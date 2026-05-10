@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Premium Futuristic Fintech Architecture
 
-## Getting Started
+Next.js App Router architecture for cinematic fintech experiences with smooth motion, premium visuals, and scalable folder structure.
 
-First, run the development server:
+## Stack
+
+- Next.js 16 (App Router, TypeScript)
+- Tailwind CSS
+- Framer Motion
+- GSAP + ScrollTrigger
+- Lenis smooth scrolling
+- React Three Fiber + Drei + Postprocessing
+- next-themes for dark and light modes
+
+## Key Features
+
+- Dark and light themes with system support
+- Primary brand color: #1b2a52
+- Global design token system
+- Smooth scrolling with Lenis integrated with ScrollTrigger
+- Scroll-based reveal utilities
+- Global gradient background + grain overlay system
+- Reusable section and container wrappers
+- Motion-safe optimization for reduced motion users
+- Performance-first setup targeted for smooth 60fps animation
+
+## Scalable Structure
+
+- src/components
+- src/sections
+- src/animations
+- src/shaders
+- src/hooks
+- src/lib
+- src/styles
+
+## Run
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Notes
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Theme switching is implemented via next-themes provider in app layout.
+- Global motion and reveal helpers are placed in src/animations.
+- Design tokens are centralized in src/lib/design-tokens.ts.
