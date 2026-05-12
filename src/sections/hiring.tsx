@@ -1,238 +1,462 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+/* ─────────────────── data ─────────────────── */
+const categories = ['All Roles', 'Leadership', 'Technology', 'Business'] as const;
+type Category = typeof categories[number];
+
 const roles = [
-  { type: 'Fractional / Advisory', title: 'Chief Risk Officer' },
-  { type: 'Fractional / Advisory', title: 'Chief Compliance Officer' },
-  { type: 'Fractional / Advisory', title: 'Chief Financial Officer' },
-  { type: 'Fractional / Full-Time', title: 'Chief Technology Officer' },
-  { type: 'Fractional / Advisory', title: 'Chief Credit Officer' },
-  { type: 'Fractional / Advisory', title: 'Chief Operating Officer' },
-  { type: 'Fractional / Consultant', title: 'Head of Product' },
-  { type: 'Fractional / Consultant', title: 'Head of Business Development & Partnerships' },
+  {
+    id: '01',
+    title: 'Chief Risk Officer',
+    type: 'Advisory',
+    category: 'Leadership' as Category,
+    tags: ['Credit Risk', 'NBFC Regulation', 'RBI Compliance'],
+    description: 'Shape the risk architecture of India\'s first AI-native NBFC. Define credit frameworks, oversee AI underwriting guardrails, and build RBI-compliant risk infrastructure from the ground up.',
+  },
+  {
+    id: '02',
+    title: 'Chief Compliance Officer',
+    type: 'Advisory',
+    category: 'Leadership' as Category,
+    tags: ['RBI Frameworks', 'KYC / AML', 'Regulatory Affairs'],
+    description: 'Lead compliance design ahead of RBI licensing. Own KYC, AML/CFT, Fair Practices Code and ensure regulatory readiness across India and Singapore operations.',
+  },
+  {
+    id: '03',
+    title: 'Chief Financial Officer',
+    type: 'Advisory',
+    category: 'Leadership' as Category,
+    tags: ['NBFC Finance', 'Capital Planning', 'Investor Relations'],
+    description: 'Build the financial architecture, treasury strategy and investor reporting framework for a greenfield NBFC. Partner directly with the founding board on capital structure.',
+  },
+  {
+    id: '04',
+    title: 'Chief Technology Officer',
+    type: 'Full-Time',
+    category: 'Technology' as Category,
+    tags: ['AI/ML', 'Fintech Infrastructure', 'Credit Systems'],
+    description: 'Architect the AI-native lending stack — credit decisioning engine, data pipelines, API infrastructure. Greenfield opportunity to build with no legacy constraints.',
+  },
+  {
+    id: '05',
+    title: 'Chief Credit Officer',
+    type: 'Advisory',
+    category: 'Leadership' as Category,
+    tags: ['Credit Policy', 'Underwriting', 'Portfolio Management'],
+    description: 'Define credit policy for a new asset class in Real Estate, AI infrastructure and clean-tech supply chains. Partner with AI teams to build human-in-the-loop credit gates.',
+  },
+  {
+    id: '06',
+    title: 'Chief Operating Officer',
+    type: 'Advisory',
+    category: 'Leadership' as Category,
+    tags: ['Operations', 'Hub & Spoke', 'Process Design'],
+    description: 'Design and operationalize the Hub & Spoke model across India. Own everything from loan origination workflows to collections infrastructure and partner integrations.',
+  },
+  {
+    id: '07',
+    title: 'Head of Product',
+    type: 'Consultant',
+    category: 'Technology' as Category,
+    tags: ['Lending Product', 'API-first', 'Roadmap'],
+    description: 'Define and execute the product roadmap for an API-first lending platform. Own borrower UX, partner integration surfaces and the AI decisioning product.',
+  },
+  {
+    id: '08',
+    title: 'Head of Business Development & Partnerships',
+    type: 'Consultant',
+    category: 'Business' as Category,
+    tags: ['Partnerships', 'Channel Distribution', 'Co-lending'],
+    description: 'Build the institutional pipeline — co-lending arrangements, originator partnerships and capital relationships across India and Southeast Asia.',
+  },
 ];
 
+/* ─────────────────── helpers ─────────────────── */
+function ArrowIcon() {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ width: 14, height: 14 }}>
+      <path d="M4 10h12M10 4l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/* ─────────────────── component ─────────────────── */
 export function Hiring() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const [activeCategory, setActiveCategory] = useState<Category>('All Roles');
+  const listRef = useRef<HTMLDivElement | null>(null);
+
+  const filtered = activeCategory === 'All Roles'
+    ? roles
+    : roles.filter((r) => r.category === activeCategory);
+
+  /* animate list when filter changes */
+  useEffect(() => {
+    const el = listRef.current;
+    if (!el) return;
+    gsap.fromTo(el.children,
+      { opacity: 0, y: 16 },
+      { opacity: 1, y: 0, duration: 0.45, stagger: 0.06, ease: 'power2.out' }
+    );
+  }, [activeCategory]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
     gsap.registerPlugin(ScrollTrigger);
-
     const section = sectionRef.current;
     if (!section) return;
 
-    const cleanups: Array<() => void> = [];
-
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '[data-hiring-intro]',
-        { opacity: 0, y: 34 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 78%',
-          },
-        }
+      const st = { trigger: section, start: 'top 76%' };
+
+      gsap.fromTo('[data-hr="filter-nav"]',
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 0.75, ease: 'power2.out', delay: 0.1, scrollTrigger: st }
+      );
+      gsap.fromTo('[data-hr="role-row"]',
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.65, stagger: 0.08, ease: 'power2.out', delay: 0.25,
+          scrollTrigger: { trigger: '[data-hr="list"]', start: 'top 82%' } }
+      );
+      gsap.fromTo('[data-hr="cta"]',
+        { opacity: 0, y: 24 },
+        { opacity: 1, y: 0, duration: 0.85, ease: 'power3.out',
+          scrollTrigger: { trigger: '[data-hr="cta"]', start: 'top 90%' } }
       );
 
-      gsap.fromTo(
-        '[data-role-card]',
-        { opacity: 0, y: 48, scale: 0.97, rotateX: 8 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          rotateX: 0,
-          duration: 0.95,
-          stagger: 0.08,
-          ease: 'power3.out',
-          transformOrigin: 'center top',
-          scrollTrigger: {
-            trigger: '[data-role-grid]',
-            start: 'top 82%',
-          },
-        }
-      );
-
-      gsap.utils.toArray<HTMLElement>('[data-role-card]').forEach((card) => {
-        const inner = card.querySelector<HTMLElement>('[data-role-inner]');
-        const glow = card.querySelector<HTMLElement>('[data-role-glow]');
-        if (!inner || !glow) return;
-
-        const handleMove = (event: MouseEvent) => {
-          const rect = card.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-          const rotateY = ((x / rect.width) - 0.5) * 6;
-          const rotateX = (0.5 - y / rect.height) * 6;
-          const glowX = (x / rect.width) * 100;
-          const glowY = (y / rect.height) * 100;
-
-          gsap.to(inner, {
-            x: rotateY * 0.65,
-            y: -rotateX * 0.65,
-            rotateX,
-            rotateY,
-            transformPerspective: 950,
-            duration: 0.35,
-            ease: 'power2.out',
-          });
-
-          gsap.to(glow, {
-            opacity: 1,
-            background: `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(212,164,55,0.16), rgba(255,255,255,0) 40%)`,
-            duration: 0.35,
-            ease: 'power2.out',
-          });
-        };
-
-        const handleLeave = () => {
-          gsap.to(inner, {
-            x: 0,
-            y: 0,
-            rotateX: 0,
-            rotateY: 0,
-            duration: 0.45,
-            ease: 'power3.out',
-          });
-
-          gsap.to(glow, {
-            opacity: 0.85,
-            background:
-              'radial-gradient(circle at top right, rgba(212,164,55,0.1), rgba(255,255,255,0) 30%)',
-            duration: 0.45,
-            ease: 'power3.out',
-          });
-        };
-
-        card.addEventListener('mousemove', handleMove);
-        card.addEventListener('mouseleave', handleLeave);
-
-        cleanups.push(() => {
-          card.removeEventListener('mousemove', handleMove);
-          card.removeEventListener('mouseleave', handleLeave);
+      /* hover: role row underline reveal */
+      gsap.utils.toArray<HTMLElement>('[data-hr="role-row"]').forEach((row) => {
+        const line = row.querySelector<HTMLElement>('[data-hr="row-line"]');
+        row.addEventListener('mouseenter', () => {
+          if (line) gsap.to(line, { scaleX: 1, duration: 0.35, ease: 'power2.out' });
+        });
+        row.addEventListener('mouseleave', () => {
+          if (line) gsap.to(line, { scaleX: 0, duration: 0.3, ease: 'power2.in' });
         });
       });
+
     }, section);
 
-    return () => {
-      cleanups.forEach((cleanup) => cleanup());
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-transparent py-18 md:py-20 lg:py-24"
       id="hiring"
+      className="relative overflow-hidden bg-[#F0F5FF]"
     >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-6%] top-16 h-72 w-72 rounded-full bg-gold/10 blur-[120px]" />
-        <div className="absolute right-[-4%] top-1/4 h-80 w-80 rounded-full bg-navy/6 blur-[150px]" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-navy/10 to-transparent" />
+      {/* background blobs */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute left-[-6%] top-32 h-72 w-72 rounded-full bg-gold/8 blur-[120px]" />
+        <div className="absolute right-[-4%] top-1/3 h-80 w-80 rounded-full bg-navy/5 blur-[150px]" />
       </div>
 
-      <div className="layout-shell editorial-container relative z-10">
-        <header className="mx-auto grid max-w-[56rem] gap-5 text-center">
-          <div data-hiring-intro className="flex flex-col items-center">
-            <div className="mb-5 inline-flex items-center gap-3">
-              <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.8)]" />
-              <span className="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-navy/60">
-                Founding Team · India
-              </span>
-            </div>
+      <div className="layout-shell editorial-container relative z-10" style={{ paddingTop: '5.5rem', paddingBottom: '4rem' }}>
 
-            <h2 className="max-w-[20ch] text-[2.15rem] font-bold leading-[0.94] tracking-[-0.055em] text-navy sm:text-[2.45rem] md:text-[2.85rem]">
-              Join at the Ground Floor
-            </h2>
-          </div>
-
-          <div data-hiring-intro className="mx-auto max-w-[42rem]">
-            <p className="text-[0.92rem] leading-[1.7] text-navy/72 lg:text-[0.96rem]">
-              Founding leadership for India&apos;s first AI-native NBFC. All roles Fractional or
-              Consultant — equity available for the right individuals.
-            </p>
-          </div>
-        </header>
-
-        <div
-          data-role-grid
-          className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 lg:mt-12"
-        >
-          {roles.map((role) => (
-            <article
-              key={role.title}
-              data-role-card
-              className="group relative"
-              style={{ perspective: '950px' }}
-            >
-              <div
-                data-role-inner
-                className="relative flex h-full flex-col overflow-hidden rounded-[1.7rem] border border-white/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,255,255,0.84)_56%,rgba(212,164,55,0.08)_100%)] p-4 shadow-[0_18px_50px_rgba(15,27,61,0.06)] transition-shadow duration-500 group-hover:shadow-[0_28px_72px_rgba(15,27,61,0.09)] sm:p-5"
-                style={{ transformStyle: 'preserve-3d' }}
+        {/* ── category filter nav ── */}
+        <div data-hr="filter-nav" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '2rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+          {categories.map((cat) => {
+            const isActive = cat === activeCategory;
+            return (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setActiveCategory(cat)}
+                style={{
+                  borderRadius: 999,
+                  padding: '0.5rem 1.4rem',
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.02em',
+                  border: isActive
+                    ? '1px solid rgba(15,27,61,0.85)'
+                    : '1px solid rgba(15,27,61,0.12)',
+                  background: isActive
+                    ? '#0f1b3d'
+                    : 'rgba(255,255,255,0.55)',
+                  color: isActive ? '#ffffff' : 'rgba(15,27,61,0.7)',
+                  boxShadow: isActive
+                    ? '0 8px 24px rgba(15,27,61,0.14)'
+                    : '0 2px 8px rgba(15,27,61,0.04)',
+                  backdropFilter: 'blur(8px)',
+                  transition: 'all 0.25s ease',
+                  cursor: 'pointer',
+                  outline: 'none',
+                }}
               >
+                {cat}
+                {cat !== 'All Roles' && (
+                  <span style={{
+                    marginLeft: 6,
+                    fontSize: '0.65rem',
+                    fontWeight: 700,
+                    color: isActive ? 'rgba(255,255,255,0.5)' : 'rgba(15,27,61,0.35)',
+                  }}>
+                    {roles.filter(r => r.category === cat).length}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+          </div>
+          {/* count pill */}
+          <div style={{
+            padding: '0.4rem 1rem',
+            borderRadius: 999,
+            background: 'rgba(212,164,55,0.1)',
+            border: '1px solid rgba(212,164,55,0.25)',
+            fontSize: '0.72rem',
+            fontWeight: 700,
+            color: '#D4A437',
+            letterSpacing: '0.06em',
+            whiteSpace: 'nowrap',
+          }}>
+            {filtered.length} open
+          </div>
+        </div>
+
+        {/* ── role list ── */}
+        <div data-hr="list">
+
+          {/* list header */}
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '2fr 1fr 1fr auto',
+            gap: '1rem',
+            padding: '0.6rem 1.25rem',
+            borderBottom: '1px solid rgba(15,27,61,0.1)',
+            marginBottom: '0.25rem',
+          }} className="hidden md:grid">
+            {['Role', 'Category', 'Engagement', ''].map((h) => (
+              <span key={h} style={{
+                fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.18em',
+                textTransform: 'uppercase', color: 'rgba(15,27,61,0.35)',
+              }}>
+                {h}
+              </span>
+            ))}
+          </div>
+
+          {/* rows */}
+          <div ref={listRef} style={{ display: 'flex', flexDirection: 'column' }}>
+            {filtered.map((role) => (
+              <a
+                key={role.id}
+                href="#contact"
+                data-hr="role-row"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '2fr 1fr 1fr auto',
+                  gap: '1rem',
+                  alignItems: 'center',
+                  padding: '1.35rem 1.25rem',
+                  borderBottom: '1px solid rgba(15,27,61,0.07)',
+                  textDecoration: 'none',
+                  position: 'relative',
+                  cursor: 'pointer',
+                  borderRadius: '0.75rem',
+                  transition: 'background 0.2s',
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.65)';
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.background = 'transparent';
+                }}
+                className="group"
+              >
+                {/* animated bottom line on hover */}
                 <div
-                  data-role-glow
-                  className="pointer-events-none absolute inset-0 opacity-85"
+                  data-hr="row-line"
                   style={{
-                    background:
-                      'radial-gradient(circle at top right, rgba(212,164,55,0.1), rgba(255,255,255,0) 30%)',
+                    position: 'absolute', bottom: 0, left: '1.25rem', right: '1.25rem',
+                    height: 1,
+                    background: 'linear-gradient(to right, #D4A437, rgba(212,164,55,0.1))',
+                    transform: 'scaleX(0)',
+                    transformOrigin: 'left',
                   }}
                 />
 
-                <div className="relative z-10 flex h-full flex-col">
-                  <span className="block text-[0.54rem] font-bold uppercase tracking-[0.18em] text-gold">
-                    {role.type}
-                  </span>
-
-                  <h3 className="mt-3 min-h-[3.35rem] text-[1.08rem] font-bold leading-[1.04] tracking-[-0.04em] text-navy">
-                    {role.title}
-                  </h3>
-
-                  <div className="mt-auto border-t border-navy/8 pt-3">
-                    <a
-                      href="#contact"
-                      className="inline-flex items-center gap-2 text-[0.64rem] font-semibold tracking-[0.08em] text-navy/78 transition-colors duration-300 hover:text-gold"
-                    >
-                      Express interest
-                      <span>→</span>
-                    </a>
+                {/* role title + tags — full width on mobile */}
+                <div className="col-span-4 md:col-span-1">
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 6 }}>
+                    <span style={{
+                      fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.1em',
+                      color: 'rgba(212,164,55,0.7)', minWidth: 24,
+                    }}>
+                      {role.id}
+                    </span>
+                    <h3 style={{
+                      fontSize: 'clamp(0.95rem, 1.3vw, 1.1rem)',
+                      fontWeight: 700,
+                      letterSpacing: '-0.025em',
+                      color: '#0f1b3d',
+                      lineHeight: 1.2,
+                    }}>
+                      {role.title}
+                    </h3>
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, paddingLeft: 32 }}>
+                    {role.tags.map((tag) => (
+                      <span key={tag} style={{
+                        fontSize: '0.62rem', fontWeight: 600, letterSpacing: '0.04em',
+                        color: 'rgba(15,27,61,0.45)',
+                        padding: '2px 8px',
+                        borderRadius: 999,
+                        background: 'rgba(15,27,61,0.05)',
+                        border: '1px solid rgba(15,27,61,0.08)',
+                      }}>
+                        {tag}
+                      </span>
+                    ))}
                   </div>
                 </div>
-              </div>
-            </article>
-          ))}
+
+                {/* category */}
+                <div className="hidden md:block">
+                  <span style={{
+                    fontSize: '0.72rem', fontWeight: 600,
+                    color: 'rgba(15,27,61,0.5)',
+                  }}>
+                    {role.category}
+                  </span>
+                </div>
+
+                {/* engagement type */}
+                <div className="hidden md:block">
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    fontSize: '0.7rem', fontWeight: 600,
+                    color: 'rgba(15,27,61,0.55)',
+                    padding: '4px 10px',
+                    borderRadius: 999,
+                    background: 'rgba(212,164,55,0.07)',
+                    border: '1px solid rgba(212,164,55,0.2)',
+                  }}>
+                    <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#D4A437', flexShrink: 0 }} />
+                    {role.type}
+                  </span>
+                </div>
+
+                {/* Apply button */}
+                <div className="hidden md:flex" style={{ flexShrink: 0 }}>
+                  <a
+                    href="#contact"
+                    onClick={e => e.stopPropagation()}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center',
+                      padding: '0.45rem 1.1rem',
+                      borderRadius: 999,
+                      fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.04em',
+                      color: '#0f1b3d',
+                      textDecoration: 'none',
+                      border: '1px solid rgba(15,27,61,0.18)',
+                      background: 'rgba(255,255,255,0.75)',
+                      backdropFilter: 'blur(6px)',
+                      transition: 'all 0.2s ease',
+                      whiteSpace: 'nowrap',
+                    }}
+                    onMouseEnter={e => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.background = '#0f1b3d';
+                      el.style.color = '#ffffff';
+                      el.style.borderColor = '#0f1b3d';
+                    }}
+                    onMouseLeave={e => {
+                      const el = e.currentTarget as HTMLElement;
+                      el.style.background = 'rgba(255,255,255,0.75)';
+                      el.style.color = '#0f1b3d';
+                      el.style.borderColor = 'rgba(15,27,61,0.18)';
+                    }}
+                  >
+                    Apply
+                  </a>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
 
+        {/* ── CTA banner ── */}
         <div
-          data-hiring-intro
-          className="mx-auto mt-8 max-w-[56rem] rounded-[2rem] border border-white/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,255,255,0.82)_56%,rgba(212,164,55,0.07)_100%)] p-6 text-center shadow-[0_22px_60px_rgba(15,27,61,0.055)] sm:p-8"
+          data-hr="cta"
+          style={{
+            marginTop: '3.5rem',
+            padding: '2.5rem 3rem',
+            borderRadius: '1.5rem',
+            background: 'linear-gradient(150deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 55%, rgba(212,164,55,0.06) 100%)',
+            border: '1px solid rgba(255,255,255,0.9)',
+            backdropFilter: 'blur(12px)',
+            boxShadow: '0 22px 60px rgba(15,27,61,0.055), inset 0 1px 0 rgba(255,255,255,0.95)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '2rem',
+            flexWrap: 'wrap',
+          }}
         >
-          <h3 className="text-[1.2rem] font-bold tracking-[-0.04em] text-navy">
-            Role not listed? Reach out anyway.
-          </h3>
-          <p className="mx-auto mt-4 max-w-[44rem] text-[0.88rem] leading-[1.72] text-navy/68">
-            Deep expertise in Indian fintech, NBFC regulation, credit, AI infrastructure or
-            regulated FS — we want to hear from you.
-          </p>
+          <div style={{ flex: 1, minWidth: 240 }}>
+            <p style={{
+              fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.2em',
+              textTransform: 'uppercase', color: '#D4A437', marginBottom: 8,
+            }}>
+              Open Application
+            </p>
+            <h3 style={{
+              fontSize: 'clamp(1.1rem, 1.8vw, 1.4rem)',
+              fontWeight: 700,
+              letterSpacing: '-0.04em',
+              color: '#0f1b3d',
+              lineHeight: 1.2,
+              marginBottom: 10,
+            }}>
+              Role not listed? Reach out anyway.
+            </h3>
+            <p style={{
+              fontSize: '0.84rem', color: 'rgba(15,27,61,0.62)', lineHeight: 1.65, maxWidth: 480,
+            }}>
+              Deep expertise in Indian fintech, NBFC regulation, credit, AI infrastructure or
+              regulated financial services — we want to hear from you.
+            </p>
+          </div>
+
           <a
             href="#contact"
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-navy/10 bg-white/80 px-5 py-3 text-[0.66rem] font-bold tracking-[0.1em] text-navy/78 shadow-[0_12px_28px_rgba(15,27,61,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/35 hover:bg-navy hover:text-white"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              padding: '0.875rem 2rem',
+              borderRadius: 999,
+              background: '#0f1b3d',
+              color: '#ffffff',
+              fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.06em',
+              textDecoration: 'none',
+              boxShadow: '0 12px 32px rgba(15,27,61,0.18)',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.25s ease',
+              flexShrink: 0,
+            }}
+            onMouseEnter={e => {
+              (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
+              (e.currentTarget as HTMLElement).style.boxShadow = '0 18px 40px rgba(15,27,61,0.22)';
+            }}
+            onMouseLeave={e => {
+              (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
+              (e.currentTarget as HTMLElement).style.boxShadow = '0 12px 32px rgba(15,27,61,0.18)';
+            }}
           >
-            Send an Open Application
+            Send Open Application
+            <ArrowIcon />
           </a>
         </div>
+
       </div>
     </section>
   );

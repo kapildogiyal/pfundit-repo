@@ -165,48 +165,6 @@ export function Infrastructure() {
           },
         }
       );
-
-      const cards = gsap.utils.toArray<HTMLElement>('[data-pillar-card]');
-      cards.forEach((card) => {
-        const inner = card.querySelector<HTMLElement>('[data-pillar-inner]');
-        if (!inner) return;
-
-        const handleMove = (event: MouseEvent) => {
-          const rect = card.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-          const rotateY = ((x / rect.width) - 0.5) * 7;
-          const rotateX = (0.5 - y / rect.height) * 7;
-
-          gsap.to(inner, {
-            x: rotateY * 0.7,
-            y: -rotateX * 0.7,
-            rotateX,
-            rotateY,
-            transformPerspective: 900,
-            duration: 0.35,
-            ease: 'power2.out',
-          });
-        };
-
-        const handleLeave = () => {
-          gsap.to(inner, {
-            x: 0,
-            y: 0,
-            rotateX: 0,
-            rotateY: 0,
-            duration: 0.45,
-            ease: 'power3.out',
-          });
-        };
-
-        card.addEventListener('mousemove', handleMove);
-        card.addEventListener('mouseleave', handleLeave);
-        cleanups.push(() => {
-          card.removeEventListener('mousemove', handleMove);
-          card.removeEventListener('mouseleave', handleLeave);
-        });
-      });
     }, section);
 
     return () => {
@@ -219,46 +177,28 @@ export function Infrastructure() {
     const panel = panelRef.current;
     if (!panel) return;
 
-    const rows = panel.querySelectorAll<HTMLElement>('[data-metric-row]');
     const fills = panel.querySelectorAll<HTMLElement>('[data-metric-fill]');
 
-    gsap.fromTo(
-      panel,
-      { opacity: 0, y: 18, scale: 0.985 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: 'power3.out' }
-    );
+    // Kill any existing animations
+    gsap.killTweensOf(fills);
+    
+    // Set fills to 0 first without animation
+    gsap.set(fills, { width: 0 });
 
-    gsap.fromTo(
-      rows,
-      { opacity: 0, y: 14 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: 0.45,
-        stagger: 0.08,
-        ease: 'power2.out',
-        delay: 0.08,
-      }
-    );
-
+    // Then animate to target width
     fills.forEach((fill) => {
-      gsap.fromTo(
-        fill,
-        { width: 0 },
-        {
-          width: fill.dataset.width,
-          duration: 0.9,
-          ease: 'power3.out',
-          delay: 0.12,
-        }
-      );
+      gsap.to(fill, {
+        width: fill.dataset.width,
+        duration: 0.8,
+        ease: 'power2.out',
+      });
     });
   }, [activeMetric]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-transparent py-16 md:py-18 lg:py-20"
+      className="relative overflow-hidden bg-[#F0F5FF] py-16 md:py-20 lg:py-24"
       id="ai-edge"
     >
       <div className="pointer-events-none absolute inset-0">
@@ -271,7 +211,7 @@ export function Infrastructure() {
         <div data-structural-fade className="mx-auto max-w-[56rem] text-center">
           <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-gold/30 bg-white/45 px-5 py-2 backdrop-blur-sm">
             <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.75)]" />
-            <span className="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-navy/60">
+            <span className="typo-eyebrow text-navy/60">
               Structural Advantage
             </span>
           </div>
@@ -280,7 +220,7 @@ export function Infrastructure() {
             Why the Numbers Are Different
           </h2>
 
-          <p className="mx-auto mt-6 max-w-[48rem] text-[1rem] leading-[1.8] text-navy/70 lg:text-[1.04rem]">
+          <p className="mx-auto mt-6 max-w-[48rem] text-[1rem] leading-[1.28] text-navy/70 lg:text-[1.04rem]">
             Greenfield architecture, AI-native credit, Hub &amp; Spoke distribution.
             Unit economics incumbents cannot match without rebuilding their stack.
           </p>
@@ -312,7 +252,7 @@ export function Infrastructure() {
 
         <div
           data-structural-fade
-          className="mx-auto mt-8 max-w-[68rem] rounded-[2.25rem] border border-white/60 bg-white/45 p-2 shadow-[0_22px_72px_rgba(15,27,61,0.05)] backdrop-blur-md"
+          className="mx-auto mt-8 max-w-[68rem] rounded-[2.25rem] p-2 shadow-[0_22px_72px_rgba(15,27,61,0.05)] "
         >
           <div
             ref={panelRef}
@@ -320,7 +260,7 @@ export function Infrastructure() {
           >
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(212,164,55,0.12),_transparent_26%)]" />
             <div className="relative z-10">
-              <h3 className="text-[1.3rem] font-bold leading-[1.06] tracking-[-0.04em] text-navy sm:text-[1.5rem]">
+              <h3 className="text-[1.3rem] font-bold leading-[0.96] tracking-[-0.04em] text-navy sm:text-[1.5rem]">
                 {activeMetric.title}
               </h3>
 
@@ -359,38 +299,22 @@ export function Infrastructure() {
           </div>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {pillars.map((pillar) => (
-            <motion.div
-              key={pillar.title}
-              data-pillar-card
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="group relative overflow-hidden rounded-[1.75rem] border border-white/75 bg-white/38 p-1 shadow-[0_16px_40px_rgba(15,27,61,0.045)] backdrop-blur-sm"
-              style={{ transformStyle: 'preserve-3d' }}
-            >
+        <div className="mt-12 flex flex-col items-center gap-8">
+          <div className="w-full flex flex-col lg:flex-row lg:divide-x lg:divide-navy/15">
+            {pillars.map((pillar, index) => (
               <div
-                data-pillar-inner
-                className="relative rounded-[1.45rem] border border-navy/6 bg-[linear-gradient(150deg,rgba(255,255,255,0.58),rgba(255,255,255,0.26)_72%,rgba(212,164,55,0.04)_100%)] px-5 py-5"
-                style={{ transformStyle: 'preserve-3d' }}
+                key={pillar.title}
+                className="flex-1 px-6 py-4 lg:px-8"
               >
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(212,164,55,0.08),_transparent_32%)]" />
-                <div className="relative z-10">
-                  <span className="block text-[0.64rem] font-bold uppercase tracking-[0.18em] text-gold">
-                    Pillar
-                  </span>
-                  <h3 className="mt-3 text-[1.02rem] font-bold tracking-[-0.03em] text-navy">
-                    {pillar.title}
-                  </h3>
-                  <p className="mt-3 text-[0.84rem] leading-[1.72] text-navy/63">
-                    {pillar.description}
-                  </p>
-                </div>
+                <h3 className="text-[1.05rem] font-bold tracking-[-0.03em] text-navy">
+                  {pillar.title}
+                </h3>
+                <p className="mt-2 text-[0.88rem] leading-[1.32] text-navy/65">
+                  {pillar.description}
+                </p>
               </div>
-            </motion.div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

@@ -9,6 +9,7 @@ const stakeholderGroups = [
     id: '01',
     title: 'Investors',
     eyebrow: 'For',
+    image: '/images/stakeholders_investors.png',
     summary: 'A rare greenfield at the intersection of regulation, AI and scale.',
     points: [
       "Building India's first greenfield AI-native NBFC — no legacy, no migration.",
@@ -21,6 +22,7 @@ const stakeholderGroups = [
     id: '02',
     title: 'Debt Providers & Banks',
     eyebrow: 'For',
+    image: '/images/stakeholders_banks.png',
     summary: 'Banking discipline meets engineering ambition.',
     points: [
       'Founders ex-J.P. Morgan & HSBC — credit, NPL and risk operators.',
@@ -33,6 +35,7 @@ const stakeholderGroups = [
     id: '03',
     title: 'Partners & Consultants',
     eyebrow: 'For',
+    image: '/images/stakeholders_partners.png',
     summary: 'A platform built to integrate from line one of code.',
     points: [
       'API-first architecture — integration is the design principle.',
@@ -57,6 +60,7 @@ export function Stakeholders() {
     const cleanups: Array<() => void> = [];
 
     const ctx = gsap.context(() => {
+      // Intro headers
       gsap.fromTo(
         '[data-stakeholder-intro]',
         { opacity: 0, y: 34 },
@@ -73,101 +77,57 @@ export function Stakeholders() {
         }
       );
 
-      gsap.fromTo(
-        '[data-stakeholder-card]',
-        { opacity: 0, y: 56, scale: 0.97, rotateX: 8 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          rotateX: 0,
-          duration: 1,
-          stagger: 0.14,
-          ease: 'power3.out',
-          transformOrigin: 'center top',
-          scrollTrigger: {
-            trigger: '[data-stakeholder-grid]',
-            start: 'top 82%',
-          },
+      // --- Desktop Pinned Logic ---
+      const textBlocks = gsap.utils.toArray<HTMLElement>('[data-stakeholder-text-block]');
+      const pinnedImgs = gsap.utils.toArray<HTMLImageElement>('[data-stakeholder-pinned-img]');
+
+      textBlocks.forEach((block, index) => {
+        // Animate text block entry
+        const content = block.querySelector('[data-block-content]');
+        if (content) {
+          gsap.fromTo(content, 
+            { opacity: 0, y: 60 },
+            { 
+              opacity: 1, y: 0, duration: 1, ease: 'power3.out',
+              scrollTrigger: {
+                trigger: block,
+                start: "top center+=35%",
+                end: "bottom center-=35%",
+                toggleActions: "play reverse play reverse",
+              }
+            }
+          );
         }
-      );
 
-      gsap.utils.toArray<HTMLElement>('[data-stakeholder-card]').forEach((card) => {
-        const inner = card.querySelector<HTMLElement>('[data-stakeholder-inner]');
-        const glow = card.querySelector<HTMLElement>('[data-stakeholder-glow]');
-        const bullets = card.querySelectorAll<HTMLElement>('[data-stakeholder-bullet]');
-        if (!inner || !glow) return;
-
-        gsap.fromTo(
-          bullets,
-          { opacity: 0, x: -10 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.55,
-            stagger: 0.08,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 84%',
-            },
+        // Trigger image crossfade when text block is active
+        ScrollTrigger.create({
+          trigger: block,
+          start: "top center",
+          end: "bottom center",
+          onEnter: () => {
+            const others = pinnedImgs.filter((_, i) => i !== index);
+            gsap.to(others, { opacity: 0, scale: 1.05, zIndex: 0, duration: 0.8, ease: 'power2.inOut', overwrite: true });
+            gsap.to(pinnedImgs[index], { opacity: 1, scale: 1, zIndex: 10, duration: 0.8, ease: 'power2.inOut', overwrite: true });
+          },
+          onEnterBack: () => {
+            const others = pinnedImgs.filter((_, i) => i !== index);
+            gsap.to(others, { opacity: 0, scale: 1.05, zIndex: 0, duration: 0.8, ease: 'power2.inOut', overwrite: true });
+            gsap.to(pinnedImgs[index], { opacity: 1, scale: 1, zIndex: 10, duration: 0.8, ease: 'power2.inOut', overwrite: true });
           }
-        );
-
-        const handleMove = (event: MouseEvent) => {
-          const rect = card.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-          const rotateY = ((x / rect.width) - 0.5) * 7;
-          const rotateX = (0.5 - y / rect.height) * 7;
-          const glowX = (x / rect.width) * 100;
-          const glowY = (y / rect.height) * 100;
-
-          gsap.to(inner, {
-            x: rotateY * 0.7,
-            y: -rotateX * 0.7,
-            rotateX,
-            rotateY,
-            transformPerspective: 950,
-            duration: 0.35,
-            ease: 'power2.out',
-          });
-
-          gsap.to(glow, {
-            opacity: 1,
-            background: `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(212,164,55,0.16), rgba(255,255,255,0) 40%)`,
-            duration: 0.35,
-            ease: 'power2.out',
-          });
-        };
-
-        const handleLeave = () => {
-          gsap.to(inner, {
-            x: 0,
-            y: 0,
-            rotateX: 0,
-            rotateY: 0,
-            duration: 0.45,
-            ease: 'power3.out',
-          });
-
-          gsap.to(glow, {
-            opacity: 0.85,
-            background:
-              'radial-gradient(circle at top right, rgba(212,164,55,0.1), rgba(255,255,255,0) 30%)',
-            duration: 0.45,
-            ease: 'power3.out',
-          });
-        };
-
-        card.addEventListener('mousemove', handleMove);
-        card.addEventListener('mouseleave', handleLeave);
-
-        cleanups.push(() => {
-          card.removeEventListener('mousemove', handleMove);
-          card.removeEventListener('mouseleave', handleLeave);
         });
       });
+
+      // --- Mobile Stack Logic ---
+      gsap.utils.toArray<HTMLElement>('[data-stakeholder-mobile-row]').forEach((row) => {
+        const img = row.querySelector('[data-stakeholder-mobile-img]');
+        const text = row.querySelector('[data-stakeholder-mobile-text]');
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: row, start: 'top 82%' }
+        });
+        tl.fromTo(img, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
+          .fromTo(text, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.5");
+      });
+
     }, section);
 
     return () => {
@@ -179,7 +139,7 @@ export function Stakeholders() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-transparent py-18 md:py-20 lg:py-24"
+      className="relative overflow-clip bg-[#F0F5FF] py-16 md:py-20 lg:py-24"
       id="stakeholders"
     >
       <div className="pointer-events-none absolute inset-0">
@@ -191,83 +151,125 @@ export function Stakeholders() {
       <div className="layout-shell editorial-container relative z-10">
         <header className="mx-auto grid max-w-[56rem] gap-4 text-center">
           <div data-stakeholder-intro className="flex flex-col items-center">
-            <div className="mb-5 inline-flex items-center gap-3">
-              <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.8)]" />
-              <span className="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-navy/60">
-                Why Pfundit
-              </span>
-            </div>
-
-            <h2 className="max-w-[20ch] text-[2.15rem] font-bold leading-[0.94] tracking-[-0.055em] text-navy sm:text-[2.45rem] md:text-[2.85rem]">
+            <h2 className="typo-hero text-navy">
               For Our Stakeholders
             </h2>
           </div>
 
           <div data-stakeholder-intro className="mx-auto max-w-[34rem]">
-            <p className="text-[0.92rem] leading-[1.7] text-navy/72 lg:text-[0.96rem]">
+            <p className="text-[0.92rem] leading-[1.28] text-navy/72 lg:text-[0.96rem]">
               One institution, three audiences. The same operating discipline.
             </p>
           </div>
         </header>
 
-        <div data-stakeholder-grid className="mt-10 grid grid-cols-1 gap-6 lg:mt-12 lg:grid-cols-3">
+        {/* --- Mobile Stack (Hidden on Desktop) --- */}
+        <div className="mt-12 flex flex-col gap-20 lg:hidden">
           {stakeholderGroups.map((group) => (
-            <article
-              key={group.title}
-              data-stakeholder-card
-              className="group relative"
-              style={{ perspective: '950px' }}
-            >
-              <div
-                data-stakeholder-inner
-                className="relative flex h-full flex-col overflow-hidden rounded-[2rem] border border-white/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,255,255,0.82)_56%,rgba(212,164,55,0.08)_100%)] p-5 shadow-[0_22px_64px_rgba(15,27,61,0.065)] transition-shadow duration-500 group-hover:shadow-[0_34px_84px_rgba(15,27,61,0.1)] sm:p-6"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <div
-                  data-stakeholder-glow
-                  className="pointer-events-none absolute inset-0 opacity-85"
-                  style={{
-                    background:
-                      'radial-gradient(circle at top right, rgba(212,164,55,0.1), rgba(255,255,255,0) 30%)',
-                  }}
-                />
+            <article key={group.id} data-stakeholder-mobile-row className="flex flex-col gap-8">
+              <div data-stakeholder-mobile-img className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] border border-white/60 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,255,255,0.4)_100%)] p-3 shadow-[0_22px_64px_rgba(15,27,61,0.065)]">
+                <div className="relative h-full w-full overflow-hidden rounded-[1.25rem]">
+                  <img src={group.image} alt={group.title} className="h-full w-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent" />
+                </div>
+              </div>
 
-                <div className="relative z-10 flex h-full flex-col">
-                  <div className="mb-8 flex items-start justify-between gap-4 border-b border-navy/8 pb-5">
-                    <div>
-                      <span className="block text-[0.56rem] font-bold uppercase tracking-[0.22em] text-gold">
-                        {group.eyebrow}
-                      </span>
-                      <h3 className="mt-3 text-[1.28rem] font-bold leading-[1.05] tracking-[-0.04em] text-navy sm:text-[1.45rem]">
-                        {group.title}
-                      </h3>
+              <div data-stakeholder-mobile-text className="flex flex-col">
+                <div className="mb-4 flex items-center gap-4">
+                  <span className="rounded-full border border-gold/20 bg-white/75 px-3 py-1 typo-label text-gold backdrop-blur-sm">{group.id}</span>
+                  <span className="block typo-label text-gold">{group.eyebrow}</span>
+                </div>
+                <h3 className="mb-3 text-[2rem] font-bold leading-[1.05] tracking-[-0.03em] text-navy">{group.title}</h3>
+                <p className="mb-6 text-[1.05rem] leading-[1.55] text-navy/70">{group.summary}</p>
+                <div className="space-y-4">
+                  {group.points.map((point) => (
+                    <div key={point} className="flex items-start gap-4">
+                      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold shadow-[0_0_10px_rgba(212,164,55,0.55)]" />
+                      <p className="text-[0.98rem] leading-[1.5] text-navy/80">{point}</p>
                     </div>
-
-                    <span className="rounded-full border border-gold/20 bg-white/75 px-3 py-1 text-[0.58rem] font-bold tracking-[0.18em] text-gold backdrop-blur-sm">
-                      {group.id}
-                    </span>
-                  </div>
-
-                  <p className="max-w-[24rem] text-[0.82rem] leading-[1.72] text-navy/64">
-                    {group.summary}
-                  </p>
-
-                  <div className="mt-6 space-y-3.5">
-                    {group.points.map((point) => (
-                      <div key={point} data-stakeholder-bullet className="flex items-start gap-3">
-                        <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold shadow-[0_0_10px_rgba(212,164,55,0.55)]" />
-                        <p className="text-[0.78rem] leading-[1.62] text-navy/72">{point}</p>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-auto pt-7">
-                    <div className="h-px w-full bg-gradient-to-r from-navy/10 via-gold/20 to-transparent" />
-                  </div>
+                  ))}
                 </div>
               </div>
             </article>
           ))}
+        </div>
+
+        {/* --- Desktop Sticky Scroll Layout (Hidden on Mobile) --- */}
+        <div className="hidden lg:flex relative mt-16 items-start gap-16 xl:gap-24">
+          
+          {/* Left: Scrolling Text Blocks */}
+          <div className="w-[50%] flex flex-col pb-[20vh]">
+            {stakeholderGroups.map((group) => (
+              <div 
+                key={group.id} 
+                data-stakeholder-text-block
+                className="flex flex-col justify-center min-h-[90vh]"
+              >
+                <div data-block-content className="flex flex-col max-w-[34rem] opacity-0">
+                  <div className="mb-6 flex items-center gap-4">
+                    <span className="rounded-full border border-gold/20 bg-white/75 px-3 py-1 typo-label text-gold backdrop-blur-sm">
+                      {group.id}
+                    </span>
+                    <span className="block typo-label text-gold">
+                      {group.eyebrow}
+                    </span>
+                  </div>
+
+                  <h3 className="mb-6 text-[2.75rem] font-bold leading-[1.05] tracking-[-0.03em] text-navy">
+                    {group.title}
+                  </h3>
+
+                  <p className="mb-8 text-[1.1rem] leading-[1.6] text-navy/75">
+                    {group.summary}
+                  </p>
+
+                  <div className="space-y-5">
+                    {group.points.map((point) => (
+                      <div key={point} className="flex items-start gap-4">
+                        <div className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold shadow-[0_0_10px_rgba(212,164,55,0.55)]" />
+                        <p className="text-[1.02rem] leading-[1.55] text-navy/85">{point}</p>
+                      </div>
+                    ))}
+                  </div>
+                  
+                  <div className="mt-12">
+                     <button className="group/btn inline-flex items-center gap-2 rounded-full border border-navy/15 bg-white/60 px-7 py-3 text-[0.88rem] font-bold text-navy transition-all hover:bg-navy hover:text-white hover:border-navy hover:shadow-xl">
+                        Learn More
+                        <svg className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
+                     </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Right: Sticky Full-Height Image Container */}
+          <div className="w-[50%] sticky top-[6.5rem] flex flex-col justify-start h-[calc(100vh-6.5rem)] pb-[5vh]">
+            <div className="relative w-full h-[78vh] overflow-hidden rounded-[2.5rem] border border-white/60 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,255,255,0.4)_100%)] p-3 shadow-[0_22px_64px_rgba(15,27,61,0.065)]">
+              <div className="relative h-full w-full overflow-hidden rounded-[1.5rem]">
+                {stakeholderGroups.map((group, index) => (
+                  <img 
+                    key={`img-${group.id}`}
+                    data-stakeholder-pinned-img
+                    src={group.image} 
+                    alt={group.title}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    style={{ 
+                      opacity: index === 0 ? 1 : 0, 
+                      transform: index === 0 ? 'scale(1)' : 'scale(1.05)',
+                      zIndex: index === 0 ? 10 : 0 
+                    }}
+                  />
+                ))}
+                <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent pointer-events-none z-20" />
+              </div>
+            </div>
+            
+            {/* Decorative glows */}
+            <div className="absolute -inset-10 -z-10 rounded-[3rem] bg-gold/5 blur-3xl pointer-events-none" />
+            <div className="absolute -inset-10 -z-10 rounded-[3rem] bg-navy/4 blur-2xl pointer-events-none" />
+          </div>
+
         </div>
       </div>
     </section>

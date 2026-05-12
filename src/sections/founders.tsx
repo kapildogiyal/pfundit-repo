@@ -5,12 +5,15 @@ import Image from 'next/image';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+/* ─────────────────── data ─────────────────── */
 const leaders = [
   {
+    id: '01',
     name: 'Sanath Shetty',
     role: 'Co-Founder & Director',
     focus: 'Credit Risk · Payments · Origination · 27 yrs Asia',
     image: '/founders/sanath.png',
+    bioIcon: 'bank',
     bio: '27 years across HSBC and J.P. Morgan in India and Singapore — built credit franchises, led APAC corporate payments, originated institutional relationships at scale.',
     background: [
       'APAC Transaction Banking — HSBC & J.P. Morgan',
@@ -20,10 +23,12 @@ const leaders = [
     linkedin: '#',
   },
   {
+    id: '02',
     name: 'Atin Bhutani',
     role: 'Co-Founder & Director',
     focus: 'Corporate Banker · Operator · Governance',
     image: '/founders/atin.png',
+    bioIcon: 'globe',
     bio: 'Country Head of International Subsidiary Banking at HSBC Singapore. Co-founded and scaled In.Corp Global to a PE exit in 2022.',
     background: [
       'HSBC — Country Head, ISB Singapore',
@@ -33,10 +38,12 @@ const leaders = [
     linkedin: '#',
   },
   {
+    id: '03',
     name: 'Madhujeet Chimni',
     role: 'Co-Founder & Director',
     focus: 'Serial Entrepreneur · Institutional Capital',
     image: '/founders/madhujeet.png',
+    bioIcon: 'chart',
     bio: 'Three exits across Asia, Europe and LATAM. Sold Stone Apple to Hitachi (2014), exited In.Corp Global to PE (2021). Chairs Blue Planet (IFU, Novo Holdings).',
     background: [
       'Stone Apple → Hitachi Consulting (2014)',
@@ -47,232 +54,417 @@ const leaders = [
   },
 ];
 
+/* ─────────────────── icons ─────────────────── */
+function BankIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-[18px] h-[18px]">
+      <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M12 10v11M16 10v11" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function GlobeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-[18px] h-[18px]">
+      <circle cx="12" cy="12" r="10" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ChartIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-[18px] h-[18px]">
+      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function BioIcon({ type }: { type: string }) {
+  if (type === 'bank') return <BankIcon />;
+  if (type === 'globe') return <GlobeIcon />;
+  return <ChartIcon />;
+}
+
+function LinkedInSquare() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
+
+/* ─────────────────── ProfileCircle ─────────────────── */
+function ProfileCircle({ leader, index }: { leader: typeof leaders[0]; index: number }) {
+  return (
+    <div className="relative flex items-center justify-center" style={{ width: 200, height: 200 }}>
+
+      {/* Outermost rotating ring — dashed, slow */}
+      <div
+        data-anim="ring"
+        className="absolute inset-0 rounded-full"
+        style={{
+          border: '1px dashed rgba(212,164,55,0.25)',
+          borderRadius: '50%',
+        }}
+      />
+
+      {/* Secondary solid ring */}
+      <div
+        className="absolute rounded-full"
+        style={{
+          inset: 14,
+          border: '1px solid rgba(212,164,55,0.18)',
+          borderRadius: '50%',
+        }}
+      />
+
+      {/* Warm atmospheric glow — radiates from bottom-center outward */}
+      <div
+        data-anim="glow"
+        className="absolute rounded-full"
+        style={{
+          inset: 18,
+          background: 'radial-gradient(ellipse 80% 60% at 50% 80%, rgba(180,130,30,0.55) 0%, rgba(120,80,15,0.25) 45%, transparent 80%)',
+          filter: 'blur(6px)',
+        }}
+      />
+
+      {/* Main image circle */}
+      <div
+        data-anim="profile"
+        className="relative overflow-hidden rounded-full"
+        style={{
+          width: 162,
+          height: 162,
+          border: '2px solid rgba(212,164,55,0.55)',
+          background: 'linear-gradient(180deg, #0d1a36 0%, #1a2840 40%, #2a1c08 100%)',
+          boxShadow: '0 0 50px rgba(180,120,20,0.35), inset 0 -20px 40px rgba(180,120,20,0.2)',
+        }}
+      >
+        <Image
+          src={leader.image}
+          alt={leader.name}
+          fill
+          sizes="162px"
+          className="object-cover object-top"
+        />
+      </div>
+
+      {/* Small glowing dot — accent, positioned on the ring arc (bottom-right) */}
+      <div
+        data-anim="accent-dot"
+        className="absolute rounded-full bg-gold"
+        style={{
+          width: 10,
+          height: 10,
+          bottom: 18,
+          right: 14,
+          boxShadow: '0 0 10px rgba(212,164,55,0.9)',
+        }}
+      />
+    </div>
+  );
+}
+
+/* ─────────────────── main component ─────────────────── */
 export function Leadership() {
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
     gsap.registerPlugin(ScrollTrigger);
 
     const section = sectionRef.current;
     if (!section) return;
 
-    const cleanups: Array<() => void> = [];
-
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '[data-founder-intro]',
+      const st = { trigger: section, start: 'top 70%' };
+
+      /* entrance: badge */
+      gsap.fromTo('[data-anim="badge"]',
+        { opacity: 0, scale: 0.5, y: -16 },
+        { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: 'back.out(2.2)', scrollTrigger: st }
+      );
+      /* entrance: headline */
+      gsap.fromTo('[data-anim="headline"]',
         { opacity: 0, y: 36 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 76%',
-          },
-        }
+        { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out', delay: 0.08, scrollTrigger: st }
+      );
+      /* entrance: subtitle */
+      gsap.fromTo('[data-anim="subtitle"]',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 0.22, scrollTrigger: st }
+      );
+      /* entrance: connector line */
+      gsap.fromTo('[data-anim="connector"]',
+        { scaleX: 0, opacity: 0 },
+        { scaleX: 1, opacity: 1, duration: 1.4, ease: 'power3.inOut', delay: 0.45, transformOrigin: 'center', scrollTrigger: st }
+      );
+      /* entrance: connector dots */
+      gsap.fromTo('[data-anim="dot"]',
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.5, stagger: 0.2, ease: 'back.out(2)', delay: 1.0, scrollTrigger: st }
+      );
+      /* entrance: profile circles */
+      gsap.fromTo('[data-anim="profile"]',
+        { scale: 0.55, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 1.3, stagger: 0.22, ease: 'elastic.out(0.8,0.45)', delay: 0.55, scrollTrigger: st }
+      );
+      /* entrance: card body */
+      gsap.fromTo('[data-anim="card-body"]',
+        { opacity: 0, y: 28 },
+        { opacity: 1, y: 0, duration: 0.9, stagger: 0.18, ease: 'power3.out', delay: 0.75, scrollTrigger: st }
+      );
+      /* entrance: card inner items */
+      gsap.fromTo('[data-anim="inner"]',
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.7, stagger: 0.055, ease: 'power2.out', delay: 0.95, scrollTrigger: st }
       );
 
-      gsap.fromTo(
-        '[data-founder-card]',
-        { opacity: 0, y: 54, scale: 0.96, rotateX: 8 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          rotateX: 0,
-          duration: 1,
-          stagger: 0.14,
-          ease: 'power3.out',
-          transformOrigin: 'center top',
-          scrollTrigger: {
-            trigger: '[data-founder-grid]',
-            start: 'top 82%',
-          },
-        }
-      );
+      /* continuous: outer ring rotation */
+      gsap.utils.toArray<HTMLElement>('[data-anim="ring"]').forEach((el, i) => {
+        gsap.to(el, { rotation: 360, duration: 24 + i * 4, ease: 'none', repeat: -1 });
+      });
 
-      const cards = gsap.utils.toArray<HTMLElement>('[data-founder-card]');
-      cards.forEach((card) => {
-        const inner = card.querySelector<HTMLElement>('[data-founder-inner]');
-        const image = card.querySelector<HTMLElement>('[data-founder-image]');
-        if (!inner) return;
+      /* continuous: floating (each card slightly different phase) */
+      gsap.utils.toArray<HTMLElement>('[data-anim="profile"]').forEach((el, i) => {
+        gsap.to(el, { y: 8, duration: 3.8 + i * 0.5, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: i * 0.35 });
+      });
 
-        const handleMove = (event: MouseEvent) => {
-          const rect = card.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-          const rotateY = ((x / rect.width) - 0.5) * 8;
-          const rotateX = (0.5 - y / rect.height) * 7;
+      /* continuous: glow pulse */
+      gsap.utils.toArray<HTMLElement>('[data-anim="glow"]').forEach((el, i) => {
+        gsap.to(el, { opacity: 0.9, duration: 3, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: i * 0.6 });
+      });
 
-          gsap.to(inner, {
-            rotateX,
-            rotateY,
-            x: rotateY * 0.6,
-            y: -rotateX * 0.6,
-            duration: 0.35,
-            ease: 'power2.out',
-            transformPerspective: 1000,
+      /* continuous: accent dot pulse */
+      gsap.utils.toArray<HTMLElement>('[data-anim="accent-dot"]').forEach((el, i) => {
+        gsap.to(el, { scale: 1.7, opacity: 0.6, duration: 2.2, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: i * 0.45 });
+      });
+
+      /* interactive: subtle mouse tilt per card */
+      const cards = gsap.utils.toArray<HTMLElement>('[data-anim="card"]');
+      document.addEventListener('mousemove', (e) => {
+        cards.forEach((card) => {
+          const r = card.getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          gsap.to(card, {
+            rotateX: (e.clientY - cy) * 0.006,
+            rotateY: (e.clientX - cx) * 0.006,
+            duration: 1.4,
+            ease: 'power1.out',
+            overwrite: 'auto',
           });
-
-          if (image) {
-            gsap.to(image, {
-              scale: 1.05,
-              x: rotateY * 0.35,
-              y: -rotateX * 0.35,
-              duration: 0.45,
-              ease: 'power2.out',
-            });
-          }
-        };
-
-        const handleLeave = () => {
-          gsap.to(inner, {
-            rotateX: 0,
-            rotateY: 0,
-            x: 0,
-            y: 0,
-            duration: 0.45,
-            ease: 'power3.out',
-          });
-
-          if (image) {
-            gsap.to(image, {
-              scale: 1,
-              x: 0,
-              y: 0,
-              duration: 0.45,
-              ease: 'power3.out',
-            });
-          }
-        };
-
-        card.addEventListener('mousemove', handleMove);
-        card.addEventListener('mouseleave', handleLeave);
-
-        cleanups.push(() => {
-          card.removeEventListener('mousemove', handleMove);
-          card.removeEventListener('mouseleave', handleLeave);
         });
       });
+
+      /* interactive: profile scale on card hover */
+      cards.forEach((card) => {
+        const profile = card.querySelector('[data-anim="profile"]');
+        card.addEventListener('mouseenter', () => {
+          if (profile) gsap.to(profile, { scale: 1.07, duration: 0.45, ease: 'power2.out', overwrite: 'auto' });
+        });
+        card.addEventListener('mouseleave', () => {
+          if (profile) gsap.to(profile, { scale: 1, duration: 0.45, ease: 'power2.out', overwrite: 'auto' });
+        });
+      });
+
     }, section);
 
-    return () => {
-      cleanups.forEach((cleanup) => cleanup());
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
+
+  /* The image connector line sits at the vertical center of the profile row.
+     Profile circles are 200px tall; we align the line to their center = top offset of the circles + 100px. */
+  const CIRCLE_H = 200;  // matches the ProfileCircle wrapper height
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-transparent py-16 md:py-20 lg:py-24"
       id="leadership"
+      className="relative overflow-hidden py-20 md:py-28"
+      style={{ background: 'linear-gradient(170deg, #0b1228 0%, #0e1a35 35%, #091122 70%, #060d1a 100%)' }}
     >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-7%] top-20 h-72 w-72 rounded-full bg-gold/10 blur-[120px]" />
-        <div className="absolute right-[-5%] top-1/3 h-[26rem] w-[26rem] rounded-full bg-navy/6 blur-[150px]" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-navy/12 to-transparent" />
+      {/* ambient blobs */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div style={{ position: 'absolute', left: '-10%', top: '-5%', width: 520, height: 520, borderRadius: '50%', background: 'radial-gradient(circle, rgba(212,164,55,0.12) 0%, transparent 70%)', filter: 'blur(40px)' }} />
+        <div style={{ position: 'absolute', right: '-8%', bottom: '-5%', width: 560, height: 560, borderRadius: '50%', background: 'radial-gradient(circle, rgba(212,164,55,0.16) 0%, transparent 70%)', filter: 'blur(50px)' }} />
+        <div style={{ position: 'absolute', left: '50%', bottom: '0', transform: 'translateX(-50%)', width: '60%', height: 200, background: 'radial-gradient(ellipse, rgba(212,164,55,0.07) 0%, transparent 70%)', filter: 'blur(30px)' }} />
       </div>
 
       <div className="layout-shell editorial-container relative z-10">
-        <header className="mx-auto grid max-w-[56rem] gap-8 text-center">
-          <div data-founder-intro className="flex flex-col items-center">
-            <div className="mb-5 inline-flex items-center gap-3">
-              <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.8)]" />
-              <span className="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-navy/60">
-                Leadership
-              </span>
-            </div>
 
-            <h2 className="max-w-[13ch] text-[2.15rem] font-bold leading-[0.94] tracking-[-0.055em] text-navy sm:text-[2.45rem] md:text-[2.85rem]">
-              The Founding Team
-            </h2>
-          </div>
-
-          <div data-founder-intro className="mx-auto max-w-[34rem]">
-            <p className="text-[0.92rem] leading-[1.7] text-navy/72 lg:text-[0.96rem]">
-              60+ combined years at J.P. Morgan and HSBC. Three successful exits. Builders, not
-              theorists.
-            </p>
-          </div>
-        </header>
-
-        <div data-founder-grid className="mt-10 grid grid-cols-1 gap-5 lg:mt-12 lg:grid-cols-3 lg:gap-6">
-          {leaders.map((leader) => (
-            <article
-              key={leader.name}
-              data-founder-card
-              className="group relative"
-              style={{ perspective: '1000px' }}
-            >
-              <div
-                data-founder-inner
-                className="relative flex h-full flex-col overflow-hidden rounded-[1.8rem] border border-white/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.94),rgba(255,255,255,0.72)_52%,rgba(212,164,55,0.08)_100%)] p-4 shadow-[0_20px_56px_rgba(15,27,61,0.065)] transition-shadow duration-500 group-hover:shadow-[0_30px_76px_rgba(15,27,61,0.1)] sm:p-5"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(212,164,55,0.12),_transparent_32%)] opacity-90" />
-
-                <div className="relative z-10 flex h-full flex-col">
-
-                  <div className="mb-5 flex items-start gap-3">
-                    <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[1.25rem] border border-navy/8 bg-navy/[0.03] shadow-[0_14px_30px_rgba(15,27,61,0.07)] sm:h-[5.25rem] sm:w-[5.25rem]">
-                      <div data-founder-image className="relative h-full w-full">
-                        <Image
-                          src={leader.image}
-                          alt={leader.name}
-                          fill
-                          sizes="84px"
-                          className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-                        />
-                      </div>
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-gold/10" />
-                    </div>
-
-                    <div className="min-w-0 pt-1.5">
-                      <span className="block text-[0.54rem] font-bold uppercase tracking-[0.18em] text-gold">
-                        {leader.role}
-                      </span>
-                      <h3 className="mt-1.5 text-[1.15rem] font-bold leading-[1.02] tracking-[-0.04em] text-navy sm:text-[1.28rem]">
-                        {leader.name}
-                      </h3>
-                      <p className="mt-2 text-[0.6rem] font-semibold tracking-[0.12em] text-navy/38">
-                        {leader.focus}
-                      </p>
-                    </div>
-                  </div>
-
-                  <p className="text-[0.76rem] leading-[1.72] text-navy/68">{leader.bio}</p>
-
-                  <div className="mt-5 space-y-2.5">
-                    {leader.background.map((item) => (
-                      <div key={item} className="flex items-start gap-3">
-                        <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold shadow-[0_0_10px_rgba(212,164,55,0.6)]" />
-                        <p className="text-[0.72rem] font-semibold leading-[1.5] text-navy/72">
-                          {item}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-5 border-t border-navy/8 pt-3.5">
-                    <a
-                      href={leader.linkedin}
-                      aria-label={`View ${leader.name} profile`}
-                      className="inline-flex items-center gap-2 text-[0.66rem] font-semibold text-navy/72 transition-colors duration-300 hover:text-gold"
-                    >
-                      LinkedIn <span>→</span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
+        {/* headline */}
+        <div className="mb-3 text-center">
+          <h2
+            data-anim="headline"
+            style={{ fontSize: '2.85rem', fontWeight: 700, letterSpacing: '-0.045em', lineHeight: 1.0, color: '#ffffff' }}
+          >
+            The Founding <span style={{ color: '#D4A437' }}>Team</span>
+          </h2>
         </div>
+
+        {/* gold dot divider */}
+        <div className="mb-5 flex items-center justify-center gap-3">
+          <div style={{ height: 1, width: 40, background: 'linear-gradient(to right, transparent, rgba(212,164,55,0.5))' }} />
+          <div style={{ height: 6, width: 6, borderRadius: '50%', background: '#D4A437' }} />
+          <div style={{ height: 1, width: 40, background: 'linear-gradient(to left, transparent, rgba(212,164,55,0.5))' }} />
+        </div>
+
+        {/* subtitle */}
+        <p
+          data-anim="subtitle"
+          style={{ textAlign: 'center', color: 'rgba(255,255,255,0.58)', fontSize: 'clamp(0.82rem, 1.4vw, 1rem)', marginBottom: '3rem', lineHeight: 1.7, maxWidth: 620, marginInline: 'auto' }}
+        >
+          60+ combined years at J.P. Morgan and HSBC. Three successful exits. Builders, not theorists.
+        </p>
+
+        {/* ─── founders grid ─── */}
+        <div style={{ position: 'relative' }}>
+
+          {/* CONNECTOR LINE — sits at the vertical midpoint of the profile circles */}
+          {/* We position it absolutely within the profiles row. The profiles row starts right here.
+              Circle height = 200px, so line is at top = 100px from start of this relative div */}
+          <div
+            className="hidden md:block"
+            style={{ position: 'absolute', top: CIRCLE_H / 2, left: 0, right: 0, height: 1, pointerEvents: 'none', zIndex: 0 }}
+          >
+            <div
+              data-anim="connector"
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(to right, transparent 2%, rgba(212,164,55,0.35) 20%, rgba(212,164,55,0.35) 80%, transparent 98%)',
+                transformOrigin: 'center',
+              }}
+            />
+            {/* dot between col 1 and col 2 (at ~33.33%) */}
+            <div
+              data-anim="dot"
+              style={{ position: 'absolute', left: '33.33%', top: '50%', transform: 'translate(-50%,-50%)', width: 8, height: 8, borderRadius: '50%', background: 'rgba(212,164,55,0.7)', boxShadow: '0 0 10px rgba(212,164,55,0.6)' }}
+            />
+            {/* dot between col 2 and col 3 (at ~66.66%) */}
+            <div
+              data-anim="dot"
+              style={{ position: 'absolute', left: '66.66%', top: '50%', transform: 'translate(-50%,-50%)', width: 8, height: 8, borderRadius: '50%', background: 'rgba(212,164,55,0.7)', boxShadow: '0 0 10px rgba(212,164,55,0.6)' }}
+            />
+          </div>
+
+          {/* columns */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: 0,
+            }}
+            className="grid-cols-1 md:grid-cols-3"
+          >
+            {leaders.map((leader, i) => (
+              <div
+                key={leader.id}
+                data-anim="card"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  padding: '0 2.5rem',
+                  /* vertical separator between columns */
+                  borderRight: i < 2 ? '1px solid rgba(255,255,255,0.07)' : 'none',
+                  perspective: '1000px',
+                  position: 'relative',
+                  zIndex: 1,
+                }}
+              >
+                {/* profile circle — centered in column */}
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginBottom: '1.75rem' }}>
+                  <ProfileCircle leader={leader} index={i} />
+                </div>
+
+                {/* number + name */}
+                <div data-anim="inner" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
+                  <div style={{
+                    width: 34, height: 34, borderRadius: '50%',
+                    border: '1px solid rgba(212,164,55,0.5)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#D4A437', letterSpacing: '0.05em' }}>{leader.id}</span>
+                  </div>
+                  <h3 style={{ fontSize: 'clamp(1.25rem, 2vw, 1.6rem)', fontWeight: 700, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1.15 }}>
+                    {leader.name}
+                  </h3>
+                </div>
+
+                {/* role */}
+                <p data-anim="inner" style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.14em', color: '#D4A437', textTransform: 'uppercase', marginBottom: 8 }}>
+                  {leader.role}
+                </p>
+
+                {/* focus — italic, muted */}
+                <p data-anim="inner" style={{ fontSize: '0.7rem', fontStyle: 'italic', color: 'rgba(255,255,255,0.45)', marginBottom: 18, lineHeight: 1.5 }}>
+                  {leader.focus}
+                </p>
+
+                {/* bio with icon */}
+                <div data-anim="inner" style={{ display: 'flex', gap: 12, marginBottom: 16, alignItems: 'flex-start' }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: '50%',
+                    border: '1px solid rgba(212,164,55,0.3)',
+                    background: 'rgba(212,164,55,0.08)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    flexShrink: 0, color: '#D4A437',
+                    marginTop: 2,
+                  }}>
+                    <BioIcon type={leader.bioIcon} />
+                  </div>
+                  <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.65 }}>
+                    {leader.bio}
+                  </p>
+                </div>
+
+                {/* background bullet list */}
+                <ul data-anim="inner" style={{ width: '100%', marginBottom: 24, listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {leader.background.map((item) => (
+                    <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                      <div style={{ marginTop: 5, width: 6, height: 6, borderRadius: '50%', background: '#D4A437', flexShrink: 0 }} />
+                      <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.58)', lineHeight: 1.55 }}>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* LinkedIn */}
+                <a
+                  href={leader.linkedin}
+                  data-anim="inner"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 10,
+                    textDecoration: 'none', color: 'rgba(255,255,255,0.75)',
+                    fontSize: '0.72rem', fontWeight: 600,
+                    transition: 'color 0.2s',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#D4A437')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.75)')}
+                >
+                  {/* "in" square badge */}
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    width: 24, height: 24, borderRadius: 5,
+                    background: '#0077B5', color: '#fff',
+                    flexShrink: 0,
+                  }}>
+                    <LinkedInSquare />
+                  </span>
+                  LinkedIn →
+                </a>
+
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </section>
   );

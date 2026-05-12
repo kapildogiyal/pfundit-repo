@@ -139,18 +139,12 @@ export function MissionVision() {
 
       <div className="layout-shell editorial-container relative z-10">
         <div className="mx-auto max-w-[42rem] pt-2 text-center">
-          <div className="mb-5 inline-flex items-center gap-3">
-            <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.75)]" />
-            <span className="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-navy/60">
-              Purpose
-            </span>
-          </div>
 
-          <h2 className="text-[2.2rem] font-bold leading-[0.96] tracking-[-0.05em] text-navy sm:text-[2.5rem] md:text-[2.85rem]">
+          <h2 className="typo-hero text-navy">
             Mission &amp; Vision
           </h2>
 
-          <p className="mx-auto mt-6 max-w-[38rem] text-[1rem] leading-[1.8] text-navy/70 lg:text-[1.04rem]">
+          <p className="mx-auto mt-6 max-w-[38rem] typo-body text-navy/70">
             Closing the credit gap across Asia &mdash; compliantly, at scale, with technology
             that earns trust.
           </p>
@@ -178,15 +172,15 @@ export function MissionVision() {
                 className="relative z-10 flex flex-col items-center"
                 style={{ transformStyle: 'preserve-3d' }}
               >
-                <span className="block text-[0.66rem] font-bold uppercase tracking-[0.18em] text-gold">
+                <span className="block typo-label text-gold">
                   {card.label}
                 </span>
 
-                <h3 className="mt-3 max-w-[20ch] text-[1.35rem] font-bold leading-[1.08] tracking-[-0.04em] text-navy sm:text-[1.55rem] md:text-[1.7rem]">
+                <h3 className="mt-3 max-w-[20ch] typo-h3 text-navy">
                   {card.title}
                 </h3>
 
-                <p className="mt-5 max-w-[44rem] text-[0.9rem] leading-[1.75] text-navy/66 sm:text-[0.93rem]">
+                <p className="mt-5 max-w-[44rem] typo-body-sm text-navy/66">
                   {card.description}
                 </p>
               </div>

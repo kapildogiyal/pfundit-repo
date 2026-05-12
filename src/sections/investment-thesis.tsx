@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -68,9 +69,9 @@ export function InvestmentThesis() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: `+=${Math.max(130, cards.length * 110)}%`,
+          end: `+=${Math.max(70, cards.length * 60)}%`,
           pin: true,
-          scrub: 0.9,
+          scrub: 0.25,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           fastScrollEnd: true,
@@ -86,8 +87,8 @@ export function InvestmentThesis() {
           scale: 0.97,
           opacity: 0.2,
           yPercent: -5,
-          duration: 1,
-          ease: 'power2.inOut',
+          duration: 0.5,
+          ease: 'power1.inOut',
           force3D: true
         }, i)
           .fromTo(card,
@@ -96,8 +97,8 @@ export function InvestmentThesis() {
               yPercent: 0,
               opacity: 1,
               scale: 1,
-              duration: 1,
-              ease: 'power2.out',
+              duration: 0.5,
+              ease: 'power1.out',
               force3D: true
             },
             i
@@ -115,20 +116,14 @@ export function InvestmentThesis() {
       <section
         ref={pinSectionRef}
         data-thesis-pin
-        className="relative flex h-screen flex-col items-center justify-center overflow-hidden px-6 py-4 lg:px-12"
+        className="relative flex h-screen flex-col items-center justify-center overflow-hidden bg-[#F0F5FF] px-6 py-4 lg:px-12"
       >
         <div className="layout-shell relative z-10 flex h-full w-full max-w-[1200px] flex-col items-center justify-center">
 
           {/* Even Tighter Header */}
           <header className="mb-4 w-full text-center lg:mb-6">
-            <div className="mb-2 inline-flex items-center gap-2">
-              <div className="h-1 w-1 rounded-full bg-gold" />
-              <span className="text-[0.5rem] font-bold uppercase tracking-[0.3em] text-navy/40">
-                Investment Thesis
-              </span>
-            </div>
-            <h2 className="text-[1.6rem] font-bold leading-tight tracking-[-0.05em] text-navy md:text-[2rem]">
-              What We Are <span className="text-gold italic">Building.</span>
+            <h2 className="typo-hero text-navy">
+              What We Are <span className="text-gold">Building.</span>
             </h2>
           </header>
 
@@ -145,34 +140,43 @@ export function InvestmentThesis() {
                   {/* Compact Left Column */}
                   <div className="flex flex-1 flex-col p-6 lg:p-10">
                     <div className="mb-4 flex items-center gap-3">
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gold/10 text-[0.55rem] font-bold text-gold border border-gold/15">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gold/10 text-[0.6rem] font-bold text-gold border border-gold/15">
                         {v.id}
                       </div>
-                      <span className="text-[0.5rem] font-bold text-navy/25 uppercase tracking-[0.2em]">Strategic Vertical</span>
+                      <span className="typo-label text-navy/25">Strategic Vertical</span>
                     </div>
 
                     <h3 className="mb-1.5 text-xl font-bold tracking-tight text-navy lg:text-2xl">
                       {v.title}
                     </h3>
-                    <p className="mb-3 text-[0.6rem] font-bold text-gold uppercase tracking-wider italic opacity-80">
+                    <p className="mb-3 typo-eyebrow text-gold opacity-80">
                       {v.tagline}
                     </p>
 
-                    <p className="mb-4 text-[0.8rem] leading-relaxed text-navy/60 lg:max-w-[95%]">
+                    <p className="mb-4 typo-body-sm text-navy/60 lg:max-w-[95%]">
                       {v.description}
                     </p>
 
-                    <div className="mt-auto grid grid-cols-2 gap-x-4 gap-y-3 border-t border-navy/[0.05] pt-5">
-                      {v.metrics.map((m) => (
-                        <div key={m.label}>
-                          <span className="block text-[1.2rem] font-bold tracking-tighter text-navy lg:text-[1.4rem]">
-                            {m.value}
-                          </span>
-                          <span className="mt-0.5 block text-[0.45rem] font-bold uppercase tracking-[0.1em] text-navy/20">
-                            {m.label}
-                          </span>
-                        </div>
-                      ))}
+                    <div className="mt-auto space-y-3">
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-2 border-t border-navy/[0.05] pt-4">
+                        {v.metrics.map((m) => (
+                          <div key={m.label}>
+                            <span className="block text-base font-bold tracking-tighter text-navy lg:text-lg">
+                              {m.value}
+                            </span>
+                            <span className="mt-0.5 block typo-label text-navy/20 text-xs">
+                              {m.label}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                      <motion.button
+                        className="btn-hero-primary rounded-full px-7 py-3 typo-button text-white transition-all duration-300 hover:-translate-y-0.5 md:px-9"
+                        whileHover={{ y: -2, scale: 1.01 }}
+                        whileTap={{ scale: 0.985 }}
+                      >
+                        Talk to Us
+                      </motion.button>
                     </div>
                   </div>
 
@@ -191,14 +195,14 @@ export function InvestmentThesis() {
 
                     <div className="absolute bottom-8 left-6 right-6">
                       <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-2xl">
-                        <span className="mb-4 block text-[0.5rem] font-bold uppercase tracking-[0.2em] text-white/40">
+                        <span className="mb-4 block typo-eyebrow text-white/40">
                           Key Capabilities
                         </span>
                         <div className="space-y-3">
                           {v.capabilities.map((cap) => (
                             <div key={cap} className="flex items-start gap-3">
                               <div className="mt-1 h-1 w-1 shrink-0 rounded-full bg-gold" />
-                              <span className="text-[0.68rem] font-semibold leading-relaxed text-white/90">{cap}</span>
+                              <span className="typo-body-sm text-white/90">{cap}</span>
                             </div>
                           ))}
                         </div>
@@ -208,14 +212,14 @@ export function InvestmentThesis() {
 
                   {/* Mobile Capabilities (more compact) */}
                   <div className="bg-navy/[0.02] p-6 lg:hidden">
-                    <span className="mb-3 block text-[0.5rem] font-bold uppercase tracking-[0.2em] text-navy/40">
+                    <span className="mb-3 block typo-eyebrow text-navy/40">
                       Key Capabilities
                     </span>
                     <div className="space-y-2">
                       {v.capabilities.map((cap) => (
                         <div key={cap} className="flex items-start gap-3">
                           <div className="mt-1 h-1 w-1 shrink-0 rounded-full bg-gold" />
-                          <span className="text-[0.7rem] font-medium leading-relaxed text-navy/70">{cap}</span>
+                          <span className="typo-body-sm text-navy/70">{cap}</span>
                         </div>
                       ))}
                     </div>

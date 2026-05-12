@@ -6,7 +6,6 @@ import {
   Contact,
   Governance,
   HeroSection,
-  Hiring,
   Infrastructure as AIEdge,
   InvestmentThesis,
   Leadership,
@@ -32,7 +31,7 @@ export default function Home() {
           <InvestmentThesis />
         </div>
 
-        <div className="h-[16vh] bg-gradient-to-b from-[#f7f7f4] via-[#f5f7fb] to-[#f3f5fa]" />
+        {/* <div className="h-[16vh] bg-gradient-to-b from-[#f7f7f4] via-[#f5f7fb] to-[#f3f5fa]" /> */}
 
         <div id="ai-edge" className="section-cinematic section-cinematic-navy">
           <AIEdge />
@@ -42,9 +41,6 @@ export default function Home() {
         </div>
         <div id="stakeholders" className="section-cinematic section-cinematic-alt">
           <Stakeholders />
-        </div>
-        <div id="hiring" className="section-cinematic">
-          <Hiring />
         </div>
         <div id="governance" className="section-cinematic section-cinematic-navy">
           <Governance />
@@ -68,13 +64,13 @@ export default function Home() {
               <p className="text-[2rem] font-bold tracking-[-0.05em] text-white sm:text-[2.25rem]">
                 Pfundit
               </p>
-              <p className="mt-4 max-w-[35rem] text-[0.9rem] leading-[1.75] text-white/68 lg:text-[0.95rem]">
+              <p className="mt-4 max-w-[35rem] typo-body-sm text-white/68">
                 A Singapore-incorporated holding company building an AI-native NBFC in India and
                 digital lending infrastructure across Asia.
               </p>
               <div className="mt-6 flex items-center gap-3">
                 <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_10px_rgba(212,164,55,0.75)]" />
-                <span className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-white/52">
+                <span className="typo-eyebrow text-white/52">
                   Singapore · ACRA Registered
                 </span>
               </div>
@@ -82,10 +78,10 @@ export default function Home() {
 
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               <div>
-                <h4 className="mb-4 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/40">
+                <h4 className="mb-4 typo-eyebrow text-white/40">
                   Registered Entity
                 </h4>
-                <div className="space-y-2.5 text-[0.8rem] leading-[1.65] text-white/68">
+                <div className="space-y-2.5 typo-body-sm text-white/68">
                   <p>Pfundit Pte. Ltd.</p>
                   <p>Singapore (ACRA) · Incorporated 2025</p>
                   <p>UEN: To be displayed on request</p>
@@ -95,10 +91,10 @@ export default function Home() {
               </div>
 
               <div>
-                <h4 className="mb-4 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/40">
+                <h4 className="mb-4 typo-eyebrow text-white/40">
                   Navigate
                 </h4>
-                <div className="space-y-2.5 text-[0.8rem] leading-[1.65] text-white/68">
+                <div className="space-y-2.5 typo-body-sm text-white/68">
                   <p><a href="#mission" className="transition-colors hover:text-[#f0ce78]">Mission</a></p>
                   <p><a href="#thesis" className="transition-colors hover:text-[#f0ce78]">Investment Thesis</a></p>
                   <p><a href="#ai-edge" className="transition-colors hover:text-[#f0ce78]">AI Edge</a></p>
@@ -109,10 +105,10 @@ export default function Home() {
               </div>
 
               <div>
-                <h4 className="mb-4 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/40">
+                <h4 className="mb-4 typo-eyebrow text-white/40">
                   Legal &amp; Policies
                 </h4>
-                <div className="space-y-2.5 text-[0.8rem] leading-[1.65] text-white/68">
+                <div className="space-y-2.5 typo-body-sm text-white/68">
                   <p>Privacy Policy</p>
                   <p>Terms of Use</p>
                   <p>Cookie Notice</p>
@@ -126,10 +122,10 @@ export default function Home() {
           </div>
 
           <div className="pt-10">
-            <h4 className="mb-4 text-[0.62rem] font-bold uppercase tracking-[0.18em] text-white/40">
+            <h4 className="mb-4 typo-eyebrow text-white/40">
               Regulatory Disclosure
             </h4>
-            <div className="grid gap-4 text-[0.78rem] leading-[1.8] text-white/56 lg:grid-cols-2 lg:gap-x-10">
+            <div className="grid gap-4 typo-body-sm text-white/56 lg:grid-cols-2 lg:gap-x-10">
               <p>
                 Pfundit Pte. Ltd. (&quot;Pfundit&quot;, &quot;we&quot;) is a private limited company incorporated in Singapore in 2025 and registered with the Accounting and Corporate Regulatory Authority (ACRA). Pfundit is in the process of incorporating a wholly-owned subsidiary in India. That India subsidiary, once incorporated, intends to apply to the Reserve Bank of India (RBI) for registration as a Non-Banking Financial Company — Type II, Non-Deposit Taking, Investment &amp; Credit Company (NBFC-ND-ICC). As of the date of this website, no such application has been filed and no RBI registration has been granted.
               </p>
@@ -144,7 +140,7 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="mt-8 flex flex-col gap-3 border-t border-white/12 pt-5 text-[0.75rem] font-medium tracking-[0.03em] text-white/44 lg:flex-row lg:items-center lg:justify-between">
+            <div className="mt-8 flex flex-col gap-3 border-t border-white/12 pt-5 typo-label text-white/44 lg:flex-row lg:items-center lg:justify-between">
               <p>© 2026 Pfundit Pte. Ltd. · All Rights Reserved.</p>
               <p>Singapore HQ · India NBFC (in formation) · Pan-Asia Lending Platform</p>
             </div>

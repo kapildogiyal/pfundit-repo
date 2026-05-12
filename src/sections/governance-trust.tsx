@@ -1,13 +1,15 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+/* ─────────────────── data ─────────────────── */
 const pillars = [
   {
-    id: 'Pillar 01',
-    title: 'Corporate Governance',
+    id: '01',
+    label: 'Corporate Governance',
+    headline: 'Institutional structure from day one',
     points: [
       'Singapore HoldCo (Pte. Ltd.) — ACRA registered, 2025',
       'Board of Directors with independent oversight (in formation)',
@@ -16,8 +18,9 @@ const pillars = [
     ],
   },
   {
-    id: 'Pillar 02',
-    title: 'Risk & Compliance',
+    id: '02',
+    label: 'Risk & Compliance',
+    headline: 'Regulatory alignment before revenue',
     points: [
       'RBI Master Directions for NBFCs — design baseline',
       'KYC / AML / CFT policies aligned to RBI & MAS',
@@ -26,8 +29,9 @@ const pillars = [
     ],
   },
   {
-    id: 'Pillar 03',
-    title: 'Data, Security & Audit',
+    id: '03',
+    label: 'Data, Security & Audit',
+    headline: 'Zero-compromise data architecture',
     points: [
       'Data residency & DPDP Act 2023 (India) alignment',
       'Encryption in transit and at rest by design',
@@ -37,318 +41,382 @@ const pillars = [
   },
 ];
 
+const timeline = [
+  { year: '2025', label: 'Singapore HoldCo incorporated (ACRA)', done: true },
+  { year: '2025–26', label: 'India subsidiary formation & board structuring', done: true },
+  { year: '2026', label: 'RBI NBFC-ND-ICC application filing', done: false },
+  { year: '2026–27', label: 'Regulatory approvals & first-loan operations', done: false },
+];
+
+/* ─────────────────── component ─────────────────── */
 export function Governance() {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const [active, setActive] = useState(0);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+
+  /* animate content panel when tab changes */
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+    gsap.fromTo(el,
+      { opacity: 0, y: 12 },
+      { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }
+    );
+  }, [active]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-
     gsap.registerPlugin(ScrollTrigger);
-
     const section = sectionRef.current;
     if (!section) return;
 
-    const cleanups: Array<() => void> = [];
-
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '[data-governance-intro]',
-        { opacity: 0, y: 34 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 78%',
-          },
-        }
+      const st = { trigger: section, start: 'top 76%' };
+
+      gsap.fromTo('[data-gv="badge"]',
+        { opacity: 0, y: -12, scale: 0.8 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(2)', scrollTrigger: st }
       );
-
-      gsap.fromTo(
-        '[data-governance-status]',
-        { opacity: 0, y: 42, scale: 0.98 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          duration: 0.95,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '[data-governance-status]',
-            start: 'top 82%',
-          },
-        }
+      gsap.fromTo('[data-gv="heading"]',
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.07, scrollTrigger: st }
       );
-
-      gsap.fromTo(
-        '[data-governance-status-copy]',
-        { opacity: 0, y: 20 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.75,
-          stagger: 0.08,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '[data-governance-status]',
-            start: 'top 82%',
-          },
-        }
+      gsap.fromTo('[data-gv="sub"]',
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.85, ease: 'power2.out', delay: 0.18, scrollTrigger: st }
       );
-
-      gsap.fromTo(
-        '[data-governance-card]',
-        { opacity: 0, y: 52, scale: 0.97, rotateX: 8 },
-        {
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          rotateX: 0,
-          duration: 1,
-          stagger: 0.12,
-          ease: 'power3.out',
-          transformOrigin: 'center top',
-          scrollTrigger: {
-            trigger: '[data-governance-grid]',
-            start: 'top 84%',
-          },
-        }
+      gsap.fromTo('[data-gv="left"]',
+        { opacity: 0, x: -30 },
+        { opacity: 1, x: 0, duration: 1, ease: 'power3.out', delay: 0.3, scrollTrigger: st }
       );
-
-      gsap.utils.toArray<HTMLElement>('[data-governance-card]').forEach((card) => {
-        const inner = card.querySelector<HTMLElement>('[data-governance-inner]');
-        const glow = card.querySelector<HTMLElement>('[data-governance-glow]');
-        const bullets = card.querySelectorAll<HTMLElement>('[data-governance-bullet]');
-        if (!inner || !glow) return;
-
-        gsap.fromTo(
-          bullets,
-          { opacity: 0, x: -10 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.55,
-            stagger: 0.08,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 86%',
-            },
-          }
-        );
-
-        const handleMove = (event: MouseEvent) => {
-          const rect = card.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-          const rotateY = ((x / rect.width) - 0.5) * 6;
-          const rotateX = (0.5 - y / rect.height) * 6;
-          const glowX = (x / rect.width) * 100;
-          const glowY = (y / rect.height) * 100;
-
-          gsap.to(inner, {
-            x: rotateY * 0.65,
-            y: -rotateX * 0.65,
-            rotateX,
-            rotateY,
-            transformPerspective: 950,
-            duration: 0.35,
-            ease: 'power2.out',
-          });
-
-          gsap.to(glow, {
-            opacity: 1,
-            background: `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(212,164,55,0.16), rgba(255,255,255,0) 42%)`,
-            duration: 0.35,
-            ease: 'power2.out',
-          });
-        };
-
-        const handleLeave = () => {
-          gsap.to(inner, {
-            x: 0,
-            y: 0,
-            rotateX: 0,
-            rotateY: 0,
-            duration: 0.45,
-            ease: 'power3.out',
-          });
-
-          gsap.to(glow, {
-            opacity: 0.85,
-            background:
-              'radial-gradient(circle at top right, rgba(212,164,55,0.1), rgba(255,255,255,0) 30%)',
-            duration: 0.45,
-            ease: 'power3.out',
-          });
-        };
-
-        card.addEventListener('mousemove', handleMove);
-        card.addEventListener('mouseleave', handleLeave);
-
-        cleanups.push(() => {
-          card.removeEventListener('mousemove', handleMove);
-          card.removeEventListener('mouseleave', handleLeave);
-        });
+      gsap.fromTo('[data-gv="right"]',
+        { opacity: 0, x: 30 },
+        { opacity: 1, x: 0, duration: 1, ease: 'power3.out', delay: 0.3, scrollTrigger: st }
+      );
+      gsap.fromTo('[data-gv="tl-item"]',
+        { opacity: 0, x: 16 },
+        { opacity: 1, x: 0, duration: 0.6, stagger: 0.13, ease: 'power2.out', delay: 0.5,
+          scrollTrigger: { trigger: '[data-gv="timeline"]', start: 'top 84%' } }
+      );
+      gsap.fromTo('[data-gv="tl-line"]',
+        { scaleY: 0 },
+        { scaleY: 1, duration: 1.4, ease: 'power3.out', delay: 0.35, transformOrigin: 'top',
+          scrollTrigger: { trigger: '[data-gv="timeline"]', start: 'top 84%' } }
+      );
+      gsap.fromTo('[data-gv="disclaimer"]',
+        { opacity: 0 },
+        { opacity: 1, duration: 1, ease: 'power2.out',
+          scrollTrigger: { trigger: '[data-gv="disclaimer"]', start: 'top 92%' } }
+      );
+      gsap.to('[data-gv="pulse-dot"]', {
+        scale: 1.6, opacity: 0.5, duration: 1.4, ease: 'sine.inOut', repeat: -1, yoyo: true,
       });
     }, section);
 
-    return () => {
-      cleanups.forEach((cleanup) => cleanup());
-      ctx.revert();
-    };
+    return () => ctx.revert();
   }, []);
+
+  const pillar = pillars[active];
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-transparent py-18 md:py-20 lg:py-24"
       id="governance"
+      className="relative overflow-hidden bg-[#F0F5FF] py-16 md:py-20 lg:py-24"
     >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-6%] top-16 h-72 w-72 rounded-full bg-gold/10 blur-[120px]" />
-        <div className="absolute right-[-4%] top-1/4 h-80 w-80 rounded-full bg-navy/6 blur-[150px]" />
+      {/* background blobs — consistent with other light sections */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute left-[-6%] top-16 h-72 w-72 rounded-full bg-gold/8 blur-[120px]" />
+        <div className="absolute right-[-4%] top-1/4 h-80 w-80 rounded-full bg-navy/5 blur-[150px]" />
         <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-navy/10 to-transparent" />
       </div>
 
       <div className="layout-shell editorial-container relative z-10">
-        <header className="mx-auto grid max-w-[58rem] gap-5 text-center">
-          <div data-governance-intro className="flex flex-col items-center">
-            <div className="mb-5 inline-flex items-center gap-3">
-              <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.8)]" />
-              <span className="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-navy/60">
-                Governance &amp; Trust
-              </span>
-            </div>
 
-            <h2 className="max-w-[20ch] text-[2.15rem] font-bold leading-[0.94] tracking-[-0.055em] text-navy sm:text-[2.45rem] md:text-[2.85rem]">
-              Built on Regulated Rails
-            </h2>
+        {/* ── header ── */}
+        <header className="mx-auto max-w-[58rem] text-center">
+          <div
+            data-gv="badge"
+            className="mb-5 inline-flex items-center gap-3 rounded-full border border-gold/30 bg-white/45 px-5 py-2 backdrop-blur-sm"
+          >
+            <div data-gv="pulse-dot" className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.8)]" />
+            <span className="typo-eyebrow text-navy/60">Governance & Trust</span>
           </div>
 
-          <div data-governance-intro className="mx-auto max-w-[48rem]">
-            <p className="text-[0.92rem] leading-[1.72] text-navy/72 lg:text-[0.96rem]">
-              A Singapore-incorporated holding company operating to institutional standards from
-              day one — designed for the scrutiny of regulators, investors and partners.
-            </p>
-          </div>
+          <h2 data-gv="heading" className="typo-hero text-navy">
+            Built on <span className="text-gold italic">Regulated</span> Rails
+          </h2>
+
+          <p data-gv="sub" className="mx-auto mt-6 max-w-[48rem] text-[0.96rem] leading-[1.28] text-navy/70">
+            A Singapore-incorporated holding company operating to institutional standards from day one —
+            designed for the scrutiny of regulators, investors and partners.
+          </p>
         </header>
 
-        <div
-          data-governance-status
-          className="mx-auto mt-10 max-w-[64rem] overflow-hidden rounded-[1.85rem] border border-white/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.98),rgba(255,255,255,0.92)_58%,rgba(212,164,55,0.04)_100%)] shadow-[0_18px_52px_rgba(15,27,61,0.055)] lg:mt-12"
-        >
-          <div className="pointer-events-none absolute inset-0">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-            <div className="absolute left-[-4%] bottom-[-18%] h-44 w-44 rounded-full bg-navy/5 blur-[105px]" />
-          </div>
+        {/* ── two-column layout ── */}
+        <div className="mt-14 grid gap-10 lg:mt-16 lg:grid-cols-[1fr_1fr] lg:gap-16 xl:gap-24">
 
-          <div className="relative z-10 border-b border-navy/8 px-5 py-3 sm:px-6 lg:px-6">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <span
-                data-governance-status-copy
-                className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-gold"
-              >
-                Regulatory Status
-              </span>
-              <div
-                data-governance-status-copy
-                className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-white/75 px-3 py-1.5 backdrop-blur-sm"
-              >
-                <div className="h-1.5 w-1.5 rounded-full bg-gold shadow-[0_0_10px_rgba(212,164,55,0.8)]" />
-                <span className="text-[0.58rem] font-bold uppercase tracking-[0.18em] text-navy/60">
-                  Updated 2026
+          {/* ── LEFT: accordion tab list ── */}
+          <div data-gv="left">
+            <div>
+              {pillars.map((p, i) => {
+                const isActive = i === active;
+                return (
+                  <div key={p.id}>
+                    {/* top border */}
+                    <div style={{ height: 1, background: 'rgba(15,27,61,0.1)' }} />
+
+                    <button
+                      type="button"
+                      onClick={() => setActive(i)}
+                      className="w-full text-left"
+                      style={{ outline: 'none', background: 'none', border: 'none', padding: '1.5rem 0', cursor: 'pointer' }}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+
+                        {/* number badge */}
+                        <div style={{
+                          width: 34, height: 34, borderRadius: '50%', flexShrink: 0,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          background: isActive ? 'rgba(212,164,55,0.1)' : 'rgba(15,27,61,0.04)',
+                          border: isActive ? '1px solid rgba(212,164,55,0.4)' : '1px solid rgba(15,27,61,0.1)',
+                          transition: 'all 0.3s ease',
+                        }}>
+                          <span style={{
+                            fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.1em',
+                            color: isActive ? '#D4A437' : 'rgba(15,27,61,0.35)',
+                            transition: 'color 0.3s',
+                          }}>
+                            {p.id}
+                          </span>
+                        </div>
+
+                        {/* label + subtext */}
+                        <div style={{ flex: 1 }}>
+                          <p style={{
+                            fontSize: 'clamp(0.95rem, 1.4vw, 1.15rem)',
+                            fontWeight: 700,
+                            letterSpacing: '-0.025em',
+                            color: isActive ? '#0f1b3d' : 'rgba(15,27,61,0.55)',
+                            lineHeight: 1.25,
+                            marginBottom: isActive ? 4 : 0,
+                            transition: 'color 0.3s',
+                          }}>
+                            {p.label}
+                          </p>
+                          {isActive && (
+                            <p style={{
+                              fontSize: '0.8rem',
+                              color: 'rgba(15,27,61,0.5)',
+                              lineHeight: 1.5,
+                              marginTop: 2,
+                            }}>
+                              {p.headline}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* chevron */}
+                        <div style={{
+                          width: 30, height: 30, borderRadius: '50%', flexShrink: 0,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          border: isActive ? '1px solid rgba(212,164,55,0.45)' : '1px solid rgba(15,27,61,0.1)',
+                          background: isActive ? 'rgba(212,164,55,0.07)' : 'transparent',
+                          transition: 'all 0.3s ease',
+                          transform: isActive ? 'rotate(90deg)' : 'none',
+                        }}>
+                          <svg viewBox="0 0 16 16" fill="none" strokeWidth="1.8" style={{ width: 11, height: 11 }}
+                            stroke={isActive ? '#D4A437' : 'rgba(15,27,61,0.35)'}>
+                            <path d="M6 3l5 5-5 5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                      </div>
+
+                      {/* active gold underline */}
+                      {isActive && (
+                        <div style={{
+                          marginTop: '1rem',
+                          height: 2,
+                          borderRadius: 1,
+                          background: 'linear-gradient(to right, #D4A437, rgba(212,164,55,0.08))',
+                        }} />
+                      )}
+                    </button>
+                  </div>
+                );
+              })}
+              {/* closing border */}
+              <div style={{ height: 1, background: 'rgba(15,27,61,0.1)' }} />
+            </div>
+
+            {/* regulatory status box */}
+            <div style={{
+              marginTop: '2rem',
+              padding: '1.25rem 1.5rem',
+              borderRadius: '1rem',
+              background: 'linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.65) 100%)',
+              border: '1px solid rgba(255,255,255,0.9)',
+              backdropFilter: 'blur(12px)',
+              boxShadow: '0 8px 32px rgba(15,27,61,0.06), inset 0 1px 0 rgba(255,255,255,0.9)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                <div style={{
+                  width: 7, height: 7, borderRadius: '50%',
+                  background: '#D4A437',
+                  boxShadow: '0 0 10px rgba(212,164,55,0.8)',
+                  flexShrink: 0,
+                }} />
+                <span style={{
+                  fontSize: '0.58rem', fontWeight: 700, letterSpacing: '0.2em',
+                  textTransform: 'uppercase', color: '#D4A437',
+                }}>
+                  Regulatory Status — 2026
                 </span>
               </div>
+              <p style={{ fontSize: '0.8rem', color: 'rgba(15,27,61,0.68)', lineHeight: 1.65, margin: 0 }}>
+                India subsidiary in formation. Intended RBI NBFC-ND-ICC application in progress.
+                No lending activity until registration is granted.
+              </p>
             </div>
           </div>
 
-          <div className="relative z-10 px-5 py-5 sm:px-6 sm:py-5 lg:px-6 lg:py-6">
-            <div className="max-w-[50rem]">
-              <h3
-                data-governance-status-copy
-                className="text-[1.18rem] font-bold leading-[1.04] tracking-[-0.045em] text-navy sm:text-[1.3rem] lg:max-w-[20ch]"
-              >
-                Updated 2026
+          {/* ── RIGHT: content panel + timeline ── */}
+          <div data-gv="right" style={{ display: 'flex', flexDirection: 'column', gap: '3rem' }}>
+
+            {/* content panel — fades/slides when active changes */}
+            <div ref={contentRef}>
+              {/* eyebrow */}
+              <p style={{
+                fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.2em',
+                textTransform: 'uppercase', color: '#D4A437', marginBottom: '0.75rem',
+              }}>
+                Pillar {pillar.id}
+              </p>
+
+              {/* headline */}
+              <h3 style={{
+                fontSize: 'clamp(1.35rem, 2vw, 1.75rem)',
+                fontWeight: 700,
+                letterSpacing: '-0.04em',
+                color: '#0f1b3d',
+                lineHeight: 1.15,
+                marginBottom: '1.5rem',
+              }}>
+                {pillar.headline}
               </h3>
-              <p
-                data-governance-status-copy
-                className="mt-3.5 text-[0.82rem] leading-[1.68] text-navy/74 sm:text-[0.86rem]"
-              >
-                India subsidiary in formation — intended application to the Reserve Bank of India
-                (RBI) for registration as an NBFC — Type II, Non-Deposit Taking, Investment &amp;
-                Credit Company (NBFC-ND-ICC).
-              </p>
-              <p
-                data-governance-status-copy
-                className="mt-3.5 max-w-[68ch] text-[0.76rem] leading-[1.68] text-navy/62 sm:text-[0.8rem]"
-              >
-                The India operating entity is being structured to satisfy applicable RBI Master
-                Directions for NBFCs. The Singapore parent operates within Singapore&apos;s ACRA
-                framework. As of the date of this website, no RBI application has been filed and no
-                registration has been granted. Pfundit does not solicit, accept or hold deposits
-                from the public in any jurisdiction and will not commence regulated lending
-                activity in India until the requisite RBI registration is granted.
-              </p>
+
+              {/* divider */}
+              <div style={{
+                height: 1,
+                background: 'linear-gradient(to right, rgba(15,27,61,0.12), transparent)',
+                marginBottom: '1.5rem',
+              }} />
+
+              {/* points */}
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                {pillar.points.map((point) => (
+                  <li key={point} style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
+                    {/* gold bullet dot */}
+                    <div style={{
+                      marginTop: 7,
+                      width: 6, height: 6,
+                      borderRadius: '50%',
+                      background: '#D4A437',
+                      boxShadow: '0 0 6px rgba(212,164,55,0.45)',
+                      flexShrink: 0,
+                    }} />
+                    <span style={{
+                      fontSize: '0.9rem',
+                      color: 'rgba(15,27,61,0.72)',
+                      lineHeight: 1.65,
+                      fontStyle: 'normal',
+                    }}>
+                      {point}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
+
+            {/* ── regulatory roadmap timeline ── */}
+            <div data-gv="timeline">
+              <p style={{
+                fontSize: '0.6rem', fontWeight: 700, letterSpacing: '0.2em',
+                textTransform: 'uppercase', color: 'rgba(15,27,61,0.35)', marginBottom: '1.5rem',
+              }}>
+                Regulatory Roadmap
+              </p>
+
+              {/* timeline rows — each row is self-contained with its own dot */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+                {timeline.map((item, ti) => {
+                  const isLast = ti === timeline.length - 1;
+                  return (
+                    <div key={item.label} data-gv="tl-item" style={{ display: 'flex', gap: 0 }}>
+
+                      {/* left column: dot + connector line */}
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 28, flexShrink: 0 }}>
+                        {/* dot */}
+                        <div style={{
+                          width: 14, height: 14,
+                          borderRadius: '50%',
+                          background: item.done ? '#D4A437' : '#F0F5FF',
+                          border: item.done ? '2px solid #D4A437' : '1.5px solid rgba(15,27,61,0.2)',
+                          boxShadow: item.done ? '0 0 12px rgba(212,164,55,0.5)' : 'none',
+                          flexShrink: 0,
+                          marginTop: 3,
+                          zIndex: 1,
+                        }} />
+                        {/* connector line below dot */}
+                        {!isLast && (
+                          <div
+                            data-gv="tl-line"
+                            style={{
+                              flex: 1,
+                              width: 1,
+                              minHeight: 32,
+                              background: item.done
+                                ? 'linear-gradient(to bottom, #D4A437, rgba(212,164,55,0.3))'
+                                : 'rgba(15,27,61,0.1)',
+                              marginTop: 4,
+                              marginBottom: 4,
+                            }}
+                          />
+                        )}
+                      </div>
+
+                      {/* right column: text content */}
+                      <div style={{ paddingLeft: 14, paddingBottom: isLast ? 0 : '1.5rem', flex: 1 }}>
+                        <span style={{
+                          display: 'block',
+                          fontSize: '0.65rem', fontWeight: 700, letterSpacing: '0.08em',
+                          color: item.done ? '#D4A437' : 'rgba(15,27,61,0.32)',
+                          marginBottom: 4,
+                        }}>
+                          {item.year}
+                        </span>
+                        <span style={{
+                          fontSize: '0.85rem',
+                          color: item.done ? 'rgba(15,27,61,0.78)' : 'rgba(15,27,61,0.4)',
+                          lineHeight: 1.55,
+                          fontStyle: 'normal',
+                        }}>
+                          {item.label}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
           </div>
         </div>
 
+        {/* ── disclaimer ── */}
         <div
-          data-governance-grid
-          className="mt-10 grid grid-cols-1 gap-6 lg:mt-12 lg:grid-cols-3"
-        >
-          {pillars.map((pillar) => (
-            <article
-              key={pillar.title}
-              data-governance-card
-              className="group relative"
-              style={{ perspective: '950px' }}
-            >
-              <div
-                data-governance-inner
-                className="relative flex h-full flex-col overflow-hidden rounded-[1.95rem] border border-white/80 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,255,255,0.82)_56%,rgba(212,164,55,0.08)_100%)] p-5 shadow-[0_22px_64px_rgba(15,27,61,0.065)] transition-shadow duration-500 group-hover:shadow-[0_34px_84px_rgba(15,27,61,0.1)] sm:p-6"
-                style={{ transformStyle: 'preserve-3d' }}
-              >
-                <div
-                  data-governance-glow
-                  className="pointer-events-none absolute inset-0 opacity-85"
-                  style={{
-                    background:
-                      'radial-gradient(circle at top right, rgba(212,164,55,0.1), rgba(255,255,255,0) 30%)',
-                  }}
-                />
-
-                <div className="relative z-10 flex h-full flex-col">
-                  <div className="mb-7 border-b border-navy/8 pb-5">
-                    <span className="block text-[0.58rem] font-bold uppercase tracking-[0.2em] text-gold">
-                      {pillar.id}
-                    </span>
-                    <h3 className="mt-3 text-[1.2rem] font-bold leading-[1.08] tracking-[-0.04em] text-navy sm:text-[1.34rem]">
-                      {pillar.title}
-                    </h3>
-                  </div>
-
-                  <div className="space-y-3.5">
-                    {pillar.points.map((point) => (
-                      <div key={point} data-governance-bullet className="flex items-start gap-3">
-                        <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold shadow-[0_0_10px_rgba(212,164,55,0.55)]" />
-                        <p className="text-[0.78rem] leading-[1.62] text-navy/72">{point}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        <div
-          data-governance-intro
-          className="mx-auto mt-10 max-w-[62rem] border-t border-navy/10 pt-8 text-center text-[0.8rem] leading-[1.72] text-navy/46 lg:mt-12"
+          data-gv="disclaimer"
+          className="mx-auto mt-12 max-w-[62rem] border-t border-navy/10 pt-8 text-center typo-body-sm text-navy/46 lg:mt-14"
         >
           Governance disclosures will be expanded as the entity progresses through licensing.
           Nothing on this page constitutes an offer of securities, financial advice, or a

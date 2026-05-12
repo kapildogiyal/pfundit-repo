@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -39,65 +40,63 @@ export function Contact() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-transparent py-18 md:py-20 lg:py-24"
+      className="relative overflow-hidden bg-[#F0F5FF] py-20 md:py-24 lg:py-28"
       id="contact"
     >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-6%] top-12 h-72 w-72 rounded-full bg-gold/10 blur-[120px]" />
-        <div className="absolute right-[-4%] top-1/3 h-80 w-80 rounded-full bg-navy/6 blur-[150px]" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-navy/10 to-transparent" />
-      </div>
-
       <div className="layout-shell editorial-container relative z-10">
-        <div
-          data-contact-reveal
-          className="mx-auto max-w-[64rem] overflow-hidden rounded-[2.2rem] border border-white/80 bg-[linear-gradient(145deg,rgba(255,255,255,0.98),rgba(255,255,255,0.88)_52%,rgba(212,164,55,0.08)_100%)] shadow-[0_24px_72px_rgba(15,27,61,0.07)]"
-        >
-          <div className="pointer-events-none absolute inset-0">
-            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/35 to-transparent" />
-            <div className="absolute right-[10%] top-[-12%] h-44 w-44 rounded-full bg-gold/10 blur-[100px]" />
-            <div className="absolute left-[-5%] bottom-[-18%] h-48 w-48 rounded-full bg-navy/5 blur-[110px]" />
+        <div className="mx-auto max-w-[80rem] overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-navy via-[#0a1628] to-[#050f1f] px-8 py-20 sm:px-12 md:py-24 relative">
+          {/* Geometric pattern background */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2.5rem]">
+            <svg className="absolute inset-0 h-full w-full opacity-50" viewBox="0 0 1200 600" preserveAspectRatio="none">
+              <defs>
+                <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+                  <path d="M 80 0 L 0 0 0 80" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1"/>
+                </pattern>
+              </defs>
+              <circle cx="600" cy="300" r="400" fill="none" stroke="#d4a437" strokeWidth="2" opacity="0.15"/>
+              <circle cx="600" cy="300" r="350" fill="none" stroke="#d4a437" strokeWidth="2" opacity="0.12"/>
+              <circle cx="600" cy="300" r="300" fill="none" stroke="#d4a437" strokeWidth="2" opacity="0.1"/>
+              <circle cx="600" cy="300" r="250" fill="none" stroke="#d4a437" strokeWidth="2" opacity="0.08"/>
+              <circle cx="600" cy="300" r="200" fill="none" stroke="#d4a437" strokeWidth="2" opacity="0.06"/>
+            </svg>
           </div>
-
-          <div className="relative z-10 px-6 py-8 text-center sm:px-8 sm:py-10 lg:px-12 lg:py-12">
-            <div data-contact-reveal className="flex flex-col items-center">
-              <div className="mb-5 inline-flex items-center gap-3">
-                <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.8)]" />
-                <span className="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-navy/60">
-                  Get in Touch
-                </span>
-              </div>
-
-              <h2 className="max-w-[14ch] text-[2.15rem] font-bold leading-[0.94] tracking-[-0.055em] text-navy sm:text-[2.45rem] md:text-[2.85rem]">
-                Let&apos;s Have a Conversation
-              </h2>
-            </div>
-
-            <p
-              data-contact-reveal
-              className="mx-auto mt-6 max-w-[44rem] text-[0.92rem] leading-[1.75] text-navy/72 lg:text-[0.96rem]"
-            >
-              Investor, debt provider, co-lending partner, technology partner, consultant — we
-              are building the founding stakeholder ecosystem now.
-            </p>
-
+          {/* Content */}
+          <div className="relative z-10 text-center">
             <div
               data-contact-reveal
-              className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5"
+              className="text-center"
             >
-              <a
-                href="mailto:info@pfundit.com"
-                className="inline-flex items-center gap-3 rounded-full bg-navy px-7 py-3 text-[0.64rem] font-bold tracking-[0.1em] text-white shadow-[0_18px_36px_rgba(15,27,61,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold hover:text-navy hover:shadow-[0_20px_36px_rgba(212,164,55,0.28)]"
-              >
-                Contact the Team
-              </a>
+              <h2 className="text-[2.4rem] font-bold leading-[1.15] tracking-[-0.04em] text-white sm:text-[2.8rem] md:text-[3.4rem]">
+                Let&apos;s Have a Conversation
+              </h2>
 
-              <button
+              <p className="mx-auto mt-6 max-w-[56rem] text-[0.95rem] leading-[1.42] text-white/75 sm:text-[1rem] md:mt-8">
+                Investor, debt provider, co-lending partner, technology partner, consultant — we are building the founding stakeholder ecosystem now.
+              </p>
+            </div>
+
+            {/* Buttons Section */}
+            <div
+              data-contact-reveal
+              className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-4 md:mt-12"
+            >
+              <motion.a
+                href="mailto:info@pfundit.com"
+                className="inline-flex items-center justify-center rounded-full px-8 py-3 font-semibold text-white btn-hero-primary transition-all duration-300"
+                whileHover={{ y: -2, scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                Talk to Us
+              </motion.a>
+
+              <motion.button
                 type="button"
-                className="inline-flex items-center gap-3 rounded-full border border-navy/10 bg-white/80 px-7 py-3 text-[0.64rem] font-bold tracking-[0.1em] text-navy/75 shadow-[0_12px_28px_rgba(15,27,61,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/35 hover:bg-navy hover:text-white"
+                className="inline-flex items-center justify-center rounded-full border-2 border-gold px-8 py-3 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold/10 hover:shadow-[0_0_24px_rgba(212,164,55,0.3)]"
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.98 }}
               >
                 Schedule a Meeting
-              </button>
+              </motion.button>
             </div>
           </div>
         </div>

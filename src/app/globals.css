@@ -23,6 +23,17 @@
   --spacing-side: 6vw;
   
   --radius-premium: 2.5rem;
+  
+  /* Premium typography scale (responsive, min 12px) */
+  --type-xs: clamp(0.75rem, 0.72rem + 0.1vw, 0.8125rem);
+  --type-sm: clamp(0.875rem, 0.84rem + 0.15vw, 0.95rem);
+  --type-base: clamp(1rem, 0.96rem + 0.2vw, 1.0625rem);
+  --type-md: clamp(1.125rem, 1.05rem + 0.3vw, 1.25rem);
+  --type-lg: clamp(1.5rem, 1.35rem + 0.6vw, 1.875rem);
+  --type-xl: clamp(1.875rem, 1.65rem + 0.8vw, 2.25rem);
+  --type-2xl: clamp(2.15rem, 1.85rem + 1vw, 2.85rem);
+  --type-3xl: clamp(2.8rem, 2.3rem + 1.5vw, 3.8rem);
+  --type-hero: clamp(3.2rem, 2.4rem + 2vw, 5.2rem);
 }
 
 @layer base {
@@ -57,8 +68,11 @@
     color: var(--color-text-primary);
     font-family: var(--font-geist), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     text-rendering: optimizeLegibility;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
   }
 
   /* Force premium button resets */
@@ -109,6 +123,87 @@
 }
 
 @layer components {
+  /* Typography Utility Classes */
+  
+  /* Hero/Primary headings - statement typography */
+  .typo-hero {
+    font-size: clamp(2.15rem, 1.85rem + 1vw, 2.85rem);
+    font-weight: 700;
+    line-height: 0.96;
+    letter-spacing: -0.055em;
+  }
+  
+  /* Page headings - section titles */
+  .typo-h1 {
+    font-size: var(--type-2xl);
+    font-weight: 700;
+    line-height: 0.94;
+    letter-spacing: -0.055em;
+  }
+  
+  /* Subsection headings */
+  .typo-h2 {
+    font-size: var(--type-xl);
+    font-weight: 700;
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+  }
+  
+  /* Card/component headings */
+  .typo-h3 {
+    font-size: var(--type-lg);
+    font-weight: 700;
+    line-height: 0.96;
+    letter-spacing: -0.04em;
+  }
+  
+  /* Body text - primary reading */
+  .typo-body {
+    font-size: var(--type-base);
+    line-height: 1.7;
+    letter-spacing: -0.01em;
+  }
+  
+  /* Secondary body - slightly smaller but still legible */
+  .typo-body-sm {
+    font-size: var(--type-sm);
+    line-height: 1.65;
+    letter-spacing: -0.005em;
+  }
+  
+  /* Labels & captions - minimum 12px */
+  .typo-label {
+    font-size: var(--type-xs);
+    font-weight: 600;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+  }
+  
+  /* Eyebrow/overline - small caps style */
+  .typo-eyebrow {
+    font-size: var(--type-xs);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    line-height: 1.4;
+  }
+  
+  /* Button text - ensures legible CTAs */
+  .typo-button {
+    font-size: var(--type-sm);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.2;
+  }
+  
+  /* Stat numbers - large impact */
+  .typo-stat {
+    font-size: var(--type-lg);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
   .layout-shell {
     width: 100%;
     max-width: 1400px;
@@ -132,15 +227,18 @@
     font-weight: 700;
     letter-spacing: 0.08em;
     transition: all 0.4s ease;
+    font-size: var(--type-sm);
   }
 
   .eyebrow {
     display: inline-block;
     margin-bottom: 1rem;
-    font-size: 0.82rem;
-    font-weight: 600;
-    letter-spacing: 0.02em;
+    font-size: var(--type-xs);
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
     color: color-mix(in srgb, var(--gold) 78%, var(--navy) 22%);
+    line-height: 1.4;
   }
 
   .section-cinematic {
@@ -194,13 +292,16 @@
     left: -22%;
     width: 54%;
     height: 380%;
-    transform: rotate(23deg);
-    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-    transition: transform 0.7s ease;
+    transform: rotate(23deg) translateX(-20%);
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    opacity: 0;
+    transition: transform 0.6s ease, opacity 0.25s ease;
+    pointer-events: none;
   }
 
   .btn-hero-primary:hover::before {
-    transform: translateX(220%) rotate(23deg);
+    opacity: 1;
+    transform: translateX(240%) rotate(23deg);
   }
 
   .btn-hero-secondary {

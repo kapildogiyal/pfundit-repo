@@ -1,16 +1,17 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useVelocity } from 'framer-motion';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
 
 const navLinks = [
   { id: 'mission', label: 'Mission' },
   { id: 'thesis', label: 'Thesis' },
   { id: 'ai-edge', label: 'AI Edge' },
   { id: 'leadership', label: 'Founders' },
-  { id: 'governance', label: 'Governance' },
-  { id: 'hiring', label: 'Hiring' },
   { id: 'stakeholders', label: 'Stakeholders' },
+  { id: 'governance', label: 'Governance' },
 ];
 
 function Magnetic({ children }: { children: React.ReactNode }) {
@@ -46,20 +47,89 @@ function Magnetic({ children }: { children: React.ReactNode }) {
 }
 
 export function Navbar() {
+  const pathname = usePathname();
+  const router = useRouter();
+  const isHiringPage = pathname === '/hiring';
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>('');
+  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
+  const [isUserClick, setIsUserClick] = useState(false);
+  const userClickRef = useRef(false);
+  const headerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const navRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const navContainerRef = useRef<HTMLDivElement | null>(null);
+  const [underline, setUnderline] = useState({ left: 0, width: 0, opacity: 0 });
   
+  const hiringStripY = useTransform(scrollY, [0, 30], [0, -60]);
+  const hiringStripOpacity = useTransform(scrollY, [0, 30], [1, 0]);
+  // On /hiring page there's no strip so nav starts at top (0), not 44px
+  const navTop = useTransform(scrollY, [0, 30], [isHiringPage ? 0 : 44, 0]);
   const navPadding = useTransform(scrollY, [0, 50], ['1rem', '0.55rem']);
   const navBackground = useTransform(
     scrollY, 
     [0, 50], 
-    ['rgba(248, 248, 245, 0)', 'rgba(251, 251, 249, 0.78)']
+    ['rgba(248, 248, 245, 0.1)', 'rgba(251, 251, 249, 0.95)']
   );
   const navBorder = useTransform(
     scrollY,
     [0, 50],
-    ['rgba(15, 27, 61, 0)', 'rgba(15, 27, 61, 0.1)']
+    ['rgba(15, 27, 61, 0)', 'rgba(15, 27, 61, 0.12)']
   );
+
+  useMotionValueEvent(scrollVelocity, 'change', (latest) => {
+    if (latest > 0) {
+      setScrollDirection('down');
+    } else if (latest < 0) {
+      setScrollDirection('up');
+    }
+  });
+
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        if (userClickRef.current) return; // Skip scroll detection if user just clicked
+        const offset = headerRef.current?.offsetHeight ?? 88;
+        const scrollPos = window.scrollY + offset + 8;
+        let current = '';
+        for (const link of navLinks) {
+          const el = document.getElementById(link.id);
+          if (!el) continue;
+          const top = el.getBoundingClientRect().top + window.scrollY;
+          if (top <= scrollPos) current = link.id;
+        }
+        setActiveSection(current);
+      });
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const container = navContainerRef.current;
+      if (!container) return setUnderline((u) => ({ ...u, opacity: 0 }));
+      const activeEl = navRefs.current[activeSection];
+      if (activeEl) {
+        const cRect = container.getBoundingClientRect();
+        const aRect = activeEl.getBoundingClientRect();
+        setUnderline({ left: aRect.left - cRect.left, width: aRect.width, opacity: 1 });
+      } else {
+        setUnderline({ left: 0, width: 0, opacity: 0 });
+      }
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [activeSection]);
 
   useEffect(() => {
     const unsubscribe = scrollY.on('change', (latest) => {
@@ -70,9 +140,19 @@ export function Navbar() {
 
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
+    if (isHiringPage) {
+      // Navigate back to home page with the hash
+      router.push(`/#${id}`);
+      return;
+    }
+    setActiveSection(id);
+    userClickRef.current = true;
+    setTimeout(() => {
+      userClickRef.current = false;
+    }, 1200);
     const element = document.getElementById(id);
     if (element) {
-      const offset = 68;
+      const offset = headerRef.current?.offsetHeight ?? 88;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -86,126 +166,159 @@ export function Navbar() {
   };
 
   return (
-    <motion.nav 
-      style={{ 
-        paddingTop: navPadding, 
-        paddingBottom: navPadding,
-        backgroundColor: navBackground,
-        borderBottom: `1px solid ${navBorder}`
-      }}
-      className="fixed top-0 left-0 w-full z-[100] backdrop-blur-xl transition-all duration-300"
-    >
-      <div className="layout-shell editorial-container flex items-center justify-between">
-        <motion.button 
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="group flex items-center gap-2 text-[1.95rem] font-bold tracking-[-0.05em] leading-none text-navy"
+    <div ref={headerRef} className="fixed left-0 top-0 z-[100] w-full">
+      {/* Hiring strip — hidden on the /hiring page itself */}
+      {!isHiringPage && (
+        <motion.div
+          style={{ 
+            y: hiringStripY,
+            opacity: scrollDirection === 'up' ? 1 : hiringStripOpacity
+          }}
+          className="absolute left-0 top-0 w-full border-b border-[#d4a437]/25 bg-[#d4a437] text-navy shadow-[0_4px_16px_rgba(212,164,55,0.15)]"
         >
-          <span className="relative overflow-hidden inline-block">
-            <span className="block group-hover:-translate-y-full transition-transform duration-500 ease-out">Pfundit</span>
-            <span className="absolute top-full left-0 block group-hover:-translate-y-full transition-transform duration-500 ease-out text-gold">Pfundit</span>
-          </span>
-          <motion.span 
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-            className="w-1.5 h-1.5 bg-gold rounded-full" 
-          />
-        </motion.button>
-
-        <div className="hidden lg:flex items-center gap-9">
-          {navLinks.map((link, index) => (
-            <motion.button
-              key={link.id}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 + index * 0.05 }}
-              onClick={() => scrollToSection(link.id)}
-              className="relative text-[0.78rem] font-semibold tracking-[0.03em] text-navy/55 hover:text-navy transition-all duration-300 group"
+          <div className="layout-shell editorial-container">
+            <Link
+              href="/hiring"
+              className="group relative flex w-full items-center justify-center gap-2 py-1.5 sm:py-2"
             >
-              <span className="relative z-10">{link.label}</span>
-              <motion.span 
-                className="absolute -bottom-1 left-0 w-0 h-px bg-gold"
-                whileHover={{ width: '100%' }}
-                transition={{ duration: 0.3 }}
+              <span className="text-center text-[0.8rem] font-medium tracking-[-0.015em] text-navy/95 sm:text-[0.9rem]">
+                We are hiring for founding roles across compliance, credit, product and engineering
+              </span>
+              <span className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5">
+                <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </span>
+            </Link>
+          </div>
+        </motion.div>
+      )}
+
+      <motion.nav 
+        style={{ 
+          paddingTop: navPadding, 
+          paddingBottom: navPadding,
+          backgroundColor: navBackground,
+          borderBottom: `1px solid ${navBorder}`,
+          top: navTop,
+        }}
+        className="absolute left-0 w-full transition-all duration-300"
+      >
+        <div className="layout-shell editorial-container flex items-center justify-between">
+          <motion.button 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="group flex items-center gap-2 text-[1.95rem] font-bold tracking-[-0.05em] leading-none text-navy"
+          >
+            <span className="relative inline-block overflow-hidden">
+              <span className="block transition-transform duration-500 ease-out group-hover:-translate-y-full">Pfundit</span>
+              <span className="absolute left-0 top-full block text-gold transition-transform duration-500 ease-out group-hover:-translate-y-full">Pfundit</span>
+            </span>
+            <motion.span 
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="h-1.5 w-1.5 rounded-full bg-gold" 
+            />
+          </motion.button>
+
+          <div className="hidden items-center gap-9 lg:flex relative" ref={navContainerRef as any}>
+            {navLinks.map((link, index) => (
+              <motion.button
+                key={link.id}
+                ref={(el) => { navRefs.current[link.id] = el; }}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                onClick={() => scrollToSection(link.id)}
+                className={`group relative typo-body-sm px-2 py-1 transition-all duration-300 ${activeSection === link.id ? 'text-navy' : 'text-navy/55'} hover:text-navy`}
+                aria-current={activeSection === link.id ? 'page' : undefined}
+              >
+                <span className="relative z-10">{link.label}</span>
+              </motion.button>
+            ))}
+            <motion.div
+              className="absolute -bottom-1 h-[2px] bg-gold rounded"
+              animate={{ left: underline.left, width: underline.width, opacity: underline.opacity }}
+              transition={{ type: 'spring', stiffness: 500, damping: 40, mass: 0.8 }}
+              style={{ position: 'absolute' }}
+            />
+          </div>
+
+          <motion.div 
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-6"
+          >
+            <Magnetic>
+              <motion.button
+                onClick={() => scrollToSection('contact')}
+                whileHover={{ y: -2, scale: 1.01 }}
+                whileTap={{ scale: 0.985 }}
+                className="group btn-hero-primary rounded-full px-7 py-3 typo-button text-white transition-all duration-300"
+              >
+                <span className="relative z-10">Talk to Us</span>
+              </motion.button>
+            </Magnetic>
+
+            <button 
+              className="group flex flex-col gap-1.5 p-2 lg:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <motion.div 
+                animate={{ rotate: mobileMenuOpen ? 45 : 0, y: mobileMenuOpen ? 7 : 0 }}
+                className="h-[1.5px] w-6 bg-navy" 
               />
-            </motion.button>
-          ))}
+              <motion.div 
+                animate={{ opacity: mobileMenuOpen ? 0 : 1, width: mobileMenuOpen ? 0 : 16 }}
+                className="h-[1.5px] bg-navy" 
+              />
+              <motion.div 
+                animate={{ rotate: mobileMenuOpen ? -45 : 0, y: mobileMenuOpen ? -7 : 0 }}
+                className="h-[1.5px] w-6 bg-navy" 
+              />
+            </button>
+          </motion.div>
         </div>
 
-        <motion.div 
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-6"
-        >
-          <Magnetic>
-            <button 
-              onClick={() => scrollToSection('contact')}
-              className="btn-hero-primary relative overflow-hidden rounded-full px-8 py-3.5 text-[0.62rem] font-bold tracking-[0.08em] text-white transition-transform active:scale-95"
+        {/* Mobile Menu Overlay */}
+        <AnimatePresence>
+          {mobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="fixed inset-0 z-[99] flex flex-col items-center justify-center bg-[linear-gradient(165deg,rgba(250,250,247,0.98),rgba(245,247,252,0.97))] p-8 lg:hidden"
             >
-              <span className="relative z-10">Talk to Us</span>
-              <motion.div 
-                className="absolute inset-0 bg-[#D4A437] translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"
-              />
-              <span className="absolute inset-0 bg-[#0f1b3d] group-hover:opacity-0 transition-opacity duration-300" />
-            </button>
-          </Magnetic>
-
-          <button 
-            className="lg:hidden flex flex-col gap-1.5 p-2 group"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            <motion.div 
-              animate={{ rotate: mobileMenuOpen ? 45 : 0, y: mobileMenuOpen ? 7 : 0 }}
-              className="w-6 h-[1.5px] bg-navy" 
-            />
-            <motion.div 
-              animate={{ opacity: mobileMenuOpen ? 0 : 1, width: mobileMenuOpen ? 0 : 16 }}
-              className="h-[1.5px] bg-navy" 
-            />
-            <motion.div 
-              animate={{ rotate: mobileMenuOpen ? -45 : 0, y: mobileMenuOpen ? -7 : 0 }}
-              className="w-6 h-[1.5px] bg-navy" 
-            />
-          </button>
-          </motion.div>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-[99] flex flex-col items-center justify-center bg-[linear-gradient(165deg,rgba(250,250,247,0.98),rgba(245,247,252,0.97))] p-8 lg:hidden"
-          >
-            <div className="flex flex-col gap-10 items-center">
-              {navLinks.map((link, i) => (
-                <motion.button
-                  key={link.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  onClick={() => scrollToSection(link.id)}
-                  className="text-4xl font-bold tracking-tighter text-navy hover:text-gold transition-colors"
+              <div className="flex flex-col items-center gap-10">
+                {navLinks.map((link, i) => (
+                  <motion.button
+                    key={link.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    onClick={() => scrollToSection(link.id)}
+                    className="text-4xl font-bold tracking-tighter text-navy transition-colors hover:text-gold"
+                  >
+                    {link.label}
+                  </motion.button>
+                ))}
+                <motion.button 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.5 }}
+                  onClick={() => scrollToSection('contact')}
+                  className="mt-4 group btn-hero-primary rounded-full px-12 py-4 typo-button text-white shadow-2xl"
                 >
-                  {link.label}
+                  <span className="relative z-10">Talk to Us</span>
+                  <motion.div
+                  />
+                  <span className="absolute inset-0 bg-[#0f1b3d] transition-opacity duration-300 group-hover:opacity-0" />
                 </motion.button>
-              ))}
-              <motion.button 
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.5 }}
-                onClick={() => scrollToSection('contact')}
-                className="mt-6 px-16 py-6 bg-navy text-white text-[0.8rem] font-bold tracking-[0.08em] rounded-full shadow-2xl"
-              >
-                Talk to Us
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.nav>
+    </div>
   );
 }
