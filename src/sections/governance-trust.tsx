@@ -144,7 +144,7 @@ export function Governance() {
           </div>
 
           <h2 data-gv="heading" className="typo-hero text-navy">
-            Built on <span className="text-gold italic">Regulated</span> Rails
+            Built on <span className="text-gold">Regulated</span> Rails
           </h2>
 
           <p data-gv="sub" className="mx-auto mt-6 max-w-[48rem] text-[0.96rem] leading-[1.28] text-navy/70">
