@@ -90,6 +90,42 @@ export function Hiring() {
   const [activeCategory, setActiveCategory] = useState<Category>('All Roles');
   const listRef = useRef<HTMLDivElement | null>(null);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState('');
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+
+  const handleApplyClick = (roleTitle: string) => {
+    setSelectedRole(roleTitle);
+    setFormStatus('idle');
+    setIsModalOpen(true);
+  };
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setFormStatus('submitting');
+    const formData = new FormData(event.currentTarget);
+    formData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        setFormStatus('success');
+        setTimeout(() => setIsModalOpen(false), 3000);
+      } else {
+        console.error("Error submitting application:", data);
+        setFormStatus('error');
+      }
+    } catch (err) {
+      console.error(err);
+      setFormStatus('error');
+    }
+  };
+
   const filtered = activeCategory === 'All Roles'
     ? roles
     : roles.filter((r) => r.category === activeCategory);
@@ -348,9 +384,12 @@ export function Hiring() {
 
                 {/* Apply button */}
                 <div className="hidden md:flex" style={{ flexShrink: 0 }}>
-                  <a
-                    href="#contact"
-                    onClick={e => e.stopPropagation()}
+                  <button
+                    onClick={e => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleApplyClick(role.title);
+                    }}
                     style={{
                       display: 'inline-flex', alignItems: 'center',
                       padding: '0.45rem 1.1rem',
@@ -378,7 +417,7 @@ export function Hiring() {
                     }}
                   >
                     Apply
-                  </a>
+                  </button>
                 </div>
               </a>
             ))}
@@ -428,8 +467,11 @@ export function Hiring() {
             </p>
           </div>
 
-          <a
-            href="#contact"
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              handleApplyClick('Open Application');
+            }}
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 10,
               padding: '0.875rem 2rem',
@@ -442,6 +484,8 @@ export function Hiring() {
               whiteSpace: 'nowrap',
               transition: 'all 0.25s ease',
               flexShrink: 0,
+              border: 'none',
+              cursor: 'pointer'
             }}
             onMouseEnter={e => {
               (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)';
@@ -454,10 +498,93 @@ export function Hiring() {
           >
             Send Open Application
             <ArrowIcon />
-          </a>
+          </button>
         </div>
 
       </div>
+
+      {/* --- Application Modal --- */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-navy/60 backdrop-blur-sm px-4">
+          <div className="relative w-full max-w-[36rem] overflow-hidden rounded-[2rem] bg-white p-8 shadow-2xl">
+            {/* close button */}
+            <button 
+              onClick={() => setIsModalOpen(false)} 
+              className="absolute right-6 top-6 text-navy/40 hover:text-navy transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <h3 className="mb-1 text-[1.8rem] font-bold text-navy tracking-tight">Application Form</h3>
+            <p className="mb-8 text-[0.95rem] text-navy/60">
+              Applying for: <span className="font-bold text-gold">{selectedRole}</span>
+            </p>
+
+            {formStatus === 'success' ? (
+              <div className="py-12 text-center flex flex-col items-center">
+                <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600 mb-5">
+                  <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h4 className="text-[1.4rem] font-bold text-navy mb-2">Application Received</h4>
+                <p className="text-[0.95rem] text-navy/70">Thank you for applying. We will be in touch shortly.</p>
+              </div>
+            ) : (
+              <form onSubmit={onSubmit} className="flex flex-col gap-5">
+                <input type="hidden" name="subject" value={`New Application for ${selectedRole}`} />
+                <input type="hidden" name="Role" value={selectedRole} />
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[0.72rem] font-bold uppercase tracking-wider text-navy/70">Full Name</label>
+                    <input required type="text" name="Name" className="w-full rounded-xl border border-navy/10 bg-[#F0F5FF]/60 px-4 py-3 text-[0.95rem] text-navy focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold transition-colors" placeholder="Jane Doe" />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[0.72rem] font-bold uppercase tracking-wider text-navy/70">Email</label>
+                    <input required type="email" name="Email" className="w-full rounded-xl border border-navy/10 bg-[#F0F5FF]/60 px-4 py-3 text-[0.95rem] text-navy focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold transition-colors" placeholder="jane@example.com" />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[0.72rem] font-bold uppercase tracking-wider text-navy/70">LinkedIn Profile</label>
+                    <input required type="url" name="LinkedIn" className="w-full rounded-xl border border-navy/10 bg-[#F0F5FF]/60 px-4 py-3 text-[0.95rem] text-navy focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold transition-colors" placeholder="https://linkedin.com/in/..." />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label className="text-[0.72rem] font-bold uppercase tracking-wider text-navy/70">Resume Link (Optional)</label>
+                    <input type="url" name="Resume Link" className="w-full rounded-xl border border-navy/10 bg-[#F0F5FF]/60 px-4 py-3 text-[0.95rem] text-navy focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold transition-colors" placeholder="Google Drive, Dropbox, etc." />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-[0.72rem] font-bold uppercase tracking-wider text-navy/70">Why Pfundit?</label>
+                  <textarea required name="Why Pfundit" rows={4} className="w-full resize-none rounded-xl border border-navy/10 bg-[#F0F5FF]/60 px-4 py-3 text-[0.95rem] text-navy focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold transition-colors" placeholder="Tell us why you are a great fit..." />
+                </div>
+
+                {formStatus === 'error' && (
+                  <p className="text-sm text-red-500 font-medium">Something went wrong. Please check your access key or try again.</p>
+                )}
+
+                <button 
+                  type="submit" 
+                  disabled={formStatus === 'submitting'}
+                  className="mt-3 w-full rounded-full bg-navy py-3.5 text-[0.95rem] font-bold text-white transition-all hover:bg-navy/90 hover:shadow-lg disabled:opacity-70 flex justify-center items-center gap-2"
+                >
+                  {formStatus === 'submitting' ? (
+                    <>
+                      <svg className="w-5 h-5 animate-spin text-white/70" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                      Submitting...
+                    </>
+                  ) : 'Submit Application'}
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
