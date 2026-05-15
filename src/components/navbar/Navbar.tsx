@@ -138,6 +138,15 @@ export function Navbar() {
     return () => unsubscribe();
   }, [scrollY]);
 
+  // Close mobile menu on Escape
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && mobileMenuOpen) setMobileMenuOpen(false);
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [mobileMenuOpen]);
+
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
     if (isHiringPage) {
@@ -181,7 +190,7 @@ export function Navbar() {
               href="/hiring"
               className="group relative flex w-full items-center justify-center gap-2 py-1.5 sm:py-2"
             >
-              <span className="text-center text-[0.8rem] font-medium tracking-[-0.015em] text-navy/95 sm:text-[0.9rem]">
+              <span className="text-center text-[clamp(0.75rem,2vw,0.9rem)] font-medium tracking-[-0.015em] text-navy/95">
                 We are hiring for founding roles across compliance, credit, product and engineering
               </span>
               <span className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5">
@@ -209,7 +218,7 @@ export function Navbar() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="group flex items-center gap-2 text-[1.95rem] font-bold tracking-[-0.05em] leading-none text-navy"
+            className="group flex items-center gap-2 text-[clamp(1.55rem,5vw,1.95rem)] font-bold tracking-[-0.05em] leading-none text-navy"
           >
             <span className="relative inline-block overflow-hidden">
               <span className="block transition-transform duration-500 ease-out group-hover:-translate-y-full">Pfundit</span>
@@ -247,16 +256,28 @@ export function Navbar() {
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-6"
+            className="flex items-center gap-3 sm:gap-6"
           >
             <Magnetic>
+              {/* Desktop / tablet CTA */}
               <motion.button
                 onClick={() => scrollToSection('contact')}
                 whileHover={{ y: -2, scale: 1.01 }}
                 whileTap={{ scale: 0.985 }}
-                className="group btn-hero-primary rounded-full px-7 py-3 typo-button text-white transition-all duration-300"
+                className="group btn-hero-primary hidden sm:inline-flex rounded-full px-6 py-3 typo-button text-white transition-all duration-300"
               >
                 <span className="relative z-10">Talk to Us</span>
+              </motion.button>
+
+              {/* Compact mobile CTA */}
+              <motion.button
+                onClick={() => scrollToSection('contact')}
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.985 }}
+                className="group btn-hero-primary sm:hidden inline-flex items-center justify-center rounded-full px-3 py-2 typo-button text-white transition-all duration-200"
+                aria-label="Talk to Us"
+              >
+                <span className="relative z-10 text-sm">Talk</span>
               </motion.button>
             </Magnetic>
 
@@ -287,8 +308,18 @@ export function Navbar() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="fixed inset-0 z-[99] flex flex-col items-center justify-center bg-[linear-gradient(165deg,rgba(250,250,247,0.98),rgba(245,247,252,0.97))] p-8 lg:hidden"
+              className="fixed inset-0 z-[99] flex flex-col items-center justify-center bg-[linear-gradient(165deg,rgba(250,250,247,0.98),rgba(245,247,252,0.97))] p-6 sm:p-8 lg:hidden"
             >
+              <button
+                aria-label="Close menu"
+                onClick={() => setMobileMenuOpen(false)}
+                className="absolute right-6 top-6 inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/70 text-navy shadow-sm"
+              >
+                <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+
               <div className="flex flex-col items-center gap-10">
                 {navLinks.map((link, i) => (
                   <motion.button
@@ -297,7 +328,7 @@ export function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
                     onClick={() => scrollToSection(link.id)}
-                    className="text-4xl font-bold tracking-tighter text-navy transition-colors hover:text-gold"
+                    className="text-[clamp(1.6rem,6vw,2.5rem)] font-bold tracking-tighter text-navy transition-colors hover:text-gold"
                   >
                     {link.label}
                   </motion.button>

@@ -59,7 +59,7 @@ export default function Home() {
         </div>
 
         <div className="layout-shell editorial-container py-16 sm:py-18 lg:py-20">
-          <div className="grid gap-12 border-b border-white/12 pb-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.3fr)] lg:gap-14">
+          <div className="grid gap-12 border-b border-white/12 pb-12 md:grid-cols-2 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1.3fr)] lg:gap-14">
             <div>
               <p className="text-[2rem] font-bold tracking-[-0.05em] text-white sm:text-[2.25rem]">
                 Pfundit

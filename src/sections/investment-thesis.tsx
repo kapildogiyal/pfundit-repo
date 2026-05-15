@@ -55,6 +55,7 @@ export function InvestmentThesis() {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+    if (!window.matchMedia('(min-width: 1024px)').matches) return;
     gsap.registerPlugin(ScrollTrigger);
 
     const section = pinSectionRef.current;
@@ -116,9 +117,9 @@ export function InvestmentThesis() {
       <section
         ref={pinSectionRef}
         data-thesis-pin
-        className="relative flex h-screen flex-col items-center justify-center overflow-hidden bg-[#F0F5FF] px-6 py-4 lg:px-12"
+        className="relative flex flex-col items-center justify-center overflow-hidden bg-[#F0F5FF] px-4 py-10 sm:px-6 lg:min-h-[100svh] lg:px-12 lg:py-4"
       >
-        <div className="layout-shell relative z-10 flex h-full w-full max-w-[1200px] flex-col items-center justify-center">
+        <div className="layout-shell relative z-10 flex w-full max-w-[1200px] flex-col items-center justify-center lg:h-full">
 
           {/* Even Tighter Header */}
           <header className="mb-4 w-full text-center lg:mb-6">
@@ -127,8 +128,74 @@ export function InvestmentThesis() {
             </h2>
           </header>
 
-          {/* Optimized Card Stacking Area - Reduced Height */}
-          <div className="relative h-[65vh] w-full max-w-[1000px] lg:h-[70vh]">
+          <div className="grid w-full max-w-[1000px] gap-4 lg:hidden">
+            {verticals.map((v) => (
+              <article
+                key={v.id}
+                className="overflow-hidden rounded-[1.5rem] border border-navy/[0.03] bg-white shadow-[0_24px_80px_-20px_rgba(15,27,61,0.06)]"
+              >
+                <div className="flex flex-col">
+                  <div className="flex flex-col p-5 sm:p-6">
+                    <div className="mb-4 flex items-center gap-3">
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full border border-gold/15 bg-gold/10 text-[0.6rem] font-bold text-gold">
+                        {v.id}
+                      </div>
+                      <span className="typo-label text-navy/25">Strategic Vertical</span>
+                    </div>
+
+                    <h3 className="mb-1.5 text-xl font-bold tracking-tight text-navy sm:text-2xl">
+                      {v.title}
+                    </h3>
+                    <p className="mb-3 typo-eyebrow text-gold opacity-80">
+                      {v.tagline}
+                    </p>
+
+                    <p className="mb-5 typo-body-sm text-navy/60">
+                      {v.description}
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-x-3 gap-y-3 border-t border-navy/[0.05] pt-4">
+                      {v.metrics.map((m) => (
+                        <div key={m.label}>
+                          <span className="block text-[clamp(0.95rem,2.8vw,1.08rem)] font-bold tracking-tighter text-navy">
+                            {m.value}
+                          </span>
+                          <span className="mt-0.5 block text-xs typo-label text-navy/20">
+                            {m.label}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="bg-navy/[0.02] p-5 sm:p-6">
+                    <span className="mb-3 block typo-eyebrow text-navy/40">
+                      Key Capabilities
+                    </span>
+                    <div className="space-y-2.5">
+                      {v.capabilities.map((cap) => (
+                        <div key={cap} className="flex items-start gap-3">
+                          <div className="mt-1 h-1 w-1 shrink-0 rounded-full bg-gold" />
+                          <span className="typo-body-sm text-navy/70">{cap}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <motion.button
+                      className="btn-hero-primary mt-5 w-full rounded-full px-7 py-3 typo-button text-white transition-all duration-300 hover:-translate-y-0.5"
+                      whileHover={{ y: -2, scale: 1.01 }}
+                      whileTap={{ scale: 0.985 }}
+                    >
+                      Talk to Us
+                    </motion.button>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+
+          {/* Optimized Card Stacking Area - Desktop Only */}
+          <div className="relative hidden h-[70vh] w-full max-w-[1000px] lg:block">
             {verticals.map((v, i) => (
               <div
                 key={v.id}
@@ -138,7 +205,7 @@ export function InvestmentThesis() {
                 <div className="relative flex h-full w-full flex-col overflow-hidden rounded-[1.5rem] border border-navy/[0.03] bg-white shadow-[0_24px_80px_-20px_rgba(15,27,61,0.06)] lg:flex-row">
 
                   {/* Compact Left Column */}
-                  <div className="flex flex-1 flex-col p-6 lg:p-10">
+                  <div className="flex flex-1 flex-col p-5 sm:p-6 lg:p-10">
                     <div className="mb-4 flex items-center gap-3">
                       <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gold/10 text-[0.6rem] font-bold text-gold border border-gold/15">
                         {v.id}
@@ -161,7 +228,7 @@ export function InvestmentThesis() {
                       <div className="grid grid-cols-2 gap-x-3 gap-y-2 border-t border-navy/[0.05] pt-4">
                         {v.metrics.map((m) => (
                           <div key={m.label}>
-                            <span className="block text-base font-bold tracking-tighter text-navy lg:text-lg">
+                            <span className="block text-[clamp(0.95rem,2.8vw,1.08rem)] font-bold tracking-tighter text-navy lg:text-lg">
                               {m.value}
                             </span>
                             <span className="mt-0.5 block typo-label text-navy/20 text-xs">
@@ -210,20 +277,6 @@ export function InvestmentThesis() {
                     </div>
                   </div>
 
-                  {/* Mobile Capabilities (more compact) */}
-                  <div className="bg-navy/[0.02] p-6 lg:hidden">
-                    <span className="mb-3 block typo-eyebrow text-navy/40">
-                      Key Capabilities
-                    </span>
-                    <div className="space-y-2">
-                      {v.capabilities.map((cap) => (
-                        <div key={cap} className="flex items-start gap-3">
-                          <div className="mt-1 h-1 w-1 shrink-0 rounded-full bg-gold" />
-                          <span className="typo-body-sm text-navy/70">{cap}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               </div>
             ))}

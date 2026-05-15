@@ -14,21 +14,21 @@ export function PremiumBackground() {
       />
 
       <motion.div
-        className="absolute -left-40 -top-28 h-[34rem] w-[34rem] rounded-full"
+        className="absolute -left-40 -top-28 h-[min(78vw,34rem)] w-[min(78vw,34rem)] rounded-full"
         style={{ background: 'radial-gradient(circle at center, rgba(212,164,55,0.14), transparent 72%)' }}
         animate={{ x: [0, 14, 0], y: [0, 10, 0] }}
         transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
       />
 
       <motion.div
-        className="absolute right-[-10rem] top-[18%] h-[33rem] w-[33rem] rounded-full"
+        className="absolute right-[-10rem] top-[18%] h-[min(80vw,33rem)] w-[min(80vw,33rem)] rounded-full"
         style={{ background: 'radial-gradient(circle at center, rgba(15,27,61,0.11), transparent 70%)' }}
         animate={{ x: [0, -14, 0], y: [0, -9, 0] }}
         transition={{ duration: 34, repeat: Infinity, ease: 'linear' }}
       />
 
       <motion.div
-        className="absolute bottom-[-12rem] left-[28%] h-[28rem] w-[28rem] rounded-full"
+        className="absolute bottom-[-12rem] left-[28%] h-[min(70vw,28rem)] w-[min(70vw,28rem)] rounded-full"
         style={{ background: 'radial-gradient(circle at center, rgba(114,130,168,0.08), transparent 70%)' }}
         animate={{ x: [0, 10, 0], y: [0, -10, 0] }}
         transition={{ duration: 32, repeat: Infinity, ease: 'linear' }}
@@ -48,7 +48,7 @@ export function PremiumBackground() {
         style={{
           backgroundImage:
             'linear-gradient(to right, rgba(16,24,40,0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(16,24,40,0.04) 1px, transparent 1px)',
-          backgroundSize: '44px 44px',
+          backgroundSize: 'clamp(24px, 5vw, 44px) clamp(24px, 5vw, 44px)',
           maskImage: 'radial-gradient(circle at center, rgba(0,0,0,0.55), transparent 84%)',
         }}
       />

@@ -150,7 +150,13 @@ export function Infrastructure() {
     const cleanups: Array<() => void> = [];
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
+      const runFromTo = (selector: string, fromVars: any, toVars: any) => {
+        const els = section.querySelectorAll(selector);
+        if (!els || els.length === 0) return;
+        gsap.fromTo(els as any, fromVars, toVars);
+      };
+
+      runFromTo(
         '[data-structural-fade]',
         { opacity: 0, y: 26 },
         {
@@ -228,7 +234,7 @@ export function Infrastructure() {
 
         <div
           data-structural-fade
-          className="mx-auto mt-10 flex max-w-[64rem] flex-wrap items-center justify-center gap-3"
+          className="mx-auto mt-10 grid w-full max-w-[64rem] grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-3"
         >
           {metrics.map((metric) => {
             const isActive = activeMetric.title === metric.title;
@@ -239,8 +245,8 @@ export function Infrastructure() {
                 onClick={() => setActiveMetric(metric)}
                 className={
                   isActive
-                    ? 'rounded-full bg-navy px-5 py-2.5 text-[0.82rem] font-semibold text-white shadow-[0_18px_34px_rgba(15,27,61,0.12)] transition-all duration-300'
-                    : 'rounded-full border border-navy/10 bg-white/45 px-5 py-2.5 text-[0.82rem] font-semibold text-navy/82 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:bg-white/75'
+                    ? 'w-full text-center rounded-full bg-navy px-5 py-2.5 text-[0.82rem] font-semibold text-white shadow-[0_18px_34px_rgba(15,27,61,0.12)] transition-all duration-300'
+                    : 'w-full text-center rounded-full border border-navy/10 bg-white/45 px-5 py-2.5 text-[0.82rem] font-semibold text-navy/82 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:bg-white/75'
                 }
                 type="button"
               >

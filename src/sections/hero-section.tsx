@@ -25,12 +25,14 @@ export function HeroSection() {
           transition={{ duration: 2.2, ease: 'easeOut' }}
           src="/herosectionbgimage.png"
           alt="Architectural Backdrop"
-          className="h-full w-full select-none object-cover opacity-75"
+          className="h-full w-full select-none object-cover opacity-20"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(212,164,55,0.2),transparent_32%),radial-gradient(circle_at_88%_20%,rgba(15,27,61,0.17),transparent_36%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(212,164,55,0.18),transparent_32%),radial-gradient(circle_at_88%_20%,rgba(15,27,61,0.14),transparent_36%)]" />
       </div>
 
-      <div className="pointer-events-none absolute inset-0 z-[1] hidden lg:block">
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-[1] w-full bg-[linear-gradient(90deg,rgba(247,247,242,0.98)_0%,rgba(247,247,242,0.96)_34%,rgba(247,247,242,0.9)_58%,rgba(247,247,242,0.58)_74%,rgba(247,247,242,0.12)_90%,transparent_100%)] lg:w-[66%]" />
+
+      <div className="pointer-events-none absolute inset-0 z-[2] hidden lg:block">
         <svg className="absolute inset-0 h-full w-full opacity-50" viewBox="0 0 1200 760" fill="none" preserveAspectRatio="none">
           <path d="M730 130C812 190 860 246 924 328" stroke="rgba(212,164,55,0.28)" strokeWidth="1.2" />
           <path d="M748 210C828 250 890 320 960 420" stroke="rgba(15,27,61,0.2)" strokeWidth="1.1" />
@@ -56,7 +58,8 @@ export function HeroSection() {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             className="col-span-12 lg:col-span-7 xl:col-span-8"
           >
-            <div className="max-w-[52rem] pt-10 lg:pt-12">
+            <div className="relative isolate max-w-[52rem] pt-10 lg:pt-12">
+              <div className="absolute -inset-x-6 -inset-y-5 -z-10 rounded-[2rem] bg-[linear-gradient(90deg,rgba(247,247,242,0.98)_0%,rgba(247,247,242,0.94)_52%,rgba(247,247,242,0.72)_78%,rgba(247,247,242,0.18)_100%)] blur-[2px] lg:-inset-x-10 lg:-inset-y-8" />
               <div className="mb-5 inline-flex items-center gap-3">
                 <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.8)]" />
                 <span className="typo-eyebrow text-navy/60">
@@ -74,9 +77,9 @@ export function HeroSection() {
                 correctly from day one.
               </p>
 
-              <div className="mb-6 grid max-w-[48rem] grid-cols-1 py-4 sm:grid-cols-3 md:mb-7 md:py-5">
+              <div className="mb-6 grid max-w-[48rem] grid-cols-1 gap-6 py-4 sm:grid-cols-2 md:grid-cols-3 md:mb-7 md:py-5">
                 <div>
-                  <span className="block text-[1.7rem] font-bold tracking-tighter text-navy md:text-[1.95rem]">
+                  <span className="block text-[clamp(1.45rem,4vw,1.95rem)] font-bold tracking-tighter text-navy">
                     &#8377;100L Cr
                   </span>
                   <span className="mt-1 block max-w-[13ch] typo-label text-text-muted">
@@ -84,7 +87,7 @@ export function HeroSection() {
                   </span>
                 </div>
                 <div>
-                  <span className="block text-[1.7rem] font-bold tracking-tighter text-navy md:text-[1.95rem]">
+                  <span className="block text-[clamp(1.45rem,4vw,1.95rem)] font-bold tracking-tighter text-navy">
                     60+ yrs
                   </span>
                   <span className="mt-1 block max-w-[15ch] typo-label text-text-muted">
@@ -92,7 +95,7 @@ export function HeroSection() {
                   </span>
                 </div>
                 <div>
-                  <span className="block text-[1.7rem] font-bold tracking-tighter text-navy md:text-[1.95rem]">
+                  <span className="block text-[clamp(1.45rem,4vw,1.95rem)] font-bold tracking-tighter text-navy">
                     25-30%*
                   </span>
                   <span className="mt-1 block max-w-[16ch] typo-label text-text-muted">

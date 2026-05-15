@@ -69,10 +69,14 @@
     font-family: var(--font-geist), system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    overflow-x: hidden;
+    overflow-x: clip;
     text-rendering: optimizeLegibility;
     line-height: 1.6;
     letter-spacing: -0.01em;
+  }
+
+  html {
+    overflow-x: clip;
   }
 
   /* Force premium button resets */
@@ -106,7 +110,7 @@
     background-image:
       linear-gradient(to right, rgba(15, 27, 61, 0.04) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(15, 27, 61, 0.04) 1px, transparent 1px);
-    background-size: 46px 46px;
+    background-size: clamp(24px, 5vw, 46px) clamp(24px, 5vw, 46px);
     mask-image: radial-gradient(circle at center, black 24%, transparent 88%);
   }
 
@@ -208,11 +212,11 @@
     width: 100%;
     max-width: 1400px;
     margin-inline: auto;
-    padding-inline: var(--spacing-gutter);
+    padding-inline: clamp(1rem, 3.75vw, var(--spacing-gutter));
   }
 
   .editorial-container {
-    padding-inline: var(--spacing-side);
+    padding-inline: clamp(1rem, 5vw, var(--spacing-side));
   }
 
   /* Remove all boxy legacy button styles */

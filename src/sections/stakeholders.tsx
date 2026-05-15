@@ -60,8 +60,14 @@ export function Stakeholders() {
     const cleanups: Array<() => void> = [];
 
     const ctx = gsap.context(() => {
+      const runFromTo = (selector: string, fromVars: any, toVars: any) => {
+        const els = section.querySelectorAll(selector);
+        if (!els || els.length === 0) return;
+        gsap.fromTo(els as any, fromVars, toVars);
+      };
+
       // Intro headers
-      gsap.fromTo(
+      runFromTo(
         '[data-stakeholder-intro]',
         { opacity: 0, y: 34 },
         {
@@ -118,7 +124,9 @@ export function Stakeholders() {
       });
 
       // --- Mobile Stack Logic ---
-      gsap.utils.toArray<HTMLElement>('[data-stakeholder-mobile-row]').forEach((row) => {
+      const mobileRows = gsap.utils.toArray<HTMLElement>('[data-stakeholder-mobile-row]');
+      if (mobileRows.length > 0) {
+        mobileRows.forEach((row) => {
         const img = row.querySelector('[data-stakeholder-mobile-img]');
         const text = row.querySelector('[data-stakeholder-mobile-text]');
         const tl = gsap.timeline({
@@ -126,7 +134,8 @@ export function Stakeholders() {
         });
         tl.fromTo(img, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
           .fromTo(text, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.5");
-      });
+        });
+      }
 
     }, section);
 

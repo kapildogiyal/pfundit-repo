@@ -17,7 +17,13 @@ export function Contact() {
     if (!section) return;
 
     const ctx = gsap.context(() => {
-      gsap.fromTo(
+      const runFromTo = (selector: string, fromVars: any, toVars: any) => {
+        const els = section.querySelectorAll(selector);
+        if (!els || els.length === 0) return;
+        gsap.fromTo(els as any, fromVars, toVars);
+      };
+
+      runFromTo(
         '[data-contact-reveal]',
         { opacity: 0, y: 30 },
         {

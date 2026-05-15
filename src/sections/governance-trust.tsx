@@ -73,42 +73,54 @@ export function Governance() {
     const ctx = gsap.context(() => {
       const st = { trigger: section, start: 'top 76%' };
 
-      gsap.fromTo('[data-gv="badge"]',
+      const runFromTo = (selector: string, fromVars: any, toVars: any) => {
+        const els = section.querySelectorAll(selector);
+        if (!els || els.length === 0) return;
+        gsap.fromTo(els as any, fromVars, toVars);
+      };
+
+      const runTo = (selector: string, toVars: any) => {
+        const els = section.querySelectorAll(selector);
+        if (!els || els.length === 0) return;
+        gsap.to(els as any, toVars);
+      };
+
+      runFromTo('[data-gv="badge"]',
         { opacity: 0, y: -12, scale: 0.8 },
         { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'back.out(2)', scrollTrigger: st }
       );
-      gsap.fromTo('[data-gv="heading"]',
+      runFromTo('[data-gv="heading"]',
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 1, ease: 'power3.out', delay: 0.07, scrollTrigger: st }
       );
-      gsap.fromTo('[data-gv="sub"]',
+      runFromTo('[data-gv="sub"]',
         { opacity: 0, y: 18 },
         { opacity: 1, y: 0, duration: 0.85, ease: 'power2.out', delay: 0.18, scrollTrigger: st }
       );
-      gsap.fromTo('[data-gv="left"]',
+      runFromTo('[data-gv="left"]',
         { opacity: 0, x: -30 },
         { opacity: 1, x: 0, duration: 1, ease: 'power3.out', delay: 0.3, scrollTrigger: st }
       );
-      gsap.fromTo('[data-gv="right"]',
+      runFromTo('[data-gv="right"]',
         { opacity: 0, x: 30 },
         { opacity: 1, x: 0, duration: 1, ease: 'power3.out', delay: 0.3, scrollTrigger: st }
       );
-      gsap.fromTo('[data-gv="tl-item"]',
+      runFromTo('[data-gv="tl-item"]',
         { opacity: 0, x: 16 },
         { opacity: 1, x: 0, duration: 0.6, stagger: 0.13, ease: 'power2.out', delay: 0.5,
           scrollTrigger: { trigger: '[data-gv="timeline"]', start: 'top 84%' } }
       );
-      gsap.fromTo('[data-gv="tl-line"]',
+      runFromTo('[data-gv="tl-line"]',
         { scaleY: 0 },
         { scaleY: 1, duration: 1.4, ease: 'power3.out', delay: 0.35, transformOrigin: 'top',
           scrollTrigger: { trigger: '[data-gv="timeline"]', start: 'top 84%' } }
       );
-      gsap.fromTo('[data-gv="disclaimer"]',
+      runFromTo('[data-gv="disclaimer"]',
         { opacity: 0 },
         { opacity: 1, duration: 1, ease: 'power2.out',
           scrollTrigger: { trigger: '[data-gv="disclaimer"]', start: 'top 92%' } }
       );
-      gsap.to('[data-gv="pulse-dot"]', {
+      runTo('[data-gv="pulse-dot"]', {
         scale: 1.6, opacity: 0.5, duration: 1.4, ease: 'sine.inOut', repeat: -1, yoyo: true,
       });
     }, section);
