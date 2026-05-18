@@ -40,28 +40,53 @@ export function MissionVision() {
 
     const ctx = gsap.context(() => {
       cardNodes.forEach((card, index) => {
-        const direction = Number(card.dataset.direction || (index === 0 ? -72 : 72));
-
-        gsap.fromTo(
-          card,
-          { x: direction, opacity: 0, y: 24 },
-          {
-            x: 0,
-            y: 0,
-            opacity: 1,
-            duration: 1,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 82%',
-              toggleActions: 'play none none reverse',
-            },
-          }
-        );
-
         const content = card.querySelector<HTMLElement>('[data-card-content]');
         const glow = card.querySelector<HTMLElement>('[data-card-glow]');
+
+        // Auto glow animation on scroll
+        if (glow && content) {
+          gsap.to(
+            { progress: 0 },
+            {
+              progress: 1,
+              duration: 1.5,
+              ease: 'sine.inOut',
+              scrollTrigger: {
+                trigger: card,
+                start: 'bottom 100%',
+                end: 'top 20%',
+                onEnter: () => {
+                  gsap.to(
+                    { progress: 0 },
+                    {
+                      progress: 1,
+                      duration: 1.2,
+                      ease: 'sine.inOut',
+                      onUpdate: function () {
+                        const pos = this.progress() * 100;
+                        glow.style.background = `radial-gradient(circle at ${pos}% 40%, rgba(212,164,55,0.55), rgba(255,255,255,0) 50%)`;
+                      },
+                    }
+                  );
+                },
+              },
+              onUpdate: function () {
+                const pos = 10 + this.progress() * 80;
+                glow.style.background = `radial-gradient(circle at ${pos}% 40%, rgba(212,164,55,0.45), rgba(255,255,255,0) 50%)`;
+              },
+            }
+          );
+        }
+
         if (!content || !glow) return;
+
+        let isAutoGlowing = false;
+
+        // Detect when auto-glow is active
+        const checkAutoGlow = () => {
+          const rect = card.getBoundingClientRect();
+          isAutoGlowing = rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
+        };
 
         const handleMove = (event: MouseEvent) => {
           const rect = card.getBoundingClientRect();
@@ -84,7 +109,7 @@ export function MissionVision() {
 
           gsap.to(glow, {
             opacity: 1,
-            background: `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(212,164,55,0.18), rgba(255,255,255,0) 42%)`,
+            background: `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(212,164,55,0.22), rgba(255,255,255,0) 42%)`,
             duration: 0.35,
             ease: 'power2.out',
           });
@@ -100,13 +125,25 @@ export function MissionVision() {
             ease: 'power3.out',
           });
 
-          gsap.to(glow, {
-            opacity: 0.8,
-            background:
-              'radial-gradient(circle at top right, rgba(212,164,55,0.12), rgba(255,255,255,0) 28%)',
-            duration: 0.45,
-            ease: 'power3.out',
-          });
+          // Return to auto-glow or default glow
+          checkAutoGlow();
+          if (isAutoGlowing) {
+            gsap.to(glow, {
+              opacity: 0.95,
+              background:
+                'radial-gradient(circle at 60% 40%, rgba(212,164,55,0.28), rgba(255,255,255,0) 50%)',
+              duration: 0.45,
+              ease: 'power3.out',
+            });
+          } else {
+            gsap.to(glow, {
+              opacity: 0.8,
+              background:
+                'radial-gradient(circle at top right, rgba(212,164,55,0.12), rgba(255,255,255,0) 28%)',
+              duration: 0.45,
+              ease: 'power3.out',
+            });
+          }
         };
 
         card.addEventListener('mousemove', handleMove);
