@@ -45,37 +45,36 @@ export function MissionVision() {
 
         // Auto glow animation on scroll
         if (glow && content) {
-          gsap.to(
-            { progress: 0 },
-            {
-              progress: 1,
-              duration: 1.5,
-              ease: 'sine.inOut',
-              scrollTrigger: {
-                trigger: card,
-                start: 'bottom 100%',
-                end: 'top 20%',
-                onEnter: () => {
-                  gsap.to(
-                    { progress: 0 },
-                    {
-                      progress: 1,
-                      duration: 1.2,
-                      ease: 'sine.inOut',
-                      onUpdate: function () {
-                        const pos = this.progress() * 100;
-                        glow.style.background = `radial-gradient(circle at ${pos}% 40%, rgba(212,164,55,0.55), rgba(255,255,255,0) 50%)`;
-                      },
-                    }
-                  );
+          glow.style.opacity = '1';
+          glow.style.backgroundSize = '220% 220%';
+          glow.style.backgroundPosition = '0% 50%';
+
+          const glowState = { x: 0 };
+
+          const revealGlow = () => {
+            gsap.fromTo(
+              glowState,
+              { x: 0 },
+              {
+                x: 100,
+                duration: 2.8,
+                ease: 'power2.out',
+                onUpdate: () => {
+                  glow.style.backgroundImage =
+                    'radial-gradient(circle at center, rgba(212,164,55,0.9) 0%, rgba(212,164,55,0.42) 18%, rgba(255,255,255,0) 55%)';
+                  glow.style.backgroundRepeat = 'no-repeat';
+                  glow.style.backgroundPosition = `${glowState.x}% 50%`;
                 },
-              },
-              onUpdate: function () {
-                const pos = 10 + this.progress() * 80;
-                glow.style.background = `radial-gradient(circle at ${pos}% 40%, rgba(212,164,55,0.45), rgba(255,255,255,0) 50%)`;
-              },
-            }
-          );
+              }
+            );
+          };
+
+          ScrollTrigger.create({
+            trigger: card,
+            start: 'top 88%',
+            once: true,
+            onEnter: revealGlow,
+          });
         }
 
         if (!content || !glow) return;
@@ -109,7 +108,7 @@ export function MissionVision() {
 
           gsap.to(glow, {
             opacity: 1,
-            background: `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(212,164,55,0.22), rgba(255,255,255,0) 42%)`,
+            background: `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(212,164,55,0.85), rgba(212,164,55,0.36) 18%, rgba(255,255,255,0) 58%)`,
             duration: 0.35,
             ease: 'power2.out',
           });
@@ -131,7 +130,7 @@ export function MissionVision() {
             gsap.to(glow, {
               opacity: 0.95,
               background:
-                'radial-gradient(circle at 60% 40%, rgba(212,164,55,0.28), rgba(255,255,255,0) 50%)',
+                'radial-gradient(circle at 50% 50%, rgba(212,164,55,0.9), rgba(212,164,55,0.4) 18%, rgba(255,255,255,0) 58%)',
               duration: 0.45,
               ease: 'power3.out',
             });
@@ -139,7 +138,7 @@ export function MissionVision() {
             gsap.to(glow, {
               opacity: 0.8,
               background:
-                'radial-gradient(circle at top right, rgba(212,164,55,0.12), rgba(255,255,255,0) 28%)',
+                'radial-gradient(circle at top right, rgba(212,164,55,0.4), rgba(212,164,55,0.14) 18%, rgba(255,255,255,0) 58%)',
               duration: 0.45,
               ease: 'power3.out',
             });
@@ -198,10 +197,12 @@ export function MissionVision() {
             >
               <div
                 data-card-glow
-                className="pointer-events-none absolute inset-0 opacity-80"
+                className="pointer-events-none absolute inset-0 opacity-100 mix-blend-screen"
                 style={{
                   background:
-                    'radial-gradient(circle at top right, rgba(212,164,55,0.12), rgba(255,255,255,0) 28%)',
+                    'radial-gradient(circle at center, rgba(212,164,55,0.85), rgba(212,164,55,0.35) 18%, rgba(255,255,255,0) 58%)',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '220% 220%',
                 }}
               />
               <div
