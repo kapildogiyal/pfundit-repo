@@ -99,38 +99,44 @@ function LinkedInSquare() {
 /* ─────────────────── ProfileCircle ─────────────────── */
 function ProfileCircle({ leader, index }: { leader: typeof leaders[0]; index: number }) {
   return (
-    <div className="relative flex items-center justify-center" style={{ width: 'clamp(140px, 58vw, 200px)', height: 'clamp(140px, 58vw, 200px)' }}>
+    <div className="relative flex items-center justify-start" style={{ width: 'clamp(140px, 58vw, 200px)', height: 'clamp(140px, 58vw, 200px)' }}>
 
-      {/* Outermost rotating ring — dashed, slow */}
       <div
-        data-anim="ring"
-        className="absolute inset-0 rounded-full"
-        style={{
-          border: '1px dashed rgba(212,164,55,0.25)',
-          borderRadius: '50%',
-        }}
-      />
+        aria-hidden
+        className="absolute inset-0"
+        style={{ transform: 'translateX(calc(-1 * clamp(13px, 2.5vw, 19px)))' }}
+      >
+        {/* Outermost rotating ring — dashed, slow */}
+        <div
+          data-anim="ring"
+          className="absolute inset-0 rounded-full"
+          style={{
+            border: '1px dashed rgba(212,164,55,0.25)',
+            borderRadius: '50%',
+          }}
+        />
 
-      {/* Secondary solid ring */}
-      <div
-        className="absolute rounded-full"
-        style={{
-          inset: 14,
-          border: '1px solid rgba(212,164,55,0.18)',
-          borderRadius: '50%',
-        }}
-      />
+        {/* Secondary solid ring */}
+        <div
+          className="absolute rounded-full"
+          style={{
+            inset: 14,
+            border: '1px solid rgba(212,164,55,0.18)',
+            borderRadius: '50%',
+          }}
+        />
 
-      {/* Warm atmospheric glow — radiates from bottom-center outward */}
-      <div
-        data-anim="glow"
-        className="absolute rounded-full"
-        style={{
-          inset: 18,
-          background: 'radial-gradient(ellipse 80% 60% at 50% 80%, rgba(180,130,30,0.55) 0%, rgba(120,80,15,0.25) 45%, transparent 80%)',
-          filter: 'blur(6px)',
-        }}
-      />
+        {/* Warm atmospheric glow — radiates from bottom-center outward */}
+        <div
+          data-anim="glow"
+          className="absolute rounded-full"
+          style={{
+            inset: 18,
+            background: 'radial-gradient(ellipse 80% 60% at 50% 80%, rgba(180,130,30,0.55) 0%, rgba(120,80,15,0.25) 45%, transparent 80%)',
+            filter: 'blur(6px)',
+          }}
+        />
+      </div>
 
       {/* Main image circle */}
       <div
@@ -162,7 +168,7 @@ function ProfileCircle({ leader, index }: { leader: typeof leaders[0]; index: nu
           width: 10,
           height: 10,
           bottom: 18,
-          right: 14,
+          right: 'calc(14px + clamp(13px, 2.5vw, 19px))',
           boxShadow: '0 0 10px rgba(212,164,55,0.9)',
         }}
       />
@@ -362,19 +368,20 @@ export function Leadership() {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'flex-start',
+                  width: '100%',
                   padding: '0 clamp(0.75rem, 3vw, 1.5rem)',
                   perspective: '1000px',
                   position: 'relative',
                   zIndex: 1,
                 }}
               >
-                {/* profile circle — left-aligned in column */}
-                <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-start', marginBottom: '1rem' }}>
+                {/* profile circle — centered on desktop, left-aligned on smaller screens */}
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start', marginBottom: '1rem' }} className="md:justify-start">
                   <ProfileCircle leader={leader} index={i} />
                 </div>
 
                 {/* number + name */}
-                <div data-anim="inner" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
+                <div data-anim="inner" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6, width: '100%' }}>
                   <div style={{
                     width: 34, height: 34, borderRadius: '50%',
                     border: '1px solid rgba(212,164,55,0.5)',
@@ -389,17 +396,17 @@ export function Leadership() {
                 </div>
 
                 {/* role */}
-                <p data-anim="inner" style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.14em', color: '#D4A437', textTransform: 'uppercase', marginBottom: 8 }}>
+                <p data-anim="inner" style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.14em', color: '#D4A437', textTransform: 'uppercase', marginBottom: 8, width: '100%' }}>
                   {leader.role}
                 </p>
 
                 {/* focus — italic, muted */}
-                <p data-anim="inner" style={{ fontSize: '0.7rem', fontStyle: 'italic', color: 'rgba(255,255,255,0.45)', marginBottom: 18, lineHeight: 1.5 }}>
+                <p data-anim="inner" style={{ fontSize: '0.7rem', fontStyle: 'italic', color: 'rgba(255,255,255,0.45)', marginBottom: 18, lineHeight: 1.5, width: '100%' }}>
                   {leader.focus}
                 </p>
 
                 {/* bio with icon */}
-                <div data-anim="inner" style={{ display: 'flex', gap: 12, marginBottom: 16, alignItems: 'flex-start' }}>
+                <div data-anim="inner" style={{ display: 'flex', gap: 12, marginBottom: 16, alignItems: 'flex-start', width: '100%' }}>
                   <div style={{
                     width: 36, height: 36, borderRadius: '50%',
                     border: '1px solid rgba(212,164,55,0.3)',
