@@ -347,16 +347,6 @@ export function Leadership() {
                 transformOrigin: 'center',
               }}
             />
-            {/* dot between col 1 and col 2 (at ~33.33%) */}
-            <div
-              data-anim="dot"
-              style={{ position: 'absolute', left: '33.33%', top: '50%', transform: 'translate(-50%,-50%)', width: 8, height: 8, borderRadius: '50%', background: 'rgba(212,164,55,0.7)', boxShadow: '0 0 10px rgba(212,164,55,0.6)' }}
-            />
-            {/* dot between col 2 and col 3 (at ~66.66%) */}
-            <div
-              data-anim="dot"
-              style={{ position: 'absolute', left: '66.66%', top: '50%', transform: 'translate(-50%,-50%)', width: 8, height: 8, borderRadius: '50%', background: 'rgba(212,164,55,0.7)', boxShadow: '0 0 10px rgba(212,164,55,0.6)' }}
-            />
           </div>
 
           {/* columns */}
@@ -378,8 +368,8 @@ export function Leadership() {
                   zIndex: 1,
                 }}
               >
-                {/* profile circle — centered in column */}
-                <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
+                {/* profile circle — left-aligned in column */}
+                <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'flex-start', marginBottom: '1rem' }}>
                   <ProfileCircle leader={leader} index={i} />
                 </div>
 
