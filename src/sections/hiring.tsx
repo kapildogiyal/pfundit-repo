@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -8,72 +9,14 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 const categories = ['All Roles', 'Leadership', 'Technology', 'Business'] as const;
 type Category = typeof categories[number];
 
-const roles = [
-  {
-    id: '01',
-    title: 'Chief Risk Officer',
-    type: 'Advisory',
-    category: 'Leadership' as Category,
-    tags: ['Credit Risk', 'NBFC Regulation', 'RBI Compliance'],
-    description: 'Shape the risk architecture of India\'s first AI-native NBFC. Define credit frameworks, oversee AI underwriting guardrails, and build RBI-compliant risk infrastructure from the ground up.',
-  },
-  {
-    id: '02',
-    title: 'Chief Compliance Officer',
-    type: 'Advisory',
-    category: 'Leadership' as Category,
-    tags: ['RBI Frameworks', 'KYC / AML', 'Regulatory Affairs'],
-    description: 'Lead compliance design ahead of RBI licensing. Own KYC, AML/CFT, Fair Practices Code and ensure regulatory readiness across India and Singapore operations.',
-  },
-  {
-    id: '03',
-    title: 'Chief Financial Officer',
-    type: 'Advisory',
-    category: 'Leadership' as Category,
-    tags: ['NBFC Finance', 'Capital Planning', 'Investor Relations'],
-    description: 'Build the financial architecture, treasury strategy and investor reporting framework for a greenfield NBFC. Partner directly with the founding board on capital structure.',
-  },
-  {
-    id: '04',
-    title: 'Chief Technology Officer',
-    type: 'Full-Time',
-    category: 'Technology' as Category,
-    tags: ['AI/ML', 'Fintech Infrastructure', 'Credit Systems'],
-    description: 'Architect the AI-native lending stack — credit decisioning engine, data pipelines, API infrastructure. Greenfield opportunity to build with no legacy constraints.',
-  },
-  {
-    id: '05',
-    title: 'Chief Credit Officer',
-    type: 'Advisory',
-    category: 'Leadership' as Category,
-    tags: ['Credit Policy', 'Underwriting', 'Portfolio Management'],
-    description: 'Define credit policy for a new asset class in Real Estate, AI infrastructure and clean-tech supply chains. Partner with AI teams to build human-in-the-loop credit gates.',
-  },
-  {
-    id: '06',
-    title: 'Chief Operating Officer',
-    type: 'Advisory',
-    category: 'Leadership' as Category,
-    tags: ['Operations', 'Hub & Spoke', 'Process Design'],
-    description: 'Design and operationalize the Hub & Spoke model across India. Own everything from loan origination workflows to collections infrastructure and partner integrations.',
-  },
-  {
-    id: '07',
-    title: 'Head of Product',
-    type: 'Consultant',
-    category: 'Technology' as Category,
-    tags: ['Lending Product', 'API-first', 'Roadmap'],
-    description: 'Define and execute the product roadmap for an API-first lending platform. Own borrower UX, partner integration surfaces and the AI decisioning product.',
-  },
-  {
-    id: '08',
-    title: 'Head of Business Development & Partnerships',
-    type: 'Consultant',
-    category: 'Business' as Category,
-    tags: ['Partnerships', 'Channel Distribution', 'Co-lending'],
-    description: 'Build the institutional pipeline — co-lending arrangements, originator partnerships and capital relationships across India and Southeast Asia.',
-  },
-];
+type Role = {
+  id: string;
+  title: string;
+  type: string;
+  category: Category;
+  tags: string[];
+  description?: string;
+};
 
 /* ─────────────────── helpers ─────────────────── */
 function ArrowIcon() {
@@ -90,9 +33,34 @@ export function Hiring() {
   const [activeCategory, setActiveCategory] = useState<Category>('All Roles');
   const listRef = useRef<HTMLDivElement | null>(null);
 
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [isLoadingRoles, setIsLoadingRoles] = useState(true);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState('');
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        const res = await fetch('/api/jobs');
+        if (res.ok) {
+          const data = await res.json();
+          setRoles(data);
+        }
+      } catch (error) {
+        console.error('Failed to fetch roles:', error);
+      } finally {
+        setIsLoadingRoles(false);
+      }
+    };
+    fetchRoles();
+  }, []);
 
   const handleApplyClick = (roleTitle: string) => {
     setSelectedRole(roleTitle);
@@ -141,7 +109,7 @@ export function Hiring() {
   }, [activeCategory]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === 'undefined' || isLoadingRoles) return;
     gsap.registerPlugin(ScrollTrigger);
     const section = sectionRef.current;
     if (!section) return;
@@ -187,7 +155,7 @@ export function Hiring() {
     }, section);
 
     return () => ctx.revert();
-  }, []);
+  }, [isLoadingRoles, filtered.length]);
 
   return (
     <section
@@ -295,7 +263,15 @@ export function Hiring() {
 
           {/* rows */}
           <div ref={listRef} style={{ display: 'flex', flexDirection: 'column' }}>
-            {filtered.map((role) => (
+            {isLoadingRoles ? (
+              <div className="py-12 text-center">
+                <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-[#D4A437] border-t-transparent"></div>
+              </div>
+            ) : filtered.length === 0 ? (
+              <div className="py-12 text-center text-[#0f1b3d]/50">
+                No roles found in this category.
+              </div>
+            ) : filtered.map((role) => (
               <a
                 key={role.id}
                 href="#contact"
@@ -557,97 +533,119 @@ export function Hiring() {
 
       </div>
 
-      {/* --- Application Modal --- */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-[1000] flex items-start justify-center overflow-y-auto bg-navy/60 backdrop-blur-sm px-3 py-3 sm:px-4 sm:py-4 md:items-center md:py-6">
-          <div className="relative w-full max-w-[36rem] max-h-[calc(100dvh-1.5rem)] overflow-y-auto rounded-[1.5rem] bg-white shadow-2xl sm:max-h-[calc(100dvh-2rem)] md:max-h-[calc(100dvh-3rem)] md:rounded-[2rem]">
-            <div className="sticky top-0 z-10 border-b border-navy/10 bg-white/95 px-5 py-4 backdrop-blur sm:px-6 md:px-8">
+      {isModalOpen && mounted && createPortal(
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#0f1b3d]/60 p-4 backdrop-blur-sm sm:p-6 md:p-8">
+          <div className="relative flex max-h-[90vh] w-full max-w-[58rem] flex-col overflow-hidden rounded-[1.5rem] bg-white shadow-2xl md:rounded-[2rem]">
+            <div className="shrink-0 border-b border-[#0f1b3d]/10 bg-white/95 px-5 py-4 backdrop-blur sm:px-6 md:px-8">
               <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="pr-4 text-[1.35rem] font-bold tracking-tight text-navy sm:text-[1.6rem] md:text-[1.8rem]">Application Form</h3>
-                  <p className="mt-1 text-[0.9rem] text-navy/60 sm:text-[0.95rem]">
-                    Applying for: <span className="font-bold text-gold">{selectedRole}</span>
-                  </p>
-                </div>
+                  <div>
+                    <h3 className="pr-4 text-[1.35rem] font-bold tracking-tight text-[#0f1b3d] sm:text-[1.6rem] md:text-[1.8rem]">Application Form</h3>
+                    <p className="mt-1 text-[0.9rem] text-[#0f1b3d]/60 sm:text-[0.95rem]">
+                      Applying for: <span className="font-bold text-[#D4A437]">{selectedRole}</span>
+                    </p>
+                  </div>
 
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="inline-flex shrink-0 items-center gap-2 rounded-full border border-navy/10 bg-white px-3 py-2 text-[0.72rem] font-bold uppercase tracking-[0.18em] text-navy/60 transition-colors hover:border-navy/20 hover:text-navy sm:px-4 sm:py-2.5"
-                  aria-label="Close application form"
-                  type="button"
-                >
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                  <span className="hidden sm:inline">Close</span>
-                </button>
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="inline-flex shrink-0 items-center gap-2 rounded-full border border-[#0f1b3d]/10 bg-white px-2 py-2 text-[0.72rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/60 transition-colors hover:border-[#0f1b3d]/20 hover:text-[#0f1b3d] sm:px-2.5 sm:py-2.5"
+                    aria-label="Close application form"
+                    type="button"
+                  >
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
 
-            <div className="px-5 py-5 sm:px-6 sm:py-6 md:px-8 md:py-8">
-            {formStatus === 'success' ? (
-              <div className="flex flex-col items-center py-10 text-center sm:py-12">
-                <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600 sm:h-16 sm:w-16">
-                  <svg className="h-7 w-7 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                  </svg>
+              <div className="grid flex-1 min-h-0 gap-0 overflow-hidden lg:grid-cols-[minmax(18rem,0.9fr)_minmax(0,1.1fr)]">
+                <aside className="border-b border-[#0f1b3d]/10 bg-[#F0F5FF]/45 px-5 py-5 sm:px-6 sm:py-6 lg:border-b-0 lg:border-r lg:px-7 lg:py-7">
+                  <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#D4A437]">Role Overview</p>
+                  <h4 className="mt-2 text-[1rem] font-bold tracking-tight text-[#0f1b3d] sm:text-[1.1rem]">What we are hiring for</h4>
+
+                  {roles.find(r => r.title === selectedRole)?.description && (
+                    <div className="mt-4 rounded-2xl border border-[#0f1b3d]/10 bg-white/85 p-4 shadow-[0_8px_24px_rgba(15,27,61,0.04)]">
+                      <h4 className="mb-2 text-[0.68rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/65">Role Description</h4>
+                      <p className="text-[0.84rem] leading-relaxed text-[#0f1b3d]/80 whitespace-pre-wrap">
+                        {roles.find(r => r.title === selectedRole)?.description}
+                      </p>
+                    </div>
+                  )}
+                </aside>
+
+                <div className="flex min-h-0 flex-col overflow-hidden">
+                  <div className="flex-1 overflow-y-auto px-5 py-5 sm:px-6 sm:py-6 lg:px-7 lg:py-7">
+                    {formStatus === 'success' ? (
+                      <div className="flex flex-col items-center py-10 text-center sm:py-12">
+                        <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-full bg-green-100 text-green-600 sm:h-16 sm:w-16">
+                          <svg className="h-7 w-7 sm:h-8 sm:w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <h4 className="mb-2 text-[1.2rem] font-bold text-[#0f1b3d] sm:text-[1.4rem]">Application Received</h4>
+                        <p className="text-[0.9rem] text-[#0f1b3d]/70 sm:text-[0.95rem]">Thank you for applying. We will be in touch shortly.</p>
+                      </div>
+                    ) : (
+                      <form id="application-form" onSubmit={onSubmit} className="flex flex-col gap-4 sm:gap-4.5">
+                        <input type="hidden" name="subject" value={`New Application for ${selectedRole}`} />
+                        <input type="hidden" name="Role" value={selectedRole} />
+
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">Full Name</label>
+                            <input required type="text" name="Name" className="w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437]" placeholder="Jane Doe" />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">Email</label>
+                            <input required type="email" name="Email" className="w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437]" placeholder="jane@example.com" />
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4">
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">LinkedIn Profile</label>
+                            <input required type="url" name="LinkedIn" className="w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437]" placeholder="https://linkedin.com/in/..." />
+                          </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">Resume Link (Optional)</label>
+                            <input type="url" name="Resume Link" className="w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437]" placeholder="Google Drive, Dropbox, etc." />
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-1.5">
+                          <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">Why Pfundit?</label>
+                          <textarea required name="Why Pfundit" rows={3} className="w-full resize-none rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437]" placeholder="Tell us why you are a great fit..." />
+                        </div>
+
+                        {formStatus === 'error' && (
+                          <p className="text-sm font-medium text-red-500">Something went wrong. Please check your access key or try again.</p>
+                        )}
+                      </form>
+                    )}
+                  </div>
+
+                  {formStatus !== 'success' && (
+                    <div className="shrink-0 bg-white/95 px-5 py-4 backdrop-blur sm:px-6 lg:px-7">
+                      <button
+                        type="submit"
+                        form="application-form"
+                        disabled={formStatus === 'submitting'}
+                        className="flex w-full items-center justify-center gap-2 rounded-full bg-[#0f1b3d] py-3 text-[0.9rem] font-bold text-white transition-all hover:bg-[#0f1b3d]/90 hover:shadow-lg disabled:opacity-70 sm:py-3.5 sm:text-[0.95rem]"
+                      >
+                        {formStatus === 'submitting' ? (
+                          <>
+                            <svg className="h-5 w-5 animate-spin text-white/70" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
+                            Submitting...
+                          </>
+                        ) : 'Submit Application'}
+                      </button>
+                    </div>
+                  )}
                 </div>
-                <h4 className="mb-2 text-[1.2rem] font-bold text-navy sm:text-[1.4rem]">Application Received</h4>
-                <p className="text-[0.9rem] text-navy/70 sm:text-[0.95rem]">Thank you for applying. We will be in touch shortly.</p>
               </div>
-            ) : (
-              <form onSubmit={onSubmit} className="flex flex-col gap-4 sm:gap-5">
-                <input type="hidden" name="subject" value={`New Application for ${selectedRole}`} />
-                <input type="hidden" name="Role" value={selectedRole} />
-
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[0.7rem] font-bold uppercase tracking-wider text-navy/70 sm:text-[0.72rem]">Full Name</label>
-                    <input required type="text" name="Name" className="w-full rounded-xl border border-navy/10 bg-[#F0F5FF]/60 px-4 py-3 text-[0.95rem] text-navy transition-colors focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold" placeholder="Jane Doe" />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[0.7rem] font-bold uppercase tracking-wider text-navy/70 sm:text-[0.72rem]">Email</label>
-                    <input required type="email" name="Email" className="w-full rounded-xl border border-navy/10 bg-[#F0F5FF]/60 px-4 py-3 text-[0.95rem] text-navy transition-colors focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold" placeholder="jane@example.com" />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-5">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[0.7rem] font-bold uppercase tracking-wider text-navy/70 sm:text-[0.72rem]">LinkedIn Profile</label>
-                    <input required type="url" name="LinkedIn" className="w-full rounded-xl border border-navy/10 bg-[#F0F5FF]/60 px-4 py-3 text-[0.95rem] text-navy transition-colors focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold" placeholder="https://linkedin.com/in/..." />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-[0.7rem] font-bold uppercase tracking-wider text-navy/70 sm:text-[0.72rem]">Resume Link (Optional)</label>
-                    <input type="url" name="Resume Link" className="w-full rounded-xl border border-navy/10 bg-[#F0F5FF]/60 px-4 py-3 text-[0.95rem] text-navy transition-colors focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold" placeholder="Google Drive, Dropbox, etc." />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-[0.7rem] font-bold uppercase tracking-wider text-navy/70 sm:text-[0.72rem]">Why Pfundit?</label>
-                  <textarea required name="Why Pfundit" rows={4} className="w-full resize-none rounded-xl border border-navy/10 bg-[#F0F5FF]/60 px-4 py-3 text-[0.95rem] text-navy transition-colors focus:border-gold focus:bg-white focus:outline-none focus:ring-1 focus:ring-gold" placeholder="Tell us why you are a great fit..." />
-                </div>
-
-                {formStatus === 'error' && (
-                  <p className="text-sm font-medium text-red-500">Something went wrong. Please check your access key or try again.</p>
-                )}
-
-                <button 
-                  type="submit" 
-                  disabled={formStatus === 'submitting'}
-                  className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-navy py-3 text-[0.9rem] font-bold text-white transition-all hover:bg-navy/90 hover:shadow-lg disabled:opacity-70 sm:mt-3 sm:py-3.5 sm:text-[0.95rem]"
-                >
-                  {formStatus === 'submitting' ? (
-                    <>
-                      <svg className="h-5 w-5 animate-spin text-white/70" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path></svg>
-                      Submitting...
-                    </>
-                  ) : 'Submit Application'}
-                </button>
-              </form>
-            )}
-            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </section>
   );
