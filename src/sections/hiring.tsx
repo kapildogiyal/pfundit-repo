@@ -39,11 +39,6 @@ export function Hiring() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState('');
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     const fetchRoles = async () => {
@@ -71,21 +66,20 @@ export function Hiring() {
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormStatus('submitting');
+
     const formData = new FormData(event.currentTarget);
-    formData.append("access_key", process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY || "");
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        body: formData
+      const response = await fetch('/api/applications/jobs', {
+        method: 'POST',
+        body: formData,
       });
-      const data = await response.json();
 
-      if (data.success) {
+      if (response.ok) {
         setFormStatus('success');
         setTimeout(() => setIsModalOpen(false), 3000);
       } else {
-        console.error("Error submitting application:", data);
+        console.error('Error submitting application');
         setFormStatus('error');
       }
     } catch (err) {
@@ -117,10 +111,14 @@ export function Hiring() {
     const ctx = gsap.context(() => {
       const st = { trigger: section, start: 'top 76%' };
 
-      const runFromTo = (selector: string, fromVars: any, toVars: any) => {
-        const els = section.querySelectorAll(selector);
-        if (!els || els.length === 0) return;
-        gsap.fromTo(els as any, fromVars, toVars);
+      const runFromTo: (selector: string, fromVars: gsap.TweenVars, toVars: gsap.TweenVars) => void = (
+        selector,
+        fromVars,
+        toVars,
+      ) => {
+        const els = Array.from(section.querySelectorAll(selector));
+        if (els.length === 0) return;
+        gsap.fromTo(els, fromVars, toVars);
       };
 
       runFromTo('[data-hr="filter-nav"]',
@@ -533,7 +531,7 @@ export function Hiring() {
 
       </div>
 
-      {isModalOpen && mounted && createPortal(
+      {isModalOpen && typeof document !== 'undefined' && createPortal(
         <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#0f1b3d]/60 p-4 backdrop-blur-sm sm:p-6 md:p-8">
           <div className="relative flex max-h-[90vh] w-full max-w-[58rem] flex-col overflow-hidden rounded-[1.5rem] bg-white shadow-2xl md:rounded-[2rem]">
             <div className="shrink-0 border-b border-[#0f1b3d]/10 bg-white/95 px-5 py-4 backdrop-blur sm:px-6 md:px-8">
@@ -603,12 +601,12 @@ export function Hiring() {
 
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-4">
                           <div className="flex flex-col gap-1.5">
-                            <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">LinkedIn Profile</label>
-                            <input required type="url" name="LinkedIn" className="w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437]" placeholder="https://linkedin.com/in/..." />
+                            <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">LinkedIn Profile (Optional)</label>
+                            <input type="url" name="LinkedIn" className="w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437]" placeholder="https://linkedin.com/in/..." />
                           </div>
                           <div className="flex flex-col gap-1.5">
-                            <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">Resume Link (Optional)</label>
-                            <input type="url" name="Resume Link" className="w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437]" placeholder="Google Drive, Dropbox, etc." />
+                            <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">Resume Upload (Required)</label>
+                            <input required type="file" name="Resume" accept=".pdf,.doc,.docx" className="w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.9rem] text-[#0f1b3d] file:mr-4 file:rounded-full file:border-0 file:bg-[#0f1b3d] file:px-4 file:py-2 file:text-[0.78rem] file:font-bold file:text-white transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437]" />
                           </div>
                         </div>
 

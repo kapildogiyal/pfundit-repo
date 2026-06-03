@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { TalkToUsButton } from '@/components/button';
 
 const ambientNodes = [
   { id: 1, top: '12%', left: '62%', delay: 0 },
@@ -68,13 +69,11 @@ export function HeroSection() {
               </div>
 
               <h1 className="mb-3 max-w-[20ch] typo-hero text-navy drop-shadow-[0_8px_30px_rgba(255,255,255,0.4)]">
-                Building Asia&apos;s First <span className="text-gold-gradient">AI-Native</span> Credit Institution
+                Disciplined Credit for the Real Economy.
               </h1>
 
               <p className="mb-6 max-w-[36rem] typo-body text-navy/72 md:mb-7">
-                A Singapore-incorporated holding company building an API-first NBFC in India and
-                digital lending infrastructure across Southeast Asia. No legacy. No migration. Built
-                correctly from day one.
+                Pfundit is a Singapore-incorporated holding company building a regulated, AI-enabled lending platform - starting with India, designed for Asia.
               </p>
 
               <div className="mb-6 grid max-w-[48rem] grid-cols-1 gap-6 py-4 sm:grid-cols-2 md:grid-cols-3 md:mb-7 md:py-5">
@@ -116,14 +115,7 @@ export function HeroSection() {
                     &rarr;
                   </span>
                 </motion.button>
-                <motion.button
-                  onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="btn-hero-primary rounded-full px-7 py-3 typo-button text-white transition-all duration-300 hover:-translate-y-0.5 md:px-9"
-                  whileHover={{ y: -2, scale: 1.01 }}
-                  whileTap={{ scale: 0.985 }}
-                >
-                  Talk to Us
-                </motion.button>
+                <TalkToUsButton onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} />
               </div>
 
               <div className="flex items-center gap-3">

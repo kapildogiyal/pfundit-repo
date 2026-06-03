@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { TalkToUsButton } from '@/components/button';
 
 const verticals = [
   {
@@ -12,7 +13,7 @@ const verticals = [
     title: 'India NBFC',
     tagline: 'Phase 1 · Greenfield · Pre-RBI Licensing',
     description:
-      "India's first greenfield AI-native NBFC. RBI compliance built into the architecture. Hub & Spoke designed to scale across India's ~$1.2Tn NBFC AUM market by 2030. Targeted at high-tailwind segments: Real Estate, AI infrastructure, circular economy and clean-tech supply chains.",
+      "Pfundit is establishing a regulated NBFC in India - focused on shorter-tenor, asset-aware lending tied to real economic flows. The platform combines institutional credit discipline with AI-enabled infrastructure, creating a portfolio that is monitorable at the asset level from day one. Our focus segments include supply-chain finance, MSME receivables and payables, rental-backed structures and circular-economy supply chains.",
     image: '/mumbai-nbfc.png',
     metrics: [
       { label: '3-Yr CAGR (FY22-24)', value: '~18%' },
@@ -21,31 +22,25 @@ const verticals = [
       { label: 'AUM 2030', value: '₹100L Cr' },
     ],
     capabilities: [
-      'Hub & Spoke — Optimize reach without capex',
-      'RBI-compliant AI with HITL gates',
-      'API-first — partners integrate, don\'t wait',
-      'Proprietary AI agent IP under build',
+      'Hub & Spoke model - national reach without proportionate headcount or physical infrastructure',
+      'RBI-compliant AI hierarchy with mandatory human oversight at every decision gate',
+      'API-first architecture - partners integrate, they do not wait',
+      'Proprietary AI Agent IP - credit underwriting and collections under development',
     ],
   },
   {
     id: '02',
     title: 'SEA Digital Lending',
-    tagline: 'Phase 2 · Multi-Market Platform Investments',
+    tagline: 'Phase 2 · Regional Strategy · Post-India',
     description:
-      'Platform investments across SEA where 70%+ of adults are underbanked and digital lending drives ~65% of digital financial services revenue. Our APAC network and AI infrastructure position us to partner across markets with structural credit gaps.',
+      "Pfundit was structured in Singapore because the founders' operating experience is regional. Once the India NBFC is established and operational, the same model - transaction-backed credit, asset-level monitoring, institutional governance - is designed to extend into Southeast Asia, where over 70% of adults remain underbanked and the MSME financing gap exceeds $300 billion. Southeast Asia is not a parallel track. It is a deliberate second chapter, enabled by the same infrastructure, the same governance standards and the same team.",
     image: '/sea-lending.png',
     metrics: [
       { label: 'SEA Lending CAGR', value: '~30%' },
       { label: 'APAC Mkt 2032', value: '$13.2B' },
       { label: 'Underbanked', value: '>70%' },
       { label: 'MSME Gap', value: '$300B' },
-    ],
-    capabilities: [
-      'Multi-market platform investments',
-      'Co-lending and assignment structures',
-      'AI risk pricing across markets',
-      '$350B digital lending opportunity by 2030',
-    ],
+    ]
   },
 ];
 
@@ -124,7 +119,7 @@ export function InvestmentThesis() {
           {/* Even Tighter Header */}
           <header className="mb-4 w-full text-center lg:mb-6">
             <h2 className="typo-hero text-navy">
-              What We Are <span className="text-gold">Building.</span>
+              What We Are <span className="text-gold">Building</span>
             </h2>
           </header>
 
@@ -169,25 +164,25 @@ export function InvestmentThesis() {
                   </div>
 
                   <div className="bg-navy/[0.02] p-5 sm:p-6">
-                    <span className="mb-3 block typo-eyebrow text-navy/40">
-                      Key Capabilities
-                    </span>
-                    <div className="space-y-2.5">
-                      {v.capabilities.map((cap) => (
-                        <div key={cap} className="flex items-start gap-3">
-                          <div className="mt-1 h-1 w-1 shrink-0 rounded-full bg-gold" />
-                          <span className="typo-body-sm text-navy/70">{cap}</span>
+                    {v.capabilities?.length ? (
+                      <>
+                        <span className="mb-3 block typo-eyebrow text-navy/40">
+                          Key Capabilities
+                        </span>
+                        <div className="space-y-2.5">
+                          {v.capabilities.map((cap) => (
+                            <div key={cap} className="flex items-start gap-3">
+                              <div className="mt-1 h-1 w-1 shrink-0 rounded-full bg-gold" />
+                              <span className="typo-body-sm text-navy/70">{cap}</span>
+                            </div>
+                          ))}
                         </div>
-                      ))}
-                    </div>
+                      </>
+                    ) : null}
 
-                    <motion.button
-                      className="btn-hero-primary mt-5 w-full rounded-full px-7 py-3 typo-button text-white transition-all duration-300 hover:-translate-y-0.5"
-                      whileHover={{ y: -2, scale: 1.01 }}
-                      whileTap={{ scale: 0.985 }}
-                    >
-                      Talk to Us
-                    </motion.button>
+                    <div className="mt-5">
+                      <TalkToUsButton onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} />
+                    </div>
                   </div>
                 </div>
               </article>
@@ -237,13 +232,7 @@ export function InvestmentThesis() {
                           </div>
                         ))}
                       </div>
-                      <motion.button
-                        className="btn-hero-primary rounded-full px-7 py-3 typo-button text-white transition-all duration-300 hover:-translate-y-0.5 md:px-9"
-                        whileHover={{ y: -2, scale: 1.01 }}
-                        whileTap={{ scale: 0.985 }}
-                      >
-                        Talk to Us
-                      </motion.button>
+                      <TalkToUsButton onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} />
                     </div>
                   </div>
 
@@ -261,19 +250,21 @@ export function InvestmentThesis() {
                     <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/10 to-transparent" />
 
                     <div className="absolute bottom-8 left-6 right-6">
-                      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-2xl">
-                        <span className="mb-4 block typo-eyebrow text-white/40">
-                          Key Capabilities
-                        </span>
-                        <div className="space-y-3">
-                          {v.capabilities.map((cap) => (
-                            <div key={cap} className="flex items-start gap-3">
-                              <div className="mt-1 h-1 w-1 shrink-0 rounded-full bg-gold" />
-                              <span className="typo-body-sm text-white/90">{cap}</span>
-                            </div>
-                          ))}
+                      {v.capabilities?.length ? (
+                        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-2xl">
+                          <span className="mb-4 block typo-eyebrow text-white/40">
+                            Key Capabilities
+                          </span>
+                          <div className="space-y-3">
+                            {v.capabilities.map((cap) => (
+                              <div key={cap} className="flex items-start gap-3">
+                                <div className="mt-1 h-1 w-1 shrink-0 rounded-full bg-gold" />
+                                <span className="typo-body-sm text-white/90">{cap}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
+                      ) : null}
                     </div>
                   </div>
 

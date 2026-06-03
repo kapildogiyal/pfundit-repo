@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 type MetricRow = {
   label: string;
   value: string;
   width: string;
-  tone: 'muted' | 'digital' | 'highlight';
+  tone: "muted" | "digital" | "highlight";
 };
 
 type Metric = {
@@ -19,72 +19,117 @@ type Metric = {
 
 const metrics: Metric[] = [
   {
-    title: 'Cost-to-Income',
+    title: "Cost-to-Income",
     values: [
-      { label: 'Traditional NBFC', value: '55-65%', width: '24%', tone: 'muted' },
-      { label: 'Existing Digital Lenders', value: '38-48%', width: '46%', tone: 'digital' },
       {
-        label: 'Pfundit \u2014 Greenfield AI-Native',
-        value: '25-30%*',
-        width: '78%',
-        tone: 'highlight',
+        label: "Traditional NBFC",
+        value: "55-65%",
+        width: "24%",
+        tone: "muted",
+      },
+      {
+        label: "Existing Digital Lenders",
+        value: "38-48%",
+        width: "46%",
+        tone: "digital",
+      },
+      {
+        label: "Pfundit \u2014 Greenfield AI-Native",
+        value: "25-30%*",
+        width: "78%",
+        tone: "highlight",
       },
     ],
   },
   {
-    title: 'Underwriting / Loan',
+    title: "Underwriting / Loan",
     values: [
-      { label: 'Traditional NBFC', value: '\u20B91,200-2,000', width: '20%', tone: 'muted' },
-      { label: 'Existing Digital Lenders', value: '\u20B9500-900', width: '42%', tone: 'digital' },
       {
-        label: 'Pfundit \u2014 Greenfield AI-Native',
-        value: '\u20B9100-200*',
-        width: '80%',
-        tone: 'highlight',
+        label: "Traditional NBFC",
+        value: "\u20B91,200-2,000",
+        width: "20%",
+        tone: "muted",
+      },
+      {
+        label: "Existing Digital Lenders",
+        value: "\u20B9500-900",
+        width: "42%",
+        tone: "digital",
+      },
+      {
+        label: "Pfundit \u2014 Greenfield AI-Native",
+        value: "\u20B9100-200*",
+        width: "80%",
+        tone: "highlight",
       },
     ],
   },
   {
-    title: 'Time to Decision',
+    title: "Time to Decision",
     values: [
-      { label: 'Traditional NBFC', value: '3-7 days', width: '18%', tone: 'muted' },
-      { label: 'Existing Digital Lenders', value: '4-24 hrs', width: '48%', tone: 'digital' },
       {
-        label: 'Pfundit \u2014 Greenfield AI-Native',
-        value: '30 min-12 hr*',
-        width: '82%',
-        tone: 'highlight',
+        label: "Traditional NBFC",
+        value: "3-7 days",
+        width: "18%",
+        tone: "muted",
+      },
+      {
+        label: "Existing Digital Lenders",
+        value: "4-24 hrs",
+        width: "48%",
+        tone: "digital",
+      },
+      {
+        label: "Pfundit \u2014 Greenfield AI-Native",
+        value: "30 min-12 hr*",
+        width: "82%",
+        tone: "highlight",
       },
     ],
   },
   {
-    title: 'CAC',
+    title: "CAC",
     values: [
-      { label: 'Traditional NBFC', value: '\u20B93,000-5,000', width: '22%', tone: 'muted' },
       {
-        label: 'Existing Digital Lenders',
-        value: '\u20B91,500-2,500',
-        width: '44%',
-        tone: 'digital',
+        label: "Traditional NBFC",
+        value: "\u20B93,000-5,000",
+        width: "22%",
+        tone: "muted",
       },
       {
-        label: 'Pfundit \u2014 Greenfield AI-Native',
-        value: '\u20B9800-1,200*',
-        width: '74%',
-        tone: 'highlight',
+        label: "Existing Digital Lenders",
+        value: "\u20B91,500-2,500",
+        width: "44%",
+        tone: "digital",
+      },
+      {
+        label: "Pfundit \u2014 Greenfield AI-Native",
+        value: "\u20B9800-1,200*",
+        width: "74%",
+        tone: "highlight",
       },
     ],
   },
   {
-    title: 'Collections Uplift',
+    title: "Collections Uplift",
     values: [
-      { label: 'Traditional NBFC', value: 'Baseline', width: '10%', tone: 'muted' },
-      { label: 'Existing Digital Lenders', value: '+25-35%', width: '32%', tone: 'digital' },
       {
-        label: 'Pfundit \u2014 Greenfield AI-Native',
-        value: '+55-70%*',
-        width: '62%',
-        tone: 'highlight',
+        label: "Traditional NBFC",
+        value: "Baseline",
+        width: "10%",
+        tone: "muted",
+      },
+      {
+        label: "Existing Digital Lenders",
+        value: "+25-35%",
+        width: "32%",
+        tone: "digital",
+      },
+      {
+        label: "Pfundit \u2014 Greenfield AI-Native",
+        value: "+55-70%*",
+        width: "62%",
+        tone: "highlight",
       },
     ],
   },
@@ -92,45 +137,48 @@ const metrics: Metric[] = [
 
 const pillars = [
   {
-    title: 'AI-Native Core',
-    description: 'Credit decisioning built on ML from the first loan.',
-  },
-  {
-    title: 'Human-in-the-Loop',
-    description: 'Mandatory oversight at every high-stakes gate.',
-  },
-  {
-    title: 'RBI Compliant by Design',
-    description: 'Regulation as architectural constraint, not retrofit.',
-  },
-  {
-    title: 'Hub & Spoke',
+    title: "AI-Native Core",
     description:
-      'National reach without heavy branch capex \u2014 capital-efficient by design.',
+      "Credit decisioning built on machine learning from the first loan - not added to an existing workflow.",
+  },
+  {
+    title: "Human-in-the-Loop",
+    description:
+      "Mandatory human oversight at every consequential decision point. AI operates. Humans govern.",
+  },
+  {
+    title: "RBI Compliant by Design",
+    description:
+      "Regulatory compliance is an architectural constraint, not a retrofit. Built in from inception.",
+  },
+  {
+    title: "Hub & Spoke",
+    description:
+      "National reach through a distributed model. Scale without proportionate cost growth.",
   },
 ];
 
-function rowTone(tone: MetricRow['tone']) {
-  if (tone === 'highlight') {
+function rowTone(tone: MetricRow["tone"]) {
+  if (tone === "highlight") {
     return {
-      label: 'text-[#9e7b22]',
-      value: 'text-[#9e7b22]',
-      fill: 'bg-[linear-gradient(90deg,rgba(157,121,33,0.9),rgba(212,164,55,0.95),rgba(238,204,120,0.9))] shadow-[0_0_18px_rgba(212,164,55,0.35)]',
+      label: "text-[#9e7b22]",
+      value: "text-[#9e7b22]",
+      fill: "bg-[linear-gradient(90deg,rgba(157,121,33,0.9),rgba(212,164,55,0.95),rgba(238,204,120,0.9))] shadow-[0_0_18px_rgba(212,164,55,0.35)]",
     };
   }
 
-  if (tone === 'digital') {
+  if (tone === "digital") {
     return {
-      label: 'text-navy/72',
-      value: 'text-navy',
-      fill: 'bg-[linear-gradient(90deg,rgba(15,27,61,0.75),rgba(26,48,94,0.9),rgba(82,108,156,0.75))] shadow-[0_0_16px_rgba(32,55,99,0.26)]',
+      label: "text-navy/72",
+      value: "text-navy",
+      fill: "bg-[linear-gradient(90deg,rgba(15,27,61,0.75),rgba(26,48,94,0.9),rgba(82,108,156,0.75))] shadow-[0_0_16px_rgba(32,55,99,0.26)]",
     };
   }
 
   return {
-    label: 'text-navy/52',
-    value: 'text-navy/86',
-    fill: 'bg-[linear-gradient(90deg,rgba(165,176,197,0.9),rgba(190,200,216,0.9))]',
+    label: "text-navy/52",
+    value: "text-navy/86",
+    fill: "bg-[linear-gradient(90deg,rgba(165,176,197,0.9),rgba(190,200,216,0.9))]",
   };
 }
 
@@ -140,7 +188,7 @@ export function Infrastructure() {
   const panelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
     gsap.registerPlugin(ScrollTrigger);
 
@@ -157,19 +205,19 @@ export function Infrastructure() {
       };
 
       runFromTo(
-        '[data-structural-fade]',
+        "[data-structural-fade]",
         { opacity: 0, y: 26 },
         {
           opacity: 1,
           y: 0,
           duration: 0.85,
           stagger: 0.08,
-          ease: 'power3.out',
+          ease: "power3.out",
           scrollTrigger: {
             trigger: section,
-            start: 'top 78%',
+            start: "top 78%",
           },
-        }
+        },
       );
     }, section);
 
@@ -183,11 +231,11 @@ export function Infrastructure() {
     const panel = panelRef.current;
     if (!panel) return;
 
-    const fills = panel.querySelectorAll<HTMLElement>('[data-metric-fill]');
+    const fills = panel.querySelectorAll<HTMLElement>("[data-metric-fill]");
 
     // Kill any existing animations
     gsap.killTweensOf(fills);
-    
+
     // Set fills to 0 first without animation
     gsap.set(fills, { width: 0 });
 
@@ -196,7 +244,7 @@ export function Infrastructure() {
       gsap.to(fill, {
         width: fill.dataset.width,
         duration: 0.8,
-        ease: 'power2.out',
+        ease: "power2.out",
       });
     });
   }, [activeMetric]);
@@ -218,17 +266,23 @@ export function Infrastructure() {
           <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-gold/30 bg-white/45 px-5 py-2 backdrop-blur-sm">
             <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.75)]" />
             <span className="typo-eyebrow text-navy/60">
-              Structural Advantage
+              The Structural Advantage
             </span>
           </div>
 
           <h2 className="text-[2.2rem] font-bold leading-[0.96] tracking-[-0.05em] text-navy sm:text-[2.5rem] md:text-[2.85rem]">
-            Why the Numbers Are Different
+            Why the Model is Built to Compound Differently
           </h2>
 
-          <p className="mx-auto mt-6 max-w-[48rem] text-[1rem] leading-[1.28] text-navy/70 lg:text-[1.04rem]">
-            Greenfield architecture, AI-native credit, Hub &amp; Spoke distribution.
-            Unit economics incumbents cannot match without rebuilding their stack.
+          <p className="mx-auto mt-6 max-w-[58rem] text-[1rem] leading-[1.28] text-navy/70 lg:text-[1.04rem]">
+            Pfundit is designed with the conviction that long-term advantage in
+            lending comes not only from access to capital, but from the quality
+            of execution around speed, distribution and operating discipline. A
+            greenfield build means zero legacy debt. An AI-native credit stack
+            means faster decisions at lower cost. A Hub & Spoke model means
+            national reach without proportionate headcount. These design choices
+            produce unit economics that incumbents cannot replicate without
+            replacing their entire stack.
           </p>
         </div>
 
@@ -245,8 +299,8 @@ export function Infrastructure() {
                 onClick={() => setActiveMetric(metric)}
                 className={
                   isActive
-                    ? 'w-full text-center rounded-full bg-navy px-5 py-2.5 text-[0.82rem] font-semibold text-white shadow-[0_18px_34px_rgba(15,27,61,0.12)] transition-all duration-300'
-                    : 'w-full text-center rounded-full border border-navy/10 bg-white/45 px-5 py-2.5 text-[0.82rem] font-semibold text-navy/82 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:bg-white/75'
+                    ? "w-full text-center rounded-full bg-navy px-5 py-2.5 text-[0.82rem] font-semibold text-white shadow-[0_18px_34px_rgba(15,27,61,0.12)] transition-all duration-300"
+                    : "w-full text-center rounded-full border border-navy/10 bg-white/45 px-5 py-2.5 text-[0.82rem] font-semibold text-navy/82 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-gold/30 hover:bg-white/75"
                 }
                 type="button"
               >
@@ -277,10 +331,16 @@ export function Infrastructure() {
                   return (
                     <div key={item.label} data-metric-row>
                       <div className="mb-3 flex items-end justify-between gap-4">
-                        <span className={`text-[0.88rem] font-semibold ${tone.label}`}>
+                        <span
+                          className={`text-[0.88rem] font-semibold ${tone.label}`}
+                        >
                           {item.label}
                         </span>
-                        <span className={`text-[0.9rem] font-bold ${tone.value}`}>{item.value}</span>
+                        <span
+                          className={`text-[0.9rem] font-bold ${tone.value}`}
+                        >
+                          {item.value}
+                        </span>
                       </div>
 
                       <div className="h-2.5 rounded-full bg-navy/[0.08] shadow-[inset_0_1px_2px_rgba(15,27,61,0.16)]">
@@ -298,8 +358,11 @@ export function Infrastructure() {
               </div>
 
               <p className="mt-7 text-[0.74rem] font-medium italic tracking-[0.02em] text-navy/56">
-                * Targets within 18 months of launch. Subject to regulatory approvals. Not a
-                financial guarantee.
+                * Pfundit estimates based on AI/GPU compute economics, Hub &
+                Spoke design and digital-first origination. 25-30%
+                cost-to-income target is projected within 24-36 months of launch
+                in India. Subject to regulatory approvals and market conditions.
+                Not a financial guarantee.
               </p>
             </div>
           </div>
@@ -308,10 +371,7 @@ export function Infrastructure() {
         <div className="mt-12 flex flex-col items-center gap-8">
           <div className="w-full flex flex-col lg:flex-row lg:divide-x lg:divide-navy/15">
             {pillars.map((pillar, index) => (
-              <div
-                key={pillar.title}
-                className="flex-1 px-6 py-4 lg:px-8"
-              >
+              <div key={pillar.title} className="flex-1 px-6 py-4 lg:px-8">
                 <h3 className="text-[1.05rem] font-bold tracking-[-0.03em] text-navy">
                   {pillar.title}
                 </h3>

@@ -8,8 +8,8 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Pfundit | Institutional Credit Infrastructure",
-  description: 'Building Asia\'s first AI-native credit institution with engineered intent.',
+  title: "Pfundit - Disciplined AI-Native Credit for the Real Economy | Singapore",
+  description: 'Pfundit is a Singapore holding company building a regulated, AI-enabled lending platform for India and Asia - focused on short-tenor, cash-flow secured financing in the real economy.',
 };
 
 export const viewport: Viewport = {

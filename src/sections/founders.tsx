@@ -10,15 +10,17 @@ const leaders = [
   {
     id: '01',
     name: 'Sanath Shetty',
-    role: 'Co-Founder & Director',
-    focus: 'Credit Risk · Payments · Origination · 27 yrs Asia',
+    role: 'Founder & Director',
+    focus: 'Consumer Credit Risk & Payments Executive · 25+ Years',
     image: '/founders/sanath.png',
     bioIcon: 'bank',
-    bio: '27 years across HSBC and J.P. Morgan in India and Singapore — built credit franchises, led APAC corporate payments, originated institutional relationships at scale.',
+    bio: 'Sanath is the credit and operational architect of Pfundit. As Regional Head of Credit Risk at HSBC India, he ran multi-geography retail lending portfolios across Cards, Personal Loans, Auto and Mortgages. He later led corporate payments origination at HSBC and J.P. Morgan across Asia-Pacific, rising to Executive Director at J.P. Morgan Singapore. His experience spans the full credit lifecycle - from origination policy and scorecard design to NPA recovery and portfolio remediation.',
     background: [
-      'APAC Transaction Banking — HSBC & J.P. Morgan',
-      'VP & Regional Head, Consumer Credit Risk — HSBC India',
-      'Sales & BD Leader, APAC Corporate & Institutional',
+      'HSBC & J.P. Morgan - Executive Director, APAC Payments',
+      'HSBC VP & Regional Head - Consumer Credit Risk, India',
+      'Retail Portfolio Management: Cards, Personal Loans, Auto, Mortgages',
+      'National Collections Strategy & DCA Governance',
+      'Transaction Banking & Cash Management, APAC',
     ],
     linkedin: '#',
   },
@@ -26,14 +28,16 @@ const leaders = [
     id: '02',
     name: 'Atin Bhutani',
     role: 'Co-Founder & Director',
-    focus: 'Corporate Banker · Operator · Governance',
+    focus: 'Corporate Banker · Entrepreneur · Governance Expert',
     image: '/founders/atin.png',
     bioIcon: 'globe',
-    bio: 'Country Head of International Subsidiary Banking at HSBC Singapore. Co-founded and scaled In.Corp Global to a PE exit in 2022.',
+    bio: "Atin combines institutional banking discipline with a decade of operator-level execution. At HSBC Singapore, he served as Country Head of International Subsidiary Banking - responsible for credit origination, risk grading and portfolio management for multinational corporate clients, with direct sanctioning authority on complex cross-border credit structures. He co-founded In.Corp Global, scaling it into one of Asia's leading corporate services platforms before a private equity exit in 2022.",
     background: [
-      'HSBC — Country Head, ISB Singapore',
-      'Group CEO, In.Corp Global — PE Exit (2022)',
-      'MBA with Distinction — IIFT',
+      'HSBC - Country Head, International Subsidiary Banking, Singapore',
+      'Credit Origination, Structuring & Portfolio Management',
+      'Group CEO, In.Corp Global - PE-backed Exit (2022)',
+      'MBA with Distinction - Indian Institute of Foreign Trade',
+      'Blue Planet Environmental Solutions - President (Current)'
     ],
     linkedin: '#',
   },
@@ -41,14 +45,16 @@ const leaders = [
     id: '03',
     name: 'Madhujeet Chimni',
     role: 'Co-Founder & Director',
-    focus: 'Serial Entrepreneur · Institutional Capital',
+    focus: 'Serial Entrepreneur · Institutional Capital · Technology',
     image: '/founders/madhujeet.png',
     bioIcon: 'chart',
-    bio: 'Three exits across Asia, Europe and LATAM. Sold Stone Apple to Hitachi (2014), exited In.Corp Global to PE (2021). Chairs Blue Planet (IFU, Novo Holdings).',
+    bio: 'Madhujeet has founded, scaled and exited businesses across Asia, Europe and Latin America over two decades. He built Stone Apple into a regional enterprise technology firm before its acquisition by Hitachi Consulting in 2014. He co-founded In.Corp Global, completing a private equity exit in 2021. He chairs Blue Planet Environmental Solutions, backed by IFU and Novo Holdings - operating across India, Singapore, the UK and New Zealand. At Pfundit, he leads capital strategy, board governance and investor relations.',
     background: [
-      'Stone Apple → Hitachi Consulting (2014)',
-      'In.Corp Global → PE Exit (2021)',
-      'Chairman, Blue Planet Environmental Solutions',
+      'Stone Apple - Founded & sold to Hitachi Consulting (2014)',
+      'In.Corp Global - Co-Founder, PE Exit (2021)',
+      'Blue Planet Environmental Solutions - Chairman (Current)',
+      'Institutional fundraising: IFU, Novo Holdings',
+      'Xcelerate Global - GRC Investment Platform'
     ],
     linkedin: '#',
   },
@@ -331,7 +337,8 @@ export function Leadership() {
           data-anim="subtitle"
           style={{ textAlign: 'center', color: 'rgba(255,255,255,0.58)', fontSize: 'clamp(0.82rem, 1.4vw, 1rem)', marginBottom: '3rem', lineHeight: 1.7, maxWidth: 620, marginInline: 'auto' }}
         >
-          60+ combined years at J.P. Morgan and HSBC. Three successful exits. Builders, not theorists.
+          <span style={{ display: 'block' }}>Three founders. 60+ combined years at J.P. Morgan and HSBC.</span>
+          <span style={{ display: 'block' }}>Three successful exits. The experience to build this institution and the track record to be trusted with it.</span>
         </p>
 
         {/* ─── founders grid ─── */}

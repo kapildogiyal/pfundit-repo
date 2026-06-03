@@ -10,12 +10,12 @@ const stakeholderGroups = [
     title: 'Investors',
     eyebrow: 'For',
     image: '/images/stakeholders_investors.png',
-    summary: 'A rare greenfield at the intersection of regulation, AI and scale.',
+    summary: 'A Rare Greenfield Opportunity at the Intersection of Regulation, AI and Scale',
     points: [
-      "Building India's first greenfield AI-native NBFC — no legacy, no migration.",
-      'Targeted 25-30% cost-to-income via Hub & Spoke architecture.',
-      'Proprietary AI agent IP — moat deepens with every loan.',
-      'Singapore HoldCo with institutional-grade governance.',
+      "India's first greenfield AI-native NBFC - no legacy systems, no migration cost, no retrofitted compliance. Built correctly from day one.",
+      'Proprietary AI and Agent IP under active development - a defensible moat that deepens as the loan book grows and agents learn.',
+      'Hub & Spoke architecture targets a cost-to-income ratio of 25-30% within 18 months - structurally lower than any incumbent NBFC or digital lender.',
+      'Singapore HoldCo with institutional-grade governance, full regulatory transparency and clean capital architecture from day one.',
     ],
   },
   {
@@ -23,12 +23,12 @@ const stakeholderGroups = [
     title: 'Debt Providers & Banks',
     eyebrow: 'For',
     image: '/images/stakeholders_banks.png',
-    summary: 'Banking discipline meets engineering ambition.',
+    summary: 'A Lending Partner Designed by Bankers, for Bankers',
     points: [
-      'Founders ex-J.P. Morgan & HSBC — credit, NPL and risk operators.',
-      'Mandatory human-in-the-loop on every AI credit decision.',
-      'RBI-compliant by design — every decision audit-ready.',
-      'Co-lending, assignment and portfolio acquisition structures.',
+      'Founded by former J.P. Morgan and HSBC executives with direct, hands-on experience in credit underwriting, portfolio management and NPL recovery.',
+      'Every AI credit decision operates within a mandatory human-in-the-loop framework - no black-box outcomes, full explainability and audit trail.',
+      'RBI-compliant AI architecture by design - regulatory risk is a founding constraint, not a future compliance project.',
+      'Co-lending, assignment and portfolio acquisition structures available - flexible capital deployment with clear, bankable risk-sharing frameworks.',
     ],
   },
   {
@@ -36,12 +36,12 @@ const stakeholderGroups = [
     title: 'Partners & Consultants',
     eyebrow: 'For',
     image: '/images/stakeholders_partners.png',
-    summary: 'A platform built to integrate from line one of code.',
+    summary: 'A Platform Designed to Integrate - From the First Line of Code',
     points: [
-      'API-first architecture — integration is the design principle.',
-      'IP co-development opportunities on the AI agent framework.',
-      'Need: RBI, credit modelling, collections, fintech infra, NBFC licensing.',
-      'Equity, advisory and commercial structures available.',
+      'API-first architecture from inception - integration is not a future roadmap item, it is the foundational design principle.',
+      'Proprietary AI agent framework creates meaningful IP co-development and commercialisation opportunities for the right strategic partners.',
+      'Domain expertise needed: RBI regulation, credit modelling, collections technology, fintech infrastructure and NBFC licensing.',
+      'Equity, advisory and commercial compensation structures available for partners who contribute substantively to the platform build.',
     ],
   },
 ];
@@ -254,7 +254,7 @@ export function Stakeholders() {
 
           {/* Right: Sticky Full-Height Image Container */}
           <div className="w-[50%] sticky top-[6.5rem] flex flex-col justify-start h-[calc(100vh-6.5rem)] pb-[5vh]">
-            <div className="relative w-full h-[78vh] overflow-hidden rounded-[2.5rem] border border-white/60 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,255,255,0.4)_100%)] p-3 shadow-[0_22px_64px_rgba(15,27,61,0.065)]">
+            <div className="relative w-full h-[78vh] overflow-hidden rounded-[2.5rem]">
               <div className="relative h-full w-full overflow-hidden rounded-[1.5rem]">
                 {stakeholderGroups.map((group, index) => (
                   <img 
