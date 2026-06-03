@@ -103,20 +103,33 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Unsupported resume format' }, { status: 400 });
     }
 
-    await fs.mkdir(resumeDirectory, { recursive: true });
+    const db = await (await import('@/lib/db/client')).getDatabase();
+    const { GridFSBucket } = await import('mongodb');
+    const bucket = new GridFSBucket(db, { bucketName: 'resumes' });
 
-    const applicationId = createRecordId('jobapp');
-    const safeResumeName = sanitizeFileName(resume.name) || 'resume';
-    const storedFileName = `${applicationId}-${safeResumeName}`;
-    const storedFilePath = path.join(resumeDirectory, storedFileName);
+    const uploadStream = bucket.openUploadStream(resume.name, {
+      metadata: {
+        contentType: resume.type || 'application/octet-stream',
+      },
+    });
+    
     const resumeBuffer = Buffer.from(await resume.arrayBuffer());
-    await fs.writeFile(storedFilePath, resumeBuffer);
+    uploadStream.end(resumeBuffer);
+
+    await new Promise((resolve, reject) => {
+      uploadStream.on('finish', resolve);
+      uploadStream.on('error', reject);
+    });
+
+    const storedFileId = uploadStream.id;
 
     const jobsCollection = await getJobsCollection();
     const matchedJob = await jobsCollection.findOne(
       { title: role },
       { projection: { _id: 0, category: 1, type: 1 } },
     );
+
+    const applicationId = createRecordId('jobapp');
 
     const newApplication: JobApplicationRecord = {
       role,
@@ -126,7 +139,7 @@ export async function POST(request: Request) {
       email,
       linkedin,
       resumeName: resume.name,
-      resumeUrl: `/uploads/job-applications/${storedFileName}`,
+      resumeUrl: `/api/resumes/${storedFileId.toString()}`,
       whyPfundit,
       id: applicationId,
       createdAt: new Date().toISOString(),
