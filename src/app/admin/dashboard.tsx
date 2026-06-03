@@ -666,6 +666,7 @@ export function AdminDashboard() {
                 <div>
                   <label className="mb-1 block text-xs font-bold uppercase text-[#0f1b3d]/70">Tags (comma separated)</label>
                   <input
+                    required
                     type="text"
                     value={tagInput}
                     onChange={(event) => setTagInput(event.target.value)}
@@ -677,6 +678,7 @@ export function AdminDashboard() {
               <div>
                 <label className="mb-1 block text-xs font-bold uppercase text-[#0f1b3d]/70">Description</label>
                 <textarea
+                  required
                   rows={5}
                   value={currentJob.description || ''}
                   onChange={(event) => setCurrentJob({ ...currentJob, description: event.target.value })}
