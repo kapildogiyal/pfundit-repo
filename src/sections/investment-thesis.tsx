@@ -190,7 +190,7 @@ export function InvestmentThesis() {
           </div>
 
           {/* Optimized Card Stacking Area - Desktop Only */}
-          <div className="relative hidden h-[70vh] w-full max-w-[1000px] lg:block">
+          <div className="relative hidden h-[70vh] min-h-[556px] w-full max-w-[1000px] lg:block">
             {verticals.map((v, i) => (
               <div
                 key={v.id}
