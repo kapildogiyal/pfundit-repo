@@ -14,14 +14,7 @@ const leaders = [
     focus: 'Consumer Credit Risk & Payments Executive · 25+ Years',
     image: '/founders/sanath.png',
     bioIcon: 'bank',
-    bio: 'Sanath is the credit and operational architect of Pfundit. As Regional Head of Credit Risk at HSBC India, he ran multi-geography retail lending portfolios across Cards, Personal Loans, Auto and Mortgages. He later led corporate payments origination at HSBC and J.P. Morgan across Asia-Pacific, rising to Executive Director at J.P. Morgan Singapore. His experience spans the full credit lifecycle - from origination policy and scorecard design to NPA recovery and portfolio remediation.',
-    background: [
-      'HSBC & J.P. Morgan - Executive Director, APAC Payments',
-      'HSBC VP & Regional Head - Consumer Credit Risk, India',
-      'Retail Portfolio Management: Cards, Personal Loans, Auto, Mortgages',
-      'National Collections Strategy & DCA Governance',
-      'Transaction Banking & Cash Management, APAC',
-    ],
+    bio: "Sanath is responsible for building Pfundit’s lending platform from first principles - defining the team, credit model, risk controls, distribution strategy and technology foundation. Twenty-five years across Citicorp, HSBC India and J.P. Morgan Singapore - running retail lending portfolios, building collections frameworks and leading corporate payments origination across Asia-Pacific - give him direct, hands-on command of everything Pfundit's lending model requires.",
     linkedin: '#',
   },
   {
@@ -31,14 +24,7 @@ const leaders = [
     focus: 'Corporate Banker · Entrepreneur · Governance Expert',
     image: '/founders/atin.png',
     bioIcon: 'globe',
-    bio: "Atin combines institutional banking discipline with a decade of operator-level execution. At HSBC Singapore, he served as Country Head of International Subsidiary Banking - responsible for credit origination, risk grading and portfolio management for multinational corporate clients, with direct sanctioning authority on complex cross-border credit structures. He co-founded In.Corp Global, scaling it into one of Asia's leading corporate services platforms before a private equity exit in 2022.",
-    background: [
-      'HSBC - Country Head, International Subsidiary Banking, Singapore',
-      'Credit Origination, Structuring & Portfolio Management',
-      'Group CEO, In.Corp Global - PE-backed Exit (2022)',
-      'MBA with Distinction - Indian Institute of Foreign Trade',
-      'Blue Planet Environmental Solutions - President (Current)'
-    ],
+    bio: "Atin brings the rare combination of institutional banker and proven entrepreneur. A decade at HSBC - culminating as Country Head of International Subsidiary Banking in Singapore - was followed by co-founding and scaling In.Corp Global to a private equity exit. At Pfundit he leads governance, capital strategy and investor relations.",
     linkedin: '#',
   },
   {
@@ -48,14 +34,7 @@ const leaders = [
     focus: 'Serial Entrepreneur · Institutional Capital · Technology',
     image: '/founders/madhujeet.png',
     bioIcon: 'chart',
-    bio: 'Madhujeet has founded, scaled and exited businesses across Asia, Europe and Latin America over two decades. He built Stone Apple into a regional enterprise technology firm before its acquisition by Hitachi Consulting in 2014. He co-founded In.Corp Global, completing a private equity exit in 2021. He chairs Blue Planet Environmental Solutions, backed by IFU and Novo Holdings - operating across India, Singapore, the UK and New Zealand. At Pfundit, he leads capital strategy, board governance and investor relations.',
-    background: [
-      'Stone Apple - Founded & sold to Hitachi Consulting (2014)',
-      'In.Corp Global - Co-Founder, PE Exit (2021)',
-      'Blue Planet Environmental Solutions - Chairman (Current)',
-      'Institutional fundraising: IFU, Novo Holdings',
-      'Xcelerate Global - GRC Investment Platform'
-    ],
+    bio: 'Madhujeet has built, scaled and exited companies across Asia, Europe and Latin America over two decades - from Stone Apple (acquired by Hitachi Consulting) to In.Corp Global (PE exit) to Blue Planet Environmental Solutions, backed by IFU and Novo Holdings. At Pfundit he leads capital strategy, board governance and the regional platform build.',
     linkedin: '#',
   },
 ];
@@ -428,16 +407,6 @@ export function Leadership() {
                     {leader.bio}
                   </p>
                 </div>
-
-                {/* background bullet list */}
-                <ul data-anim="inner" style={{ width: '100%', marginBottom: 24, listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {leader.background.map((item) => (
-                    <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                      <div style={{ marginTop: 5, width: 6, height: 6, borderRadius: '50%', background: '#D4A437', flexShrink: 0 }} />
-                      <span style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.58)', lineHeight: 1.55 }}>{item}</span>
-                    </li>
-                  ))}
-                </ul>
 
                 {/* LinkedIn */}
                 <a

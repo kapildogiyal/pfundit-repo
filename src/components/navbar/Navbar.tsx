@@ -60,14 +60,43 @@ export function Navbar() {
   const headerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
+
+  const [isScrolled, setIsScrolled] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.scrollY > 20;
+    }
+    return false;
+  });
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    setIsScrolled(latest > 20);
+  });
   const navRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const navContainerRef = useRef<HTMLDivElement | null>(null);
   const [underline, setUnderline] = useState({ left: 0, width: 0, opacity: 0 });
+  const hiringStripRef = useRef<HTMLDivElement>(null);
+  const [hiringStripHeight, setHiringStripHeight] = useState(38);
+
+  useEffect(() => {
+    if (isHiringPage) return;
+    const updateHeight = () => {
+      if (hiringStripRef.current) {
+        setHiringStripHeight(hiringStripRef.current.offsetHeight);
+      }
+    };
+    updateHeight();
+    const timer = setTimeout(updateHeight, 50);
+    window.addEventListener('resize', updateHeight);
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+      clearTimeout(timer);
+    };
+  }, [isHiringPage]);
 
   const hiringStripY = useTransform(scrollY, [0, 30], [0, -60]);
   const hiringStripOpacity = useTransform(scrollY, [0, 30], [1, 0]);
-  // On /hiring page there's no strip so nav starts at top (0), not 44px
-  const navTop = useTransform(scrollY, [0, 30], [isHiringPage ? 0 : 44, 0]);
+  // On /hiring page there's no strip so nav starts at top (0), not hiringStripHeight
+  const navTop = useTransform(scrollY, [0, 30], [isHiringPage ? 0 : hiringStripHeight, 0]);
   const navPadding = useTransform(scrollY, [0, 50], ['1rem', '0.55rem']);
   const navBackground = useTransform(
     scrollY,
@@ -79,6 +108,8 @@ export function Navbar() {
     [0, 50],
     ['rgba(15, 27, 61, 0)', 'rgba(15, 27, 61, 0.12)']
   );
+
+  const showDarkNav = isHiringPage || isScrolled;
 
   useMotionValueEvent(scrollVelocity, 'change', (latest) => {
     if (latest > 0) {
@@ -180,6 +211,7 @@ export function Navbar() {
       {/* Hiring strip — hidden on the /hiring page itself */}
       {!isHiringPage && (
         <motion.div
+          ref={hiringStripRef}
           style={{
             y: hiringStripY,
             opacity: scrollDirection === 'up' ? 1 : hiringStripOpacity
@@ -226,7 +258,7 @@ export function Navbar() {
 
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="group flex items-center gap-2 text-[clamp(1.55rem,5vw,1.95rem)] font-bold tracking-[-0.05em] leading-none text-navy"
+            className={`group flex items-center gap-2 text-[clamp(1.55rem,5vw,1.95rem)] font-bold tracking-[-0.05em] leading-none transition-colors duration-300 ${showDarkNav ? 'text-navy' : 'text-white'}`}
           >
             <span className="relative inline-block overflow-hidden">
               <span className="block transition-transform duration-500 ease-out group-hover:-translate-y-full">Pfundit</span>
@@ -247,7 +279,7 @@ export function Navbar() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 onClick={() => scrollToSection(link.id)}
-                className={`group relative typo-body-sm px-2 py-1 transition-all duration-300 ${activeSection === link.id ? 'text-navy' : 'text-navy/55'} hover:text-navy`}
+                className={`group relative typo-body-sm px-2 py-1 transition-all duration-300 ${activeSection === link.id ? (showDarkNav ? 'text-navy' : 'text-white') : (showDarkNav ? 'text-navy/55' : 'text-white/65')} ${showDarkNav ? 'hover:text-navy' : 'hover:text-white'}`}
                 aria-current={activeSection === link.id ? 'page' : undefined}
               >
                 <span className="relative z-10">{link.label}</span>
@@ -284,15 +316,15 @@ export function Navbar() {
             >
               <motion.div
                 animate={{ rotate: mobileMenuOpen ? 45 : 0, y: mobileMenuOpen ? 7 : 0 }}
-                className="h-[1.5px] w-6 bg-navy"
+                className={`h-[1.5px] w-6 transition-colors duration-300 ${mobileMenuOpen ? 'bg-navy' : (showDarkNav ? 'bg-navy' : 'bg-white')}`}
               />
               <motion.div
                 animate={{ opacity: mobileMenuOpen ? 0 : 1, width: mobileMenuOpen ? 0 : 16 }}
-                className="h-[1.5px] bg-navy"
+                className={`h-[1.5px] transition-colors duration-300 ${mobileMenuOpen ? 'bg-navy' : (showDarkNav ? 'bg-navy' : 'bg-white')}`}
               />
               <motion.div
                 animate={{ rotate: mobileMenuOpen ? -45 : 0, y: mobileMenuOpen ? -7 : 0 }}
-                className="h-[1.5px] w-6 bg-navy"
+                className={`h-[1.5px] w-6 transition-colors duration-300 ${mobileMenuOpen ? 'bg-navy' : (showDarkNav ? 'bg-navy' : 'bg-white')}`}
               />
             </button>
           </motion.div>
