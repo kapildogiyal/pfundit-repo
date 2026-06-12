@@ -176,7 +176,7 @@ export function Stakeholders() {
         <div className="mt-12 flex flex-col gap-20 lg:hidden">
           {stakeholderGroups.map((group) => (
             <article key={group.id} data-stakeholder-mobile-row className="flex flex-col gap-8">
-              <div data-stakeholder-mobile-img className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem] border border-white/60 bg-[linear-gradient(160deg,rgba(255,255,255,0.96),rgba(255,255,255,0.4)_100%)] p-3 shadow-[0_22px_64px_rgba(15,27,61,0.065)]">
+              <div data-stakeholder-mobile-img className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem]">
                 <div className="relative h-full w-full overflow-hidden rounded-[1.25rem]">
                   <img src={group.image} alt={group.title} className="h-full w-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent" />
