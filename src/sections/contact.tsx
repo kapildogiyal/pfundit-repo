@@ -48,26 +48,14 @@ export function Contact() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden section-padding bg-tier-anchor"
+      className="relative overflow-hidden py-12 sm:py-20 bg-[#F4F3EF]"
       id="contact"
     >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(15,27,61,0.08)] to-transparent" />
-      <div className="layout-shell editorial-container relative z-10">
-        <div className="mx-auto max-w-[80rem] px-8 py-20 sm:px-12 md:py-24 relative">
+      <div className="layout-shell editorial-container relative z-10 px-4 sm:px-8">
+        <div className="mx-auto max-w-[80rem] px-8 py-20 sm:px-12 md:py-24 relative bg-tier-anchor rounded-[2.5rem] overflow-hidden shadow-xl border border-white/10">
 
           {/* Arc illustration as background decor */}
-          <div className="pointer-events-none absolute inset-0 overflow-hidden">
-            <div
-              className="absolute -top-12 -left-12 opacity-15"
-              style={{ width: 700, height: 400 }}
-            >
-              <img
-                src="/ChatGPT Image Jul 9, 2026, 04_58_59 PM.png"
-                alt=""
-                className="w-full h-auto select-none"
-                style={{ filter: 'brightness(0) invert(1)' }}
-              />
-            </div>
+          <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2.5rem]">
             <svg className="absolute inset-0 h-full w-full opacity-40" viewBox="0 0 1200 600" preserveAspectRatio="none">
               <circle cx="600" cy="300" r="380" fill="none" stroke="#d4a437" strokeWidth="1.5" opacity="0.18" />
               <circle cx="600" cy="300" r="300" fill="none" stroke="#d4a437" strokeWidth="1.5" opacity="0.12" />

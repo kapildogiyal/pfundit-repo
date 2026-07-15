@@ -101,14 +101,14 @@ export function Governance() {
 
           {/* Stacked layers illustration — blended */}
           <div className="hidden lg:block flex-shrink-0 illustration-float" style={{ width: 180, marginTop: '-0.5rem' }}>
-            <Image
+            {/* <Image
               src="/ChatGPT Image Jul 9, 2026, 04_58_36 PM.png"
               alt="Layered governance structure"
               width={180}
               height={220}
               className="w-full h-auto select-none"
               style={{ mixBlendMode: 'multiply' }}
-            />
+            /> */}
           </div>
         </div>
 
