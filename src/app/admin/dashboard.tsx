@@ -108,7 +108,7 @@ function EmptyState({ title, description }: { title: string; description: string
 const detailModalHeaderClassName = 'flex items-start justify-between border-b border-[#0f1b3d]/8 px-6 py-4';
 const detailModalCloseButtonClassName = 'rounded-full p-2 text-[#0f1b3d]/50 hover:bg-[#F0F5FF] hover:text-[#0f1b3d]';
 
-const filterChipBaseClass = 'rounded-full px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.18em] transition-colors';
+const filterChipBaseClass = 'rounded-full px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.18em] transition-colors';
 
 function getDateRangeBounds(filter: DateRangeFilterState) {
   const now = new Date();
@@ -168,7 +168,7 @@ function DateRangeFilter({
       <button
         type="button"
         onClick={() => setIsOpen((value) => !value)}
-        className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[0.62rem] font-semibold uppercase tracking-[0.18em] shadow-[0_8px_24px_rgba(15,27,61,0.04)] transition-colors ${
+        className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[0.625rem] font-semibold uppercase tracking-[0.18em] shadow-[0_8px_24px_rgba(15,27,61,0.04)] transition-colors ${
           isOpen ? 'border-[#0f1b3d] bg-[#0f1b3d] text-white' : 'border-[#0f1b3d]/10 bg-white text-[#0f1b3d]/70 hover:bg-[#F6F8FF]'
         }`}
         aria-haspopup="dialog"
@@ -183,7 +183,7 @@ function DateRangeFilter({
       {isOpen && (
         <div className="absolute right-0 top-full z-20 mt-2 w-[18rem] rounded-2xl border border-[#0f1b3d]/10 bg-white p-3 shadow-[0_16px_40px_rgba(15,27,61,0.12)] sm:w-[22rem]">
           <div className="mb-2 flex items-center justify-between gap-3">
-            <p className="text-[0.58rem] font-bold uppercase tracking-[0.22em] text-[#D4A437]">{title}</p>
+            <p className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#D4A437]">{title}</p>
             <button type="button" onClick={() => setIsOpen(false)} className="rounded-full p-1 text-[#0f1b3d]/45 hover:text-[#0f1b3d]">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -208,7 +208,7 @@ function DateRangeFilter({
 
           <div className="mt-3 grid gap-2">
             <label className="flex items-center gap-2 rounded-xl border border-[#0f1b3d]/10 bg-[#F8FAFF] px-3 py-2">
-              <span className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#0f1b3d]/50">From</span>
+              <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[#0f1b3d]/50">From</span>
               <input
                 type="date"
                 value={filter.from}
@@ -217,7 +217,7 @@ function DateRangeFilter({
               />
             </label>
             <label className="flex items-center gap-2 rounded-xl border border-[#0f1b3d]/10 bg-[#F8FAFF] px-3 py-2">
-              <span className="text-[0.58rem] font-semibold uppercase tracking-[0.18em] text-[#0f1b3d]/50">To</span>
+              <span className="text-[0.65rem] font-semibold uppercase tracking-[0.18em] text-[#0f1b3d]/50">To</span>
               <input
                 type="date"
                 value={filter.to}
@@ -374,7 +374,7 @@ export function AdminDashboard() {
       <aside className="border-b border-[#0f1b3d]/8 bg-white/92 px-3 py-3 backdrop-blur-xl lg:fixed lg:z-30 lg:flex lg:h-[calc(100vh)] lg:w-[15.5rem] lg:flex-col  lg:border lg:px-3 lg:py-3.5 lg:shadow-[0_18px_40px_rgba(15,27,61,0.06)]">
         <div className="flex items-start justify-between gap-3 lg:block">
           <div className="pb-2 lg:pb-3">
-            <p className="text-[0.55rem] font-semibold uppercase tracking-[0.28em] text-[#0f1b3d]/38">Admin panel</p>
+            <p className="text-[0.625rem] font-semibold uppercase tracking-[0.28em] text-[#0f1b3d]/38">Admin panel</p>
             <h2 className="mt-1 text-[1.15rem] font-semibold tracking-tight text-[#0f1b3d]">Pfundit</h2>
           </div>
         </div>
@@ -401,7 +401,7 @@ export function AdminDashboard() {
                     </span>
                     <p className="truncate text-[0.82rem] font-medium tracking-tight sm:text-[0.85rem]">{tab.label}</p>
                   </div>
-                  <span className={`min-w-7 rounded-full px-2 py-0.5 text-center text-[0.55rem] font-semibold uppercase tracking-[0.16em] ${isActive ? 'bg-white/12 text-white' : 'bg-[#0f1b3d]/5 text-[#0f1b3d]/42'}`}>
+                  <span className={`min-w-7 rounded-full px-2 py-0.5 text-center text-[0.625rem] font-semibold uppercase tracking-[0.16em] ${isActive ? 'bg-white/12 text-white' : 'bg-[#0f1b3d]/5 text-[#0f1b3d]/42'}`}>
                     {count}
                   </span>
                 </div>
@@ -414,7 +414,7 @@ export function AdminDashboard() {
           <button
             type="button"
             onClick={handleLogout}
-            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#0f1b3d]/10 bg-[#F8FAFF] px-3 py-2 text-[0.62rem] font-semibold uppercase tracking-[0.22em] text-[#0f1b3d]/55 transition-all hover:border-[#0f1b3d]/16 hover:bg-white hover:text-[#0f1b3d]"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#0f1b3d]/10 bg-[#F8FAFF] px-3 py-2 text-[0.625rem] font-semibold uppercase tracking-[0.22em] text-[#0f1b3d]/55 transition-all hover:border-[#0f1b3d]/16 hover:bg-white hover:text-[#0f1b3d]"
           >
             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12H3m0 0l4-4m-4 4 4 4m6-8v2a2 2 0 0 1-2 2h-1m3 4v2a2 2 0 0 1-2 2H7" />
@@ -505,11 +505,11 @@ export function AdminDashboard() {
 
               <div className="overflow-hidden rounded-[1.5rem] border border-[#0f1b3d]/10 bg-white shadow-[0_18px_60px_rgba(15,27,61,0.06)]">
               <div className="hidden border-b border-[#0f1b3d]/5 bg-[#F6F8FF] px-5 py-3 sm:px-6 lg:grid lg:grid-cols-[minmax(14rem,1.1fr)_minmax(0,1fr)_10rem_10rem_2rem] lg:gap-4">
-                <div className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Name</div>
-                <div className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Email</div>
-                <div className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Role</div>
-                <div className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Submitted</div>
-                <div className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45" />
+                <div className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Name</div>
+                <div className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Email</div>
+                <div className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Role</div>
+                <div className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Submitted</div>
+                <div className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45" />
               </div>
               {filteredJobApplications.length === 0 ? (
                 <div className="p-6">
@@ -533,7 +533,7 @@ export function AdminDashboard() {
 
                       <div className="min-w-0 text-sm text-[#0f1b3d]/70">{application.email}</div>
 
-                      <div className="text-[0.6rem] font-bold uppercase tracking-[0.22em] text-[#D4A437] lg:pt-0.5">{application.role}</div>
+                      <div className="text-[0.65rem] font-bold uppercase tracking-[0.22em] text-[#D4A437] lg:pt-0.5">{application.role}</div>
 
                       <div className="text-sm text-[#0f1b3d] lg:pt-0.5">{formatDate(application.createdAt)}</div>
 
@@ -558,10 +558,10 @@ export function AdminDashboard() {
 
               <div className="overflow-hidden rounded-[1.5rem] border border-[#0f1b3d]/10 bg-white shadow-[0_18px_60px_rgba(15,27,61,0.06)]">
                 <div className="hidden border-b border-[#0f1b3d]/5 bg-[#F6F8FF] px-5 py-3 sm:px-6 lg:grid lg:grid-cols-[minmax(14rem,1.1fr)_10rem_10rem_2rem] lg:gap-4">
-                  <div className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Contact</div>
-                  <div className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Mail</div>
-                  <div className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Submitted</div>
-                  <div className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45" />
+                  <div className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Contact</div>
+                  <div className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Mail</div>
+                  <div className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45">Submitted</div>
+                  <div className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#0f1b3d]/45" />
                 </div>
 
                 {filteredContactSubmissions.length === 0 ? (
@@ -712,7 +712,7 @@ export function AdminDashboard() {
           <div className="w-full max-w-2xl rounded-[1.5rem] bg-white shadow-2xl">
             <div className={detailModalHeaderClassName}>
               <div>
-                <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#D4A437]">Contact message</p>
+                <p className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#D4A437]">Contact message</p>
                 <h2 className="mt-1 text-xl font-bold tracking-tight text-[#0f1b3d]">{selectedContactSubmission.name}</h2>
                 <p className="mt-1 text-sm text-[#0f1b3d]/60">{selectedContactSubmission.email}</p>
               </div>
@@ -730,17 +730,17 @@ export function AdminDashboard() {
             <div className="px-6 py-5">
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl bg-[#F6F8FF] p-4">
-                  <p className="text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Submitted</p>
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Submitted</p>
                   <p className="mt-1 text-sm text-[#0f1b3d]">{formatDate(selectedContactSubmission.createdAt)}</p>
                 </div>
                 <div className="rounded-2xl bg-[#F6F8FF] p-4">
-                  <p className="text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Mail</p>
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Mail</p>
                   <p className="mt-1 text-sm text-[#0f1b3d]">{selectedContactSubmission.email}</p>
                 </div>
               </div>
 
               <div className="mt-4 rounded-2xl bg-[#F0F5FF] p-4">
-                <p className="text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Message</p>
+                <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Message</p>
                 <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-[#0f1b3d]/80">{selectedContactSubmission.message}</p>
               </div>
             </div>
@@ -753,7 +753,7 @@ export function AdminDashboard() {
           <div className="w-full max-w-2xl rounded-[1.5rem] bg-white shadow-2xl">
             <div className={detailModalHeaderClassName}>
               <div>
-                <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#D4A437]">Job application</p>
+                <p className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#D4A437]">Job application</p>
                 <h2 className="mt-1 text-xl font-bold tracking-tight text-[#0f1b3d]">{selectedJobApplication.name}</h2>
                 <p className="mt-1 text-sm text-[#0f1b3d]/60">{selectedJobApplication.email}</p>
               </div>
@@ -771,19 +771,19 @@ export function AdminDashboard() {
             <div className="px-6 py-5">
               <div className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-2xl bg-[#F6F8FF] p-4">
-                  <p className="text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Role</p>
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Role</p>
                   <p className="mt-1 text-sm text-[#0f1b3d]">{selectedJobApplication.role}</p>
                 </div>
                 <div className="rounded-2xl bg-[#F6F8FF] p-4">
-                  <p className="text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Submitted</p>
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Submitted</p>
                   <p className="mt-1 text-sm text-[#0f1b3d]">{formatDate(selectedJobApplication.createdAt)}</p>
                 </div>
                 <div className="rounded-2xl bg-[#F6F8FF] p-4">
-                  <p className="text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">LinkedIn</p>
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">LinkedIn</p>
                   <p className="mt-1 break-all text-sm text-[#0f1b3d]">{selectedJobApplication.linkedin || 'Not provided'}</p>
                 </div>
                 <div className="rounded-2xl bg-[#F6F8FF] p-4">
-                  <p className="text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Resume</p>
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Resume</p>
                   {selectedJobApplication.resumeUrl || selectedJobApplication.resumeLink ? (
                     <a
                       href={selectedJobApplication.resumeUrl || selectedJobApplication.resumeLink}
@@ -803,7 +803,7 @@ export function AdminDashboard() {
               </div>
 
               <div className="mt-4 rounded-2xl bg-[#F0F5FF] p-4">
-                <p className="text-[0.58rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Why Pfundit</p>
+                <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[#0f1b3d]/45">Why Pfundit</p>
                 <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-[#0f1b3d]/80">{selectedJobApplication.whyPfundit}</p>
               </div>
             </div>

@@ -1,232 +1,140 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-const cards = [
-  {
-    label: "Mission",
-    title: "To expand access to disciplined, formal credit by financing productive real-economy activity.",
-    description:
-      "India's MSME sector faces a formal credit gap of ₹30 lakh crore (~$360 billion). Southeast Asia adds a further $300 billion MSME financing shortfall. Across both regions, over 700 million adults remain outside the formal credit system. The barrier is not demand - for credit, for working capital, for growth finance. It is the cost and complexity of serving them. We are building the infrastructure that makes disciplined lending at this scale commercially viable.",
-    direction: -72,
-  },
-  {
-    label: "Vision",
-    title: "To be Asia's most trusted AI-enabled credit platform by 2030.",
-    description:
-      "A regulated institution that holds a licence, manages a loan book, stands behind every credit outcome and compounds defensible IP in how credit is priced, delivered and managed - across India first, and Asia by design.",
-    direction: 72,
-  },
-];
+import React, { useRef } from "react";
+import { useScrollReveal } from "@/animations/useScrollReveal";
+import { glassOpacityDark } from "@/lib/glassmorphism";
 
 export function MissionVision() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const cardNodes = Array.from(
-      section.querySelectorAll<HTMLElement>("[data-mission-card]"),
-    );
-
-    const cleanups: Array<() => void> = [];
-
-    const ctx = gsap.context(() => {
-      cardNodes.forEach((card, index) => {
-        const content = card.querySelector<HTMLElement>("[data-card-content]");
-        const glow = card.querySelector<HTMLElement>("[data-card-glow]");
-
-        // Auto glow animation on scroll
-        if (glow && content) {
-          glow.style.opacity = "1";
-          glow.style.backgroundSize = "220% 220%";
-          glow.style.backgroundPosition = "0% 50%";
-
-          const glowState = { x: 0 };
-
-          const revealGlow = () => {
-            gsap.fromTo(
-              glowState,
-              { x: 0 },
-              {
-                x: 100,
-                duration: 2.8,
-                ease: "power2.out",
-                onUpdate: () => {
-                  glow.style.backgroundImage =
-                    "radial-gradient(circle at center, rgba(212,164,55,0.9) 0%, rgba(212,164,55,0.42) 18%, rgba(255,255,255,0) 55%)";
-                  glow.style.backgroundRepeat = "no-repeat";
-                  glow.style.backgroundPosition = `${glowState.x}% 50%`;
-                },
-              },
-            );
-          };
-
-          ScrollTrigger.create({
-            trigger: card,
-            start: "top 88%",
-            once: true,
-            onEnter: revealGlow,
-          });
-        }
-
-        if (!content || !glow) return;
-
-        let isAutoGlowing = false;
-
-        // Detect when auto-glow is active
-        const checkAutoGlow = () => {
-          const rect = card.getBoundingClientRect();
-          isAutoGlowing =
-            rect.top < window.innerHeight * 0.9 && rect.bottom > 0;
-        };
-
-        const handleMove = (event: MouseEvent) => {
-          const rect = card.getBoundingClientRect();
-          const x = event.clientX - rect.left;
-          const y = event.clientY - rect.top;
-          const rotateY = (x / rect.width - 0.5) * 8;
-          const rotateX = (0.5 - y / rect.height) * 8;
-          const glowX = (x / rect.width) * 100;
-          const glowY = (y / rect.height) * 100;
-
-          gsap.to(content, {
-            x: rotateY * 0.9,
-            y: -rotateX * 0.9,
-            rotateX,
-            rotateY,
-            transformPerspective: 900,
-            duration: 0.35,
-            ease: "power2.out",
-          });
-
-          gsap.to(glow, {
-            opacity: 1,
-            background: `radial-gradient(circle at ${glowX}% ${glowY}%, rgba(212,164,55,0.85), rgba(212,164,55,0.36) 18%, rgba(255,255,255,0) 58%)`,
-            duration: 0.35,
-            ease: "power2.out",
-          });
-        };
-
-        const handleLeave = () => {
-          gsap.to(content, {
-            x: 0,
-            y: 0,
-            rotateX: 0,
-            rotateY: 0,
-            duration: 0.45,
-            ease: "power3.out",
-          });
-
-          // Return to auto-glow or default glow
-          checkAutoGlow();
-          if (isAutoGlowing) {
-            gsap.to(glow, {
-              opacity: 0.95,
-              background:
-                "radial-gradient(circle at 50% 50%, rgba(212,164,55,0.9), rgba(212,164,55,0.4) 18%, rgba(255,255,255,0) 58%)",
-              duration: 0.45,
-              ease: "power3.out",
-            });
-          } else {
-            gsap.to(glow, {
-              opacity: 0.8,
-              background:
-                "radial-gradient(circle at top right, rgba(212,164,55,0.4), rgba(212,164,55,0.14) 18%, rgba(255,255,255,0) 58%)",
-              duration: 0.45,
-              ease: "power3.out",
-            });
-          }
-        };
-
-        card.addEventListener("mousemove", handleMove);
-        card.addEventListener("mouseleave", handleLeave);
-
-        cleanups.push(() => {
-          card.removeEventListener("mousemove", handleMove);
-          card.removeEventListener("mouseleave", handleLeave);
-        });
-      });
-    }, section);
-
-    return () => {
-      cleanups.forEach((cleanup) => cleanup());
-      ctx.revert();
-    };
-  }, []);
+  // Initialize global scroll reveal
+  useScrollReveal(sectionRef);
+  const mRuleRef = useRef<HTMLDivElement | null>(null);
+  const vRuleRef = useRef<HTMLDivElement | null>(null);
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-transparent py-20 md:py-20 lg:py-24"
       id="mission"
+      aria-label="Mission and Vision"
+      className="bg-tier-base"
+      style={{
+        paddingTop: 'clamp(96px, 10vw, 132px)',
+        paddingBottom: 'clamp(96px, 10vw, 132px)',
+        position: "relative",
+        backgroundImage: "linear-gradient(rgba(249, 248, 244, 0.52), rgba(249, 248, 244, 0.52)), url('/m%26vbg.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
     >
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-0 top-0 h-64 w-64 -translate-x-1/3 -translate-y-1/3 rounded-full bg-gold/10 blur-[110px]" />
-        <div className="absolute right-0 top-1/4 h-72 w-72 translate-x-1/4 rounded-full bg-navy/6 blur-[120px]" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-navy/10 to-transparent" />
-      </div>
+      {/* Top rule */}
+      <div aria-hidden style={{
+        position: "absolute", top: 0, left: 0, right: 0, height: 1,
+        background: "linear-gradient(to right, transparent, rgba(15,27,61,0.07), transparent)",
+      }} />
 
-      <div className="layout-shell editorial-container relative z-10">
-        <div className="mx-auto max-w-[42rem] text-center">
-          <div className="mb-5 inline-flex items-center gap-3 rounded-full border border-gold/30 bg-white/45 px-5 py-2 backdrop-blur-sm">
-            <div className="h-2 w-2 rounded-full bg-gold shadow-[0_0_14px_rgba(212,164,55,0.75)]" />
-            <span className="typo-eyebrow text-navy/60">Purpose</span>
-          </div>
-
-          <h2 className="typo-hero text-navy">Mission &amp; Vision</h2>
-
-          <p className="mx-auto mt-6 max-w-[48rem] typo-body text-navy/70">
-            To expand access to disciplined, formal credit by financing
-            productive real-economy activity - with technology-led
-            infrastructure, institutional governance and long-term regulatory
-            alignment.
-          </p>
+      <div className="layout-shell">
+        {/* ── INTRO HEADER ─────────────────────────────────────────────── */}
+        <div className="header-group">
+          <h2
+            data-reveal="heading"
+            className="typo-h2 text-navy reveal-hidden header-heading"
+          >
+            Mission &amp; Vision
+          </h2>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2">
-          {cards.map((card) => (
-            <article
-              key={card.label}
-              data-mission-card
-              data-direction={card.direction}
-              className="group relative flex h-full overflow-hidden rounded-[2rem] border border-navy/8 bg-[linear-gradient(135deg,rgba(255,255,255,0.88),rgba(255,255,255,0.72)_58%,rgba(212,164,55,0.07)_100%)] p-6 text-center shadow-[0_18px_48px_rgba(15,27,61,0.07)] transition-all duration-300 hover:-translate-y-1 hover:border-gold/25 hover:shadow-[0_24px_58px_rgba(15,27,61,0.1)] sm:p-7"
-              style={{ transformStyle: "preserve-3d" }}
+        {/* ── MAIN COMPOSITION ─────────────────────────────────────────── */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(0, 1.28fr) 20px minmax(0, 1fr)",
+            columnGap: "40px",
+            alignItems: "start",
+          }}
+          className="max-lg:!grid-cols-1 max-lg:!gap-y-16"
+        >
+
+          {/* ─── MISSION (left, wider) ─────────────────────────────────── */}
+          <div
+            data-reveal="block"
+            className="reveal-hidden"
+          >
+            <div className="mb-6 inline-flex items-center gap-3">
+              <div className="h-1.5 w-1.5 rounded-full bg-[#C9A84C]" />
+              <span className="typo-eyebrow text-navy/45">Mission</span>
+            </div>
+
+            {/* Gold rule */}
+            <div
+              data-reveal="underline"
+              ref={mRuleRef}
+              style={{ width: 24, height: 1, background: "#C9A84C", marginBottom: 28, transition: "width 0.35s ease" }}
+            />
+
+            {/* Heading */}
+            <h3
+              className="typo-h3 text-navy"
+              style={{ margin: 0, marginBottom: 28 }}
             >
-              <div
-                data-card-glow
-                className="pointer-events-none absolute inset-0 opacity-100 mix-blend-screen"
-                style={{
-                  background:
-                    "radial-gradient(circle at center, rgba(212,164,55,0.85), rgba(212,164,55,0.35) 18%, rgba(255,255,255,0) 58%)",
-                  backgroundRepeat: "no-repeat",
-                  backgroundSize: "220% 220%",
-                }}
-              />
-              <div
-                data-card-content
-                className="relative z-10 flex flex-col items-center"
-                style={{ transformStyle: "preserve-3d" }}
-              >
-                <span className="block typo-label text-gold">{card.label}</span>
+              To expand access to disciplined, formal credit by financing <span className="italic" style={{ color: '#D4A437' }}>productive real-economy activity.</span>
+            </h3>
 
-                <h3 className="mt-3 max-w-[25ch] typo-h3 text-navy">
-                  {card.title}
-                </h3>
+            {/* Body */}
+            <p
+              className="typo-body text-navy/60"
+              style={{ margin: 0, maxWidth: "60ch" }}
+            >
+              In Asia — across India, ASEAN over 700 million adults and a combined MSME credit gap exceeding US$660 billion define one of the largest unmet opportunities in global finance. These are productive people and businesses — driving real output, trade and employment — locked out not by lack of creditworthiness, but by the cost and complexity of serving them. Pfundit is building the AI-native credit infrastructure to change that.
+            </p>
+          </div>
 
-                <p className="mt-5 max-w-[44rem] typo-body-sm text-navy/66">
-                  {card.description}
-                </p>
-              </div>
-            </article>
-          ))}
+          {/* ── Vertical centre divider ── */}
+          <div
+            aria-hidden
+            style={{ alignSelf: "stretch", display: "flex", justifyContent: "center" }}
+            className="hidden lg:flex"
+          >
+            <div
+              data-reveal="underline"
+              style={{ width: 2, height: "100%", background: "linear-gradient(to bottom, rgba(201,168,76,0), rgba(201,168,76,0.42), rgba(201,168,76,0))", transformOrigin: "top" }}
+            />
+          </div>
+
+          {/* ─── VISION (right, narrower) ──────────────────────────────── */}
+          <div
+            data-reveal="block"
+            className="reveal-hidden lg:pl-2"
+          >
+            <div className="mb-6 inline-flex items-center gap-3">
+              <div className="h-1.5 w-1.5 rounded-full bg-[#C9A84C]" />
+              <span className="typo-eyebrow text-navy/45">Vision</span>
+            </div>
+
+            {/* Gold rule */}
+            <div
+              data-reveal="underline"
+              ref={vRuleRef}
+              style={{ width: 24, height: 1, background: "#C9A84C", marginBottom: 28, transition: "width 0.35s ease" }}
+            />
+
+            {/* Heading */}
+            <h3
+              className="typo-h3 text-navy"
+              style={{ margin: 0, marginBottom: 28 }}
+            >
+              To be Asia's most trusted <span className="italic" style={{ color: '#D4A437' }}>AI-enabled credit platform</span> by 2030.
+            </h3>
+
+            {/* Body */}
+            <p
+              className="typo-body text-navy/60"
+              style={{ margin: 0, marginBottom: 48 }}
+            >
+              A regulated institution that holds a licence, manages a loan book, stands behind every credit outcome and compounds defensible IP in how credit is priced, delivered and managed — across India first, and Asia by design.
+            </p>
+
+          </div>
         </div>
       </div>
     </section>

@@ -7,12 +7,24 @@ import { usePathname, useRouter } from 'next/navigation';
 import { TalkToUsButton } from '@/components/button';
 
 const navLinks = [
-  { id: 'mission', label: 'Mission' },
-  { id: 'thesis', label: 'Thesis' },
+  { id: 'mission', label: 'Company' },
   { id: 'ai-edge', label: 'AI Edge' },
   { id: 'leadership', label: 'Founders' },
   { id: 'stakeholders', label: 'Stakeholders' },
   { id: 'governance', label: 'Governance' },
+];
+
+const companyItems = [
+  {
+    id: 'mission',
+    title: 'Mission & Vision',
+    description: 'Why we exist and where we are headed',
+  },
+  {
+    id: 'thesis',
+    title: 'What We Are Building',
+    description: 'The AI-native credit infrastructure',
+  },
 ];
 
 function Magnetic({ children }: { children: React.ReactNode }) {
@@ -53,6 +65,7 @@ export function Navbar() {
   const isHiringPage = pathname === '/hiring';
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [companyMenuOpen, setCompanyMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
   const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
   const [isUserClick, setIsUserClick] = useState(false);
@@ -97,11 +110,11 @@ export function Navbar() {
   const hiringStripOpacity = useTransform(scrollY, [0, 30], [1, 0]);
   // On /hiring page there's no strip so nav starts at top (0), not hiringStripHeight
   const navTop = useTransform(scrollY, [0, 30], [isHiringPage ? 0 : hiringStripHeight, 0]);
-  const navPadding = useTransform(scrollY, [0, 50], ['1rem', '0.55rem']);
+  const navHeight = useTransform(scrollY, [0, 50], ['88px', '64px']);
   const navBackground = useTransform(
     scrollY,
     [0, 50],
-    ['rgba(248, 248, 245, 0.1)', 'rgba(251, 251, 249, 0.95)']
+    ['rgba(247, 246, 242, 0.0)', 'rgba(249, 248, 244, 0.96)']
   );
   const navBorder = useTransform(
     scrollY,
@@ -109,7 +122,8 @@ export function Navbar() {
     ['rgba(15, 27, 61, 0)', 'rgba(15, 27, 61, 0.12)']
   );
 
-  const showDarkNav = isHiringPage || isScrolled;
+  // Always dark nav since hero is light paper bg
+  const showDarkNav = true;
 
   useMotionValueEvent(scrollVelocity, 'change', (latest) => {
     if (latest > 0) {
@@ -173,14 +187,31 @@ export function Navbar() {
   // Close mobile menu on Escape
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && mobileMenuOpen) setMobileMenuOpen(false);
+      if (e.key === 'Escape') {
+        setMobileMenuOpen(false);
+        setCompanyMenuOpen(false);
+      }
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, [mobileMenuOpen]);
 
+  useEffect(() => {
+    const onPointerDown = (event: PointerEvent) => {
+      const target = event.target as Node;
+      const navNode = navContainerRef.current;
+      if (navNode && !navNode.contains(target)) {
+        setCompanyMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => document.removeEventListener('pointerdown', onPointerDown);
+  }, []);
+
   const scrollToSection = (id: string) => {
     setMobileMenuOpen(false);
+    setCompanyMenuOpen(false);
     if (isHiringPage) {
       // Navigate back to home page with the hash
       router.push(`/#${id}`);
@@ -216,15 +247,15 @@ export function Navbar() {
             y: hiringStripY,
             opacity: scrollDirection === 'up' ? 1 : hiringStripOpacity
           }}
-          className="absolute left-0 top-0 w-full border-b border-[#d4a437]/25 bg-[#d4a437] text-navy shadow-[0_4px_16px_rgba(212,164,55,0.15)]"
+          className="absolute left-0 top-0 flex min-h-[42px] w-full items-center border-b border-[#d4a437]/25 bg-[#d4a437] text-navy shadow-[0_4px_16px_rgba(212,164,55,0.15)]"
         >
           <div className="layout-shell editorial-container">
             <Link
               href="/hiring"
-              className="group relative flex w-full items-center justify-center gap-2 py-1.5 sm:py-2"
+              className="group relative flex w-full items-center justify-center gap-2 py-2"
             >
               <span className="text-center text-[clamp(0.75rem,2vw,0.9rem)] font-medium tracking-[-0.015em] text-navy/95">
-                We are building the founding team in India - roles across credit, risk, compliance, technology and business development
+                <strong className="font-bold">Hiring</strong> — We are building the founding team in India — roles across credit, risk, compliance, technology and business development
               </span>
               <span className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5">
                 <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -238,15 +269,14 @@ export function Navbar() {
 
       <motion.nav
         style={{
-          paddingTop: navPadding,
-          paddingBottom: navPadding,
+          height: navHeight,
           backgroundColor: navBackground,
           borderBottom: `1px solid ${navBorder}`,
           top: navTop,
         }}
-        className="absolute left-0 w-full transition-all duration-300"
+        className="absolute left-0 w-full transition-all duration-300 flex items-center"
       >
-        <div className="layout-shell editorial-container flex items-center justify-between">
+        <div className="flex w-full items-center justify-between px-8 lg:px-16" style={{ paddingInline: 'clamp(32px, 5vw, 96px)' }}>
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -258,7 +288,7 @@ export function Navbar() {
 
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className={`group flex items-center gap-2 text-[clamp(1.55rem,5vw,1.95rem)] font-bold tracking-[-0.05em] leading-none transition-colors duration-300 ${showDarkNav ? 'text-navy' : 'text-white'}`}
+            className="group flex items-center gap-2 text-[clamp(1.55rem,5vw,1.95rem)] font-bold tracking-[-0.05em] leading-none text-navy transition-colors duration-300"
           >
             <span className="relative inline-block overflow-hidden">
               <span className="block transition-transform duration-500 ease-out group-hover:-translate-y-full">Pfundit</span>
@@ -271,8 +301,92 @@ export function Navbar() {
             />
           </motion.button>
 
-          <div className="hidden items-center gap-9 lg:flex relative" ref={navContainerRef as any}>
-            {navLinks.map((link, index) => (
+          <div
+            className="relative hidden items-center gap-7 lg:flex"
+            ref={navContainerRef}
+            onMouseLeave={() => setCompanyMenuOpen(false)}
+          >
+            <div className="relative">
+              {(() => {
+                const companyActive = companyMenuOpen || activeSection === 'mission' || activeSection === 'thesis';
+                return (
+                  <>
+              <motion.button
+                type="button"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                onClick={() => setCompanyMenuOpen((open) => !open)}
+                onMouseEnter={() => setCompanyMenuOpen(true)}
+                onFocus={() => setCompanyMenuOpen(true)}
+                aria-expanded={companyMenuOpen}
+                aria-haspopup="menu"
+                className={`group relative inline-flex items-center gap-2 px-2 py-1 text-[0.92rem] font-medium tracking-[-0.02em] transition-colors duration-300 ${companyActive ? 'text-navy' : 'text-navy/55 hover:text-navy'}`}
+              >
+                <span>Company</span>
+                <motion.svg
+                  animate={{ rotate: companyMenuOpen ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-4 w-4 text-gold"
+                  viewBox="0 0 20 20"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path d="M5 8l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </motion.svg>
+              </motion.button>
+
+              <motion.div
+                className="absolute left-2 right-2 -bottom-0.5 h-[2px] rounded bg-gold"
+                animate={{ opacity: companyActive ? 1 : 0, scaleX: companyActive ? 1 : 0.7 }}
+                transition={{ type: 'spring', stiffness: 500, damping: 38, mass: 0.7 }}
+                style={{ transformOrigin: 'left' }}
+              />
+
+              <AnimatePresence>
+                {companyMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
+                    className="absolute left-0 top-[calc(100%+10px)] z-50 w-[20.5rem] overflow-hidden rounded-[1.25rem] border border-[rgba(15,27,61,0.08)] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(248,247,243,0.98))] p-2.5 shadow-[0_20px_44px_rgba(15,27,61,0.12)]"
+                  >
+                    <div className="grid gap-2">
+                      {companyItems.map((item) => (
+                        <button
+                          key={item.id}
+                          type="button"
+                          onClick={() => scrollToSection(item.id)}
+                          className="group flex w-full items-center justify-between gap-4 rounded-[1rem] border border-[rgba(15,27,61,0.08)] bg-white px-4 py-3.5 text-left shadow-[0_6px_18px_rgba(15,27,61,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[rgba(212,164,55,0.28)] hover:shadow-[0_12px_28px_rgba(15,27,61,0.09)]"
+                        >
+                          <span className="min-w-0">
+                            <span className="block text-[0.96rem] font-semibold tracking-[-0.02em] text-navy transition-colors duration-300 group-hover:text-gold">
+                              {item.title}
+                            </span>
+                            <span className="mt-0.5 block text-[0.78rem] leading-[1.35] text-navy/52">
+                              {item.description}
+                            </span>
+                          </span>
+                          <svg
+                            className="h-4 w-4 shrink-0 text-gold transition-transform duration-300 group-hover:translate-x-0.5"
+                            viewBox="0 0 20 20"
+                            fill="none"
+                            aria-hidden="true"
+                          >
+                            <path d="M7 4l6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+                  </>
+                );
+              })()}
+            </div>
+
+            {navLinks.slice(1).map((link) => (
               <motion.button
                 key={link.id}
                 ref={(el) => { navRefs.current[link.id] = el; }}
@@ -286,7 +400,7 @@ export function Navbar() {
               </motion.button>
             ))}
             <motion.div
-              className="absolute -bottom-1 h-[2px] bg-gold rounded"
+              className="absolute -bottom-1 h-[2px] rounded bg-gold"
               animate={{ left: underline.left, width: underline.width, opacity: underline.opacity }}
               transition={{ type: 'spring', stiffness: 500, damping: 40, mass: 0.8 }}
               style={{ position: 'absolute' }}

@@ -325,7 +325,7 @@ export function Hiring() {
                   </div>
                   <div className="flex flex-wrap gap-2 lg:pl-8">
                     {role.tags.map((tag) => (
-                      <span key={tag} className="text-[0.62rem] font-semibold tracking-[0.04em] text-[rgba(15,27,61,0.45)] px-2 py-0.5 rounded-full bg-[rgba(15,27,61,0.05)] border border-[rgba(15,27,61,0.08)]">
+                      <span key={tag} className="text-[0.625rem] font-semibold tracking-[0.04em] text-[rgba(15,27,61,0.45)] px-2 py-0.5 rounded-full bg-[rgba(15,27,61,0.05)] border border-[rgba(15,27,61,0.08)]">
                         {tag}
                       </span>
                     ))}
@@ -558,7 +558,7 @@ export function Hiring() {
 
               <div className="grid flex-1 min-h-0 gap-0 overflow-hidden lg:grid-cols-[minmax(18rem,0.9fr)_minmax(0,1.1fr)]">
                 <aside className="border-b border-[#0f1b3d]/10 bg-[#F0F5FF]/45 px-5 py-5 sm:px-6 sm:py-6 lg:border-b-0 lg:border-r lg:px-7 lg:py-7">
-                  <p className="text-[0.62rem] font-bold uppercase tracking-[0.22em] text-[#D4A437]">Role Overview</p>
+                  <p className="text-[0.625rem] font-bold uppercase tracking-[0.22em] text-[#D4A437]">Role Overview</p>
                   <h4 className="mt-2 text-[1rem] font-bold tracking-tight text-[#0f1b3d] sm:text-[1.1rem]">What we are hiring for</h4>
 
                   {roles.find(r => r.title === selectedRole)?.description && (

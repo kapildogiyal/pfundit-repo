@@ -8,14 +8,14 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Pfundit - Disciplined AI-Native Credit for the Real Economy | Singapore",
-  description: 'Pfundit is a Singapore holding company building a regulated, AI-enabled lending platform for India and Asia - focused on short-tenor, cash-flow secured financing in the real economy.',
+  title: "Pfundit — Disciplined Credit for the Real Economy | Singapore",
+  description: 'Pfundit is a Singapore holding company building a regulated, AI-native lending platform for India and Asia — focused on short-tenor, asset-backed financing in the real economy.',
 };
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#0f1b3d',
+  themeColor: '#FCFBF8',
 };
 
 export default function RootLayout({
@@ -28,10 +28,17 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="min-h-full flex flex-col selection:bg-[#0f1b3d] selection:text-white">
         {children}
       </body>
     </html>
   );
 }
-

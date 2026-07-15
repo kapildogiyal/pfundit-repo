@@ -1,285 +1,97 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import React, { useRef } from 'react';
+import { useScrollReveal } from '@/animations/useScrollReveal';
 
-const stakeholderGroups = [
-  {
-    id: '01',
-    title: 'Investors',
-    eyebrow: 'For',
-    image: '/images/stakeholders_investors.png',
-    summary: 'A Rare Greenfield Opportunity at the Intersection of Regulation, AI and Scale',
-    points: [
-      "India's first greenfield AI-native NBFC - no legacy systems, no migration cost, no retrofitted compliance. Built correctly from day one.",
-      'Proprietary AI and Agent IP under active development - a defensible moat that deepens as the loan book grows and agents learn.',
-      'Hub & Spoke architecture targets a cost-to-income ratio of 25-30% within 18 months - structurally lower than any incumbent NBFC or digital lender.',
-      'Singapore HoldCo with institutional-grade governance, full regulatory transparency and clean capital architecture from day one.',
-    ],
+const stakeholdersContent = [
+  { 
+    title: 'The Leadership', 
+    description: 'Founded by former J.P. Morgan and HSBC banking executives alongside serial entrepreneurs with a track record of Private Equity exits.' 
   },
-  {
-    id: '02',
-    title: 'Debt Providers & Banks',
-    eyebrow: 'For',
-    image: '/images/stakeholders_banks.png',
-    summary: 'A Lending Partner Designed by Bankers, for Bankers',
-    points: [
-      'Founded by former J.P. Morgan and HSBC executives with direct, hands-on experience in credit underwriting, portfolio management and NPL recovery.',
-      'Every AI credit decision operates within a mandatory human-in-the-loop framework - no black-box outcomes, full explainability and audit trail.',
-      'RBI-compliant AI architecture by design - regulatory risk is a founding constraint, not a future compliance project.',
-      'Co-lending, assignment and portfolio acquisition structures available - flexible capital deployment with clear, bankable risk-sharing frameworks.',
-    ],
+  { 
+    title: 'The Opportunity', 
+    description: 'A greenfield entry into Indian credit, pairing institutional-scale compliance with native artificial intelligence from day one.' 
   },
-  {
-    id: '03',
-    title: 'Partners & Consultants',
-    eyebrow: 'For',
-    image: '/images/stakeholders_partners.png',
-    summary: 'A Platform Designed to Integrate - From the First Line of Code',
-    points: [
-      'API-first architecture from inception - integration is not a future roadmap item, it is the foundational design principle.',
-      'Proprietary AI agent framework creates meaningful IP co-development and commercialisation opportunities for the right strategic partners.',
-      'Domain expertise needed: RBI regulation, credit modelling, collections technology, fintech infrastructure and NBFC licensing.',
-      'Equity, advisory and commercial compensation structures available for partners who contribute substantively to the platform build.',
-    ],
+  { 
+    title: 'The Discipline', 
+    description: 'Proprietary data models and autonomous workflows operate within a mandatory human-in-the-loop protocol, compounding efficiency without compounding risk.' 
   },
 ];
 
 export function Stakeholders() {
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    gsap.registerPlugin(ScrollTrigger);
-
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const cleanups: Array<() => void> = [];
-
-    const ctx = gsap.context(() => {
-      const runFromTo = (selector: string, fromVars: any, toVars: any) => {
-        const els = section.querySelectorAll(selector);
-        if (!els || els.length === 0) return;
-        gsap.fromTo(els as any, fromVars, toVars);
-      };
-
-      // Intro headers
-      runFromTo(
-        '[data-stakeholder-intro]',
-        { opacity: 0, y: 34 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.9,
-          stagger: 0.12,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: section,
-            start: 'top 78%',
-          },
-        }
-      );
-
-      // --- Desktop Pinned Logic ---
-      const textBlocks = gsap.utils.toArray<HTMLElement>('[data-stakeholder-text-block]');
-      const pinnedImgs = gsap.utils.toArray<HTMLImageElement>('[data-stakeholder-pinned-img]');
-
-      textBlocks.forEach((block, index) => {
-        // Animate text block entry
-        const content = block.querySelector('[data-block-content]');
-        if (content) {
-          gsap.fromTo(content, 
-            { opacity: 0, y: 60 },
-            { 
-              opacity: 1, y: 0, duration: 1, ease: 'power3.out',
-              scrollTrigger: {
-                trigger: block,
-                start: "top center+=35%",
-                end: "bottom center-=35%",
-                toggleActions: "play reverse play reverse",
-              }
-            }
-          );
-        }
-
-        // Trigger image crossfade when text block is active
-        ScrollTrigger.create({
-          trigger: block,
-          start: "top center",
-          end: "bottom center",
-          onEnter: () => {
-            const others = pinnedImgs.filter((_, i) => i !== index);
-            gsap.to(others, { opacity: 0, scale: 1.05, zIndex: 0, duration: 0.8, ease: 'power2.inOut', overwrite: true });
-            gsap.to(pinnedImgs[index], { opacity: 1, scale: 1, zIndex: 10, duration: 0.8, ease: 'power2.inOut', overwrite: true });
-          },
-          onEnterBack: () => {
-            const others = pinnedImgs.filter((_, i) => i !== index);
-            gsap.to(others, { opacity: 0, scale: 1.05, zIndex: 0, duration: 0.8, ease: 'power2.inOut', overwrite: true });
-            gsap.to(pinnedImgs[index], { opacity: 1, scale: 1, zIndex: 10, duration: 0.8, ease: 'power2.inOut', overwrite: true });
-          }
-        });
-      });
-
-      // --- Mobile Stack Logic ---
-      const mobileRows = gsap.utils.toArray<HTMLElement>('[data-stakeholder-mobile-row]');
-      if (mobileRows.length > 0) {
-        mobileRows.forEach((row) => {
-        const img = row.querySelector('[data-stakeholder-mobile-img]');
-        const text = row.querySelector('[data-stakeholder-mobile-text]');
-        const tl = gsap.timeline({
-          scrollTrigger: { trigger: row, start: 'top 82%' }
-        });
-        tl.fromTo(img, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' })
-          .fromTo(text, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, "-=0.5");
-        });
-      }
-
-    }, section);
-
-    return () => {
-      cleanups.forEach((cleanup) => cleanup());
-      ctx.revert();
-    };
-  }, []);
+  useScrollReveal(sectionRef);
 
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-clip bg-[#F0F5FF] py-16 md:py-20 lg:py-24"
+      className="relative overflow-clip section-padding"
+      style={{ background: '#FFFFFF' }}
       id="stakeholders"
     >
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(15,27,61,0.08)] to-transparent" />
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-[-6%] top-16 h-72 w-72 rounded-full bg-gold/10 blur-[120px]" />
-        <div className="absolute right-[-4%] top-1/4 h-80 w-80 rounded-full bg-navy/6 blur-[150px]" />
-        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-navy/10 to-transparent" />
+        <div className="absolute left-[-6%] top-16 h-72 w-72 rounded-full bg-[#D4A437]/5 blur-[120px]" />
       </div>
 
       <div className="layout-shell editorial-container relative z-10">
-        <header className="mx-auto grid max-w-[56rem] gap-4 text-center">
-          <div data-stakeholder-intro className="flex flex-col items-center">
-            <h2 className="typo-hero text-navy">
-              For Our Stakeholders
-            </h2>
+        
+        <header className="max-w-[42rem] mb-16">
+          <div data-reveal="eyebrow" className="reveal-hidden header-eyebrow">
+            <div className="header-eyebrow-dot" />
+            <span className="typo-eyebrow text-navy/55">For Our Stakeholders</span>
           </div>
 
-          <div data-stakeholder-intro className="mx-auto max-w-[34rem]">
-            <p className="text-[0.92rem] leading-[1.28] text-navy/72 lg:text-[0.96rem]">
-              One institution, three audiences. The same operating discipline.
-            </p>
-          </div>
+          <h2 data-reveal="heading" className="reveal-hidden typo-h2 text-navy header-heading">
+            One institution, built for the people who back it.
+          </h2>
         </header>
 
-        {/* --- Mobile Stack (Hidden on Desktop) --- */}
-        <div className="mt-12 flex flex-col gap-20 lg:hidden">
-          {stakeholderGroups.map((group) => (
-            <article key={group.id} data-stakeholder-mobile-row className="flex flex-col gap-8">
-              <div data-stakeholder-mobile-img className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem]">
-                <div className="relative h-full w-full overflow-hidden rounded-[1.25rem]">
-                  <img src={group.image} alt={group.title} className="h-full w-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent" />
-                </div>
-              </div>
-
-              <div data-stakeholder-mobile-text className="flex flex-col">
-                <div className="mb-4 flex items-center gap-4">
-                  <span className="rounded-full border border-gold/20 bg-white/75 px-3 py-1 typo-label text-gold backdrop-blur-sm">{group.id}</span>
-                  <span className="block typo-label text-gold">{group.eyebrow}</span>
-                </div>
-                <h3 className="mb-3 text-[2rem] font-bold leading-[1.05] tracking-[-0.03em] text-navy">{group.title}</h3>
-                <p className="mb-6 text-[1.05rem] leading-[1.55] text-navy/70">{group.summary}</p>
-                <div className="space-y-4">
-                  {group.points.map((point) => (
-                    <div key={point} className="flex items-start gap-4">
-                      <div className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gold shadow-[0_0_10px_rgba(212,164,55,0.55)]" />
-                      <p className="text-[0.98rem] leading-[1.5] text-navy/80">{point}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-
-        {/* --- Desktop Sticky Scroll Layout (Hidden on Mobile) --- */}
-        <div className="hidden lg:flex relative mt-16 items-start gap-16 xl:gap-24">
+        {/* ── 3 Columns (Open Editorial Layout) ── */}
+        <div className="relative mt-8">
+          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-navy/[0.08] via-navy/[0.04] to-transparent" />
           
-          {/* Left: Scrolling Text Blocks */}
-          <div className="w-[50%] flex flex-col pb-[20vh]">
-            {stakeholderGroups.map((group) => (
-              <div 
-                key={group.id} 
-                data-stakeholder-text-block
-                className="flex flex-col justify-center min-h-[90vh]"
-              >
-                <div data-block-content className="flex flex-col max-w-[34rem] opacity-0">
-                  <div className="mb-6 flex items-center gap-4">
-                    <span className="rounded-full border border-gold/20 bg-white/75 px-3 py-1 typo-label text-gold backdrop-blur-sm">
-                      {group.id}
-                    </span>
-                    <span className="block typo-label text-gold">
-                      {group.eyebrow}
-                    </span>
+          <div className="grid md:grid-cols-3 gap-x-10 gap-y-12 pt-10">
+            {stakeholdersContent.map((item, i) => (
+              <div key={item.title} data-reveal="block" className={`reveal-hidden group relative pt-4 ${i > 0 ? 'md:pl-10' : ''}`}>
+                
+                {/* Vertical separator line */}
+                {i > 0 && <div className="hidden md:block absolute left-0 top-0 h-full w-px bg-gradient-to-b from-navy/[0.06] to-transparent" />}
+
+                {/* Icon & Animated Gold Line */}
+                <div className="mb-8 flex items-center justify-between">
+                  <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full border border-[rgba(212,164,55,0.3)] bg-[rgba(212,164,55,0.05)] text-[#D4A437] transition-transform duration-500 group-hover:scale-110 group-hover:bg-[rgba(212,164,55,0.1)]">
+                    {i === 0 && (
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    )}
+                    {i === 1 && (
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                    )}
+                    {i === 2 && (
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    )}
                   </div>
-
-                  <h3 className="mb-6 text-[2.75rem] font-bold leading-[1.05] tracking-[-0.03em] text-navy">
-                    {group.title}
-                  </h3>
-
-                  <p className="mb-8 text-[1.1rem] leading-[1.6] text-navy/75">
-                    {group.summary}
-                  </p>
-
-                  <div className="space-y-5">
-                    {group.points.map((point) => (
-                      <div key={point} className="flex items-start gap-4">
-                        <div className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold shadow-[0_0_10px_rgba(212,164,55,0.55)]" />
-                        <p className="text-[1.02rem] leading-[1.55] text-navy/85">{point}</p>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <div className="mt-12">
-                     <button className="group/btn inline-flex items-center gap-2 rounded-full border border-navy/15 bg-white/60 px-7 py-3 text-[0.88rem] font-bold text-navy transition-all hover:bg-navy hover:text-white hover:border-navy hover:shadow-xl">
-                        Learn More
-                        <svg className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
-                     </button>
+                  {/* Animated Gold Line */}
+                  <div className="h-px flex-1 ml-6 bg-navy/[0.04] relative overflow-hidden">
+                    <div className="absolute top-0 left-0 h-full w-full origin-left scale-x-0 bg-gradient-to-r from-[#D4A437] to-transparent transition-transform duration-700 ease-out group-hover:scale-x-100" />
                   </div>
                 </div>
+
+                <h3 className="typo-button text-navy mb-4 transition-colors duration-300 group-hover:text-[#9e7b22]">
+                  {item.title}
+                </h3>
+                <p className="typo-body-sm text-navy/60 leading-relaxed">
+                  {item.description}
+                </p>
+
+                {/* Subtle hover background glow behind column */}
+                <div className="absolute inset-0 -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(ellipse_at_top_left,rgba(212,164,55,0.04),transparent_60%)] pointer-events-none" />
               </div>
             ))}
           </div>
-
-          {/* Right: Sticky Full-Height Image Container */}
-          <div className="w-[50%] sticky top-[6.5rem] flex flex-col justify-start h-[calc(100vh-6.5rem)] pb-[5vh]">
-            <div className="relative w-full h-[78vh] overflow-hidden rounded-[2.5rem]">
-              <div className="relative h-full w-full overflow-hidden rounded-[1.5rem]">
-                {stakeholderGroups.map((group, index) => (
-                  <img 
-                    key={`img-${group.id}`}
-                    data-stakeholder-pinned-img
-                    src={group.image} 
-                    alt={group.title}
-                    className="absolute inset-0 h-full w-full object-cover"
-                    style={{ 
-                      opacity: index === 0 ? 1 : 0, 
-                      transform: index === 0 ? 'scale(1)' : 'scale(1.05)',
-                      zIndex: index === 0 ? 10 : 0 
-                    }}
-                  />
-                ))}
-                <div className="absolute inset-0 bg-gradient-to-t from-navy/10 to-transparent pointer-events-none z-20" />
-              </div>
-            </div>
-            
-            {/* Decorative glows */}
-            <div className="absolute -inset-10 -z-10 rounded-[3rem] bg-gold/5 blur-3xl pointer-events-none" />
-            <div className="absolute -inset-10 -z-10 rounded-[3rem] bg-navy/4 blur-2xl pointer-events-none" />
-          </div>
-
         </div>
+
       </div>
     </section>
   );

@@ -11,30 +11,30 @@ const leaders = [
     id: '01',
     name: 'Sanath Shetty',
     role: 'Founder & Director',
-    focus: 'Consumer Credit Risk & Payments Executive · 25+ Years',
+    focus: 'Consumer Credit Risk & Payments · 25+ Years',
     image: '/founders/sanath.png',
     bioIcon: 'bank',
-    bio: "Sanath is responsible for building Pfundit’s lending platform from first principles - defining the team, credit model, risk controls, distribution strategy and technology foundation. Twenty-five years across Citicorp, HSBC India and J.P. Morgan Singapore - running retail lending portfolios, building collections frameworks and leading corporate payments origination across Asia-Pacific - give him direct, hands-on command of everything Pfundit's lending model requires.",
+    bio: "Building Pfundit's lending platform from first principles — team, credit model, risk controls, distribution and technology. 25+ years across Citicorp, HSBC (India and Singapore), and J.P. Morgan Singapore.",
     linkedin: '#',
   },
   {
     id: '02',
     name: 'Atin Bhutani',
     role: 'Co-Founder & Director',
-    focus: 'Corporate Banker · Entrepreneur · Governance Expert',
+    focus: 'Corporate Banker · Governance Expert',
     image: '/founders/atin.png',
     bioIcon: 'globe',
-    bio: "Atin brings the rare combination of institutional banker and proven entrepreneur. A decade at HSBC - culminating as Country Head of International Subsidiary Banking in Singapore - was followed by co-founding and scaling In.Corp Global to a private equity exit. At Pfundit he leads governance, capital strategy and investor relations.",
+    bio: "Institutional banker and proven entrepreneur. A decade at HSBC — Country Head of International Subsidiary Banking, Singapore — then co-founded and scaled In.Corp Global to a PE exit. Leads governance and investor relations.",
     linkedin: '#',
   },
   {
     id: '03',
     name: 'Madhujeet Chimni',
     role: 'Co-Founder & Director',
-    focus: 'Serial Entrepreneur · Institutional Capital · Technology',
+    focus: 'Institutional Capital · Technology',
     image: '/founders/madhujeet.png',
     bioIcon: 'chart',
-    bio: 'Madhujeet has built, scaled and exited companies across Asia, Europe and Latin America over two decades - from Stone Apple (acquired by Hitachi Consulting) to In.Corp Global (PE exit) to Blue Planet Environmental Solutions, backed by IFU and Novo Holdings. At Pfundit he leads capital strategy, board governance and the regional platform build.',
+    bio: 'Serial entrepreneur across Asia, Europe and Latin America — from Stone Apple (acquired by Hitachi) to In.Corp Global (PE exit) to Blue Planet, backed by IFU and Novo Holdings and Drivn. Leads capital strategy and the regional build.',
     linkedin: '#',
   },
 ];
@@ -282,8 +282,7 @@ export function Leadership() {
     <section
       ref={sectionRef}
       id="leadership"
-      className="relative overflow-hidden py-20 md:py-28"
-      style={{ background: 'linear-gradient(170deg, #0b1228 0%, #0e1a35 35%, #091122 70%, #060d1a 100%)' }}
+      className="relative overflow-hidden section-padding bg-tier-anchor"
     >
       {/* ambient blobs */}
       <div className="pointer-events-none absolute inset-0" aria-hidden>
@@ -298,7 +297,8 @@ export function Leadership() {
         <div className="mb-3 text-center">
           <h2
             data-anim="headline"
-            style={{ fontSize: 'clamp(2rem, 7vw, 2.85rem)', fontWeight: 700, letterSpacing: '-0.045em', lineHeight: 1.0, color: '#ffffff' }}
+            className="typo-h2 text-white"
+            style={{ margin: 0 }}
           >
             The Founding <span style={{ color: '#D4A437' }}>Team</span>
           </h2>
@@ -314,10 +314,11 @@ export function Leadership() {
         {/* subtitle */}
         <p
           data-anim="subtitle"
-          style={{ textAlign: 'center', color: 'rgba(255,255,255,0.58)', fontSize: 'clamp(0.82rem, 1.4vw, 1rem)', marginBottom: '3rem', lineHeight: 1.7, maxWidth: 620, marginInline: 'auto' }}
+          className="typo-body text-white/60"
+          style={{ textAlign: 'center', marginBottom: '3rem', maxWidth: 620, marginInline: 'auto' }}
         >
           <span style={{ display: 'block' }}>Three founders. 60+ combined years at J.P. Morgan and HSBC.</span>
-          <span style={{ display: 'block' }}>Three successful exits. The experience to build this institution and the track record to be trusted with it.</span>
+          <span style={{ display: 'block' }}>Three exits. The experience to build this institution and the track record to be trusted with it.</span>
         </p>
 
         {/* ─── founders grid ─── */}
@@ -374,20 +375,20 @@ export function Leadership() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     flexShrink: 0,
                   }}>
-                    <span style={{ fontSize: '0.58rem', fontWeight: 700, color: '#D4A437', letterSpacing: '0.05em' }}>{leader.id}</span>
+                    <span className="typo-label" style={{ color: '#D4A437' }}>{leader.id}</span>
                   </div>
-                  <h3 style={{ fontSize: 'clamp(1.25rem, 2vw, 1.6rem)', fontWeight: 700, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1.15 }}>
+                  <h3 className="typo-button text-white" style={{ fontSize: 'clamp(1.15rem, 1.5vw, 1.35rem)' }}>
                     {leader.name}
                   </h3>
                 </div>
 
                 {/* role */}
-                <p data-anim="inner" style={{ fontSize: '0.62rem', fontWeight: 700, letterSpacing: '0.14em', color: '#D4A437', textTransform: 'uppercase', marginBottom: 8, width: '100%' }}>
+                <p data-anim="inner" className="typo-eyebrow" style={{ color: '#D4A437', marginBottom: 8, width: '100%' }}>
                   {leader.role}
                 </p>
 
                 {/* focus — italic, muted */}
-                <p data-anim="inner" style={{ fontSize: '0.7rem', fontStyle: 'italic', color: 'rgba(255,255,255,0.45)', marginBottom: 18, lineHeight: 1.5, width: '100%' }}>
+                <p data-anim="inner" className="typo-small" style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.45)', marginBottom: 18, width: '100%' }}>
                   {leader.focus}
                 </p>
 
@@ -403,7 +404,7 @@ export function Leadership() {
                   }}>
                     <BioIcon type={leader.bioIcon} />
                   </div>
-                  <p style={{ fontSize: '0.7rem', color: 'rgba(255,255,255,0.62)', lineHeight: 1.65 }}>
+                  <p className="typo-small text-white/60">
                     {leader.bio}
                   </p>
                 </div>
@@ -412,10 +413,10 @@ export function Leadership() {
                 <a
                   href={leader.linkedin}
                   data-anim="inner"
+                  className="typo-button"
                   style={{
                     display: 'inline-flex', alignItems: 'center', gap: 10,
                     textDecoration: 'none', color: 'rgba(255,255,255,0.75)',
-                    fontSize: '0.72rem', fontWeight: 600,
                     transition: 'color 0.2s',
                     marginTop: '0.6rem'
                   }}

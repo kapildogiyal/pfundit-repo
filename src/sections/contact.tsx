@@ -48,97 +48,51 @@ export function Contact() {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-[#F0F5FF] py-20 md:py-24 lg:py-28"
+      className="relative overflow-hidden section-padding bg-tier-anchor"
       id="contact"
     >
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[rgba(15,27,61,0.08)] to-transparent" />
       <div className="layout-shell editorial-container relative z-10">
-        <div className="mx-auto max-w-[80rem] overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-navy via-[#0a1628] to-[#050f1f] px-8 py-20 sm:px-12 md:py-24 relative">
-          {/* Geometric pattern background */}
-          <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[2.5rem]">
-            <svg
-              className="absolute inset-0 h-full w-full opacity-50"
-              viewBox="0 0 1200 600"
-              preserveAspectRatio="none"
+        <div className="mx-auto max-w-[80rem] px-8 py-20 sm:px-12 md:py-24 relative">
+
+          {/* Arc illustration as background decor */}
+          <div className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div
+              className="absolute -top-12 -left-12 opacity-15"
+              style={{ width: 700, height: 400 }}
             >
-              <defs>
-                <pattern
-                  id="grid"
-                  width="80"
-                  height="80"
-                  patternUnits="userSpaceOnUse"
-                >
-                  <path
-                    d="M 80 0 L 0 0 0 80"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="1"
-                  />
-                </pattern>
-              </defs>
-              <circle
-                cx="600"
-                cy="300"
-                r="400"
-                fill="none"
-                stroke="#d4a437"
-                strokeWidth="2"
-                opacity="0.15"
+              <img
+                src="/ChatGPT Image Jul 9, 2026, 04_58_59 PM.png"
+                alt=""
+                className="w-full h-auto select-none"
+                style={{ filter: 'brightness(0) invert(1)' }}
               />
-              <circle
-                cx="600"
-                cy="300"
-                r="350"
-                fill="none"
-                stroke="#d4a437"
-                strokeWidth="2"
-                opacity="0.12"
-              />
-              <circle
-                cx="600"
-                cy="300"
-                r="300"
-                fill="none"
-                stroke="#d4a437"
-                strokeWidth="2"
-                opacity="0.1"
-              />
-              <circle
-                cx="600"
-                cy="300"
-                r="250"
-                fill="none"
-                stroke="#d4a437"
-                strokeWidth="2"
-                opacity="0.08"
-              />
-              <circle
-                cx="600"
-                cy="300"
-                r="200"
-                fill="none"
-                stroke="#d4a437"
-                strokeWidth="2"
-                opacity="0.06"
-              />
+            </div>
+            <svg className="absolute inset-0 h-full w-full opacity-40" viewBox="0 0 1200 600" preserveAspectRatio="none">
+              <circle cx="600" cy="300" r="380" fill="none" stroke="#d4a437" strokeWidth="1.5" opacity="0.18" />
+              <circle cx="600" cy="300" r="300" fill="none" stroke="#d4a437" strokeWidth="1.5" opacity="0.12" />
+              <circle cx="600" cy="300" r="220" fill="none" stroke="#d4a437" strokeWidth="1.5" opacity="0.08" />
             </svg>
           </div>
+
           {/* Content */}
           <div className="relative z-10 text-center">
-            <div data-contact-reveal className="text-center">
-              <h2 className="text-[2.4rem] font-bold leading-[1.15] tracking-[-0.04em] text-white sm:text-[2.8rem] md:text-[3.4rem]">
-                Let&apos;s Have a Conversation
+            <div data-contact-reveal className="header-group">
+              <div className="header-eyebrow">
+                <div className="header-eyebrow-dot shadow-[0_0_8px_rgba(212,164,55,0.8)]" />
+                <span className="typo-eyebrow text-[#D4A437]">Let&apos;s Have a Conversation</span>
+              </div>
+              <h2
+                className="typo-h2 text-white header-heading"
+              >
+                The right conversations shape the institution.
               </h2>
-
-              <p className="mx-auto mt-6 max-w-[56rem] text-[0.95rem] leading-[1.42] text-white/75 sm:text-[1rem] md:mt-8">
-                Whether you are an investor, debt provider, co-lending partner,
-                technology partner, loan origination partner or strategic
-                consultant - Pfundit is actively building its founding
-                stakeholder ecosystem. We are at the stage where the right
-                conversations shape the institution.
+              <p className="mx-auto max-w-[52rem] typo-body text-white/65">
+                Pfundit is a greenfield, AI-native NBFC with strong return potential in India. We welcome conversations with friends &amp; family, venture capital and family offices. If you&apos;re curious, write to us.
               </p>
             </div>
 
-            {/* Buttons Section */}
+            {/* Buttons */}
             <div
               data-contact-reveal
               className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-4 md:mt-12"
@@ -147,15 +101,15 @@ export function Contact() {
 
               <motion.button
                 type="button"
-                className="inline-flex items-center justify-center rounded-full border-2 border-gold px-8 py-3 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-gold/10 hover:shadow-[0_0_24px_rgba(212,164,55,0.3)]"
+                className="typo-button inline-flex items-center justify-center gap-2.5 rounded-full border border-[rgba(212,164,55,0.45)] px-7 py-3 text-white/75 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[rgba(212,164,55,0.1)] hover:text-white hover:border-[rgba(212,164,55,0.7)]"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
-                Schedule a Meeting
+                Request Investor Materials
               </motion.button>
             </div>
 
-            {/* Modal (opened from 'Talk to Us') */}
+            {/* Modal */}
             {showModal && (
               <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
                 <div
@@ -165,26 +119,14 @@ export function Contact() {
                 <div className="relative z-[100000] w-full max-w-2xl">
                   <div className="relative flex max-h-[90vh] w-full flex-col overflow-hidden rounded-[1.25rem] bg-white shadow-2xl">
                     <div className="flex items-center justify-between px-5 py-3">
-                      <h3 className="text-lg font-semibold text-[#0f1b3d]">
-                        Talk to Us
-                      </h3>
+                      <h3 className="text-lg font-semibold text-[#0f1b3d]">Write to Us</h3>
                       <button
                         type="button"
                         onClick={() => setShowModal(false)}
                         className="rounded-full p-2 text-[#0f1b3d]/60 hover:text-[#0f1b3d]"
                       >
-                        <svg
-                          className="h-5 w-5"
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
+                        <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                         </svg>
                       </button>
                     </div>
@@ -205,7 +147,6 @@ export function Contact() {
 function ContactForm({ onClose }: { onClose?: () => void }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -230,13 +171,9 @@ function ContactForm({ onClose }: { onClose?: () => void }) {
   };
 
   const focusFirstError = (err: typeof errors) => {
-    if (err.name) {
-      nameRef.current?.focus();
-    } else if (err.email) {
-      emailRef.current?.focus();
-    } else if (err.message) {
-      messageRef.current?.focus();
-    }
+    if (err.name) nameRef.current?.focus();
+    else if (err.email) emailRef.current?.focus();
+    else if (err.message) messageRef.current?.focus();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -287,51 +224,30 @@ function ContactForm({ onClose }: { onClose?: () => void }) {
       {success ? (
         <div className="flex flex-col items-center rounded-2xl bg-white/95 p-6 text-center text-[#0f1b3d]">
           <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-green-100 text-green-600">
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M5 13l4 4L19 7"
-              />
+            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <div className="text-lg font-bold">
-            Thanks — your message has been received.
-          </div>
+          <div className="text-lg font-bold">Thanks — your message has been received.</div>
         </div>
       ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="grid gap-4 rounded-none bg-transparent p-0"
-        >
+        <form onSubmit={handleSubmit} className="grid gap-4 rounded-none bg-transparent p-0">
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="flex flex-col gap-1.5">
-              <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">
-                Name
-              </label>
+              <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70">Name</label>
               <input
                 ref={nameRef}
                 required
                 placeholder="Jane Doe"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className={`w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437] ${errors.name ? "ring-1 ring-red-400" : ""}`}
+                className={`w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F4F3EF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437] ${errors.name ? "ring-1 ring-red-400" : ""}`}
               />
-              {errors.name && (
-                <p className="mt-1 text-xs text-red-400">{errors.name}</p>
-              )}
+              {errors.name && <p className="mt-1 text-xs text-red-400">{errors.name}</p>}
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">
-                Email
-              </label>
+              <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70">Email</label>
               <input
                 ref={emailRef}
                 required
@@ -339,20 +255,14 @@ function ContactForm({ onClose }: { onClose?: () => void }) {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437] ${errors.email ? "ring-1 ring-red-400" : ""}`}
+                className={`w-full rounded-xl border border-[#0f1b3d]/10 bg-[#F4F3EF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437] ${errors.email ? "ring-1 ring-red-400" : ""}`}
               />
-              {errors.email && (
-                <p className="mt-1 text-xs text-red-400">{errors.email}</p>
-              )}
+              {errors.email && <p className="mt-1 text-xs text-red-400">{errors.email}</p>}
             </div>
           </div>
 
-          {/* Removed company and subject fields per request */}
-
           <div className="flex flex-col gap-1.5">
-            <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70 sm:text-[0.7rem]">
-              Message
-            </label>
+            <label className="text-[0.68rem] font-bold uppercase tracking-wider text-[#0f1b3d]/70">Message</label>
             <textarea
               ref={messageRef}
               required
@@ -360,11 +270,9 @@ function ContactForm({ onClose }: { onClose?: () => void }) {
               placeholder="Tell us what's on your mind..."
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              className={`w-full resize-none rounded-xl border border-[#0f1b3d]/10 bg-[#F0F5FF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437] ${errors.message ? "ring-1 ring-red-400" : ""}`}
+              className={`w-full resize-none rounded-xl border border-[#0f1b3d]/10 bg-[#F4F3EF]/60 px-4 py-2.5 text-[0.95rem] text-[#0f1b3d] transition-colors focus:border-[#D4A437] focus:bg-white focus:outline-none focus:ring-1 focus:ring-[#D4A437] ${errors.message ? "ring-1 ring-red-400" : ""}`}
             />
-            {errors.message && (
-              <p className="mt-1 text-xs text-red-400">{errors.message}</p>
-            )}
+            {errors.message && <p className="mt-1 text-xs text-red-400">{errors.message}</p>}
           </div>
 
           <div className="shrink-0">
@@ -376,24 +284,9 @@ function ContactForm({ onClose }: { onClose?: () => void }) {
             >
               {loading ? (
                 <>
-                  <svg
-                    className="h-5 w-5 animate-spin text-white/70"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v8H4z"
-                    ></path>
+                  <svg className="h-5 w-5 animate-spin text-white/70" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                   </svg>
                   Sending...
                 </>

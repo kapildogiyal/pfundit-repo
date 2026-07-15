@@ -17,7 +17,7 @@ export function TalkToUsButton({ onClick, type = 'button' }: TalkToUsButtonProps
       whileHover={{ y: -2, scale: 1.01 }}
       whileTap={{ scale: 0.985 }}
     >
-      <span className="relative z-10">Talk to Us</span>
+      <span className="relative z-10">Write to Us</span>
     </motion.button>
   );
 }
