@@ -83,13 +83,13 @@ export function Contact() {
             {/* Buttons */}
             <div
               data-contact-reveal
-              className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-4 md:mt-12"
+              className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6 md:mt-12"
             >
               <TalkToUsButton onClick={() => setShowModal(true)} />
 
               <motion.button
                 type="button"
-                className="typo-button inline-flex items-center justify-center gap-2.5 rounded-full border border-[rgba(212,164,55,0.45)] px-7 py-3 text-white/75 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[rgba(212,164,55,0.1)] hover:text-white hover:border-[rgba(212,164,55,0.7)]"
+                className="typo-button inline-flex items-center justify-center gap-2.5 rounded-full border-2 border-white/20 bg-white/5 px-8 py-3.5 text-white font-medium transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/10 hover:border-white/40 hover:shadow-[0_4px_20px_rgba(255,255,255,0.1)]"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >

@@ -40,6 +40,27 @@
   --text-h1: clamp(3rem, 4.2vw, 3.75rem);
   --text-h2: clamp(3rem, 4.2vw, 3.75rem); /* Same as H1 */
   --text-stat: clamp(1.5rem, 2.5vw, 1.875rem);
+
+  --animate-border-beam: border-beam 4s linear infinite;
+
+  @keyframes border-beam {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+.bg-border-beam {
+  background: conic-gradient(
+    from 0deg,
+    transparent 50%,
+    #ffffff 80%,
+    #ffffff 95%,
+    transparent 100%
+  );
 }
 
 @layer base {
@@ -209,11 +230,7 @@
     line-height: 1.6;
   }
 
-  /* ── Global minimum font-size guard ── */
-  /* Ensures no rendered text is ever smaller than 10px sitewide */
-  * {
-    min-font-size: 10px;
-  }
+
 
   .layout-shell {
     width: 100%;

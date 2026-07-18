@@ -13,73 +13,25 @@ const leaders = [
     role: 'Founder & Director',
     focus: 'Consumer Credit Risk & Payments · 25+ Years',
     image: '/founders/sanath.png',
-    bioIcon: 'bank',
     bio: "Building Pfundit's lending platform from first principles — team, credit model, risk controls, distribution and technology. 25+ years across Citicorp, HSBC (India and Singapore), and J.P. Morgan Singapore.",
-    linkedin: '#',
   },
   {
     id: '02',
     name: 'Atin Bhutani',
     role: 'Co-Founder & Director',
     focus: 'Corporate Banker · Governance Expert',
-    image: '/founders/atin.png',
-    bioIcon: 'globe',
+    image: '/founders/atin.webp',
     bio: "Institutional banker and proven entrepreneur. A decade at HSBC — Country Head of International Subsidiary Banking, Singapore — then co-founded and scaled In.Corp Global to a PE exit. Leads governance and investor relations.",
-    linkedin: '#',
   },
   {
     id: '03',
     name: 'Madhujeet Chimni',
     role: 'Co-Founder & Director',
     focus: 'Institutional Capital · Technology',
-    image: '/founders/madhujeet.png',
-    bioIcon: 'chart',
+    image: '/founders/madhujeet.webp',
     bio: 'Serial entrepreneur across Asia, Europe and Latin America — from Stone Apple (acquired by Hitachi) to In.Corp Global (PE exit) to Blue Planet, backed by IFU and Novo Holdings and Drivn. Leads capital strategy and the regional build.',
-    linkedin: '#',
   },
 ];
-
-/* ─────────────────── icons ─────────────────── */
-function BankIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-[18px] h-[18px]">
-      <path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 10v11M12 10v11M16 10v11" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function GlobeIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-[18px] h-[18px]">
-      <circle cx="12" cy="12" r="10" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ChartIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-[18px] h-[18px]">
-      <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function BioIcon({ type }: { type: string }) {
-  if (type === 'bank') return <BankIcon />;
-  if (type === 'globe') return <GlobeIcon />;
-  return <ChartIcon />;
-}
-
-function LinkedInSquare() {
-  return (
-    <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
-    </svg>
-  );
-}
 
 /* ─────────────────── ProfileCircle ─────────────────── */
 function ProfileCircle({ leader, index }: { leader: typeof leaders[0]; index: number }) {
@@ -191,19 +143,9 @@ export function Leadership() {
         { opacity: 1, y: 0, duration: 1.1, ease: 'power3.out', delay: 0.08, scrollTrigger: st }
       );
 
-      runFromTo('[data-anim="subtitle"]',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 0.22, scrollTrigger: st }
-      );
-
       runFromTo('[data-anim="connector"]',
         { scaleX: 0, opacity: 0 },
         { scaleX: 1, opacity: 1, duration: 1.4, ease: 'power3.inOut', delay: 0.45, transformOrigin: 'center', scrollTrigger: st }
-      );
-
-      runFromTo('[data-anim="dot"]',
-        { scale: 0, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.5, stagger: 0.2, ease: 'back.out(2)', delay: 1.0, scrollTrigger: st }
       );
 
       runFromTo('[data-anim="profile"]',
@@ -211,7 +153,7 @@ export function Leadership() {
         { scale: 1, opacity: 1, duration: 1.3, stagger: 0.22, ease: 'elastic.out(0.8,0.45)', delay: 0.55, scrollTrigger: st }
       );
 
-      runFromTo('[data-anim="card-body"]',
+      runFromTo('[data-anim="card"]',
         { opacity: 0, y: 28 },
         { opacity: 1, y: 0, duration: 0.9, stagger: 0.18, ease: 'power3.out', delay: 0.75, scrollTrigger: st }
       );
@@ -241,24 +183,8 @@ export function Leadership() {
         gsap.to(el, { scale: 1.7, opacity: 0.6, duration: 2.2, ease: 'sine.inOut', repeat: -1, yoyo: true, delay: i * 0.45 });
       });
 
-      /* interactive: subtle mouse tilt per card */
-      const cards = gsap.utils.toArray<HTMLElement>('[data-anim="card"]');
-      document.addEventListener('mousemove', (e) => {
-        cards.forEach((card) => {
-          const r = card.getBoundingClientRect();
-          const cx = r.left + r.width / 2;
-          const cy = r.top + r.height / 2;
-          gsap.to(card, {
-            rotateX: (e.clientY - cy) * 0.006,
-            rotateY: (e.clientX - cx) * 0.006,
-            duration: 1.4,
-            ease: 'power1.out',
-            overwrite: 'auto',
-          });
-        });
-      });
-
       /* interactive: profile scale on card hover */
+      const cards = gsap.utils.toArray<HTMLElement>('[data-anim="card"]');
       cards.forEach((card) => {
         const profile = card.querySelector('[data-anim="profile"]');
         card.addEventListener('mouseenter', () => {
@@ -274,8 +200,6 @@ export function Leadership() {
     return () => ctx.revert();
   }, []);
 
-  /* The image connector line sits at the vertical center of the profile row.
-     Profile circles are 200px tall; we align the line to their center = top offset of the circles + 100px. */
   const CIRCLE_H = 200;  // matches the ProfileCircle wrapper height
 
   return (
@@ -293,40 +217,25 @@ export function Leadership() {
 
       <div className="layout-shell editorial-container relative z-10">
 
-        {/* headline */}
-        <div className="mb-3 text-center">
+        {/* Header - Left Aligned to match screenshot */}
+        <div className="mb-14 max-w-[54rem]">
+          <div data-anim="badge" className="header-eyebrow">
+            <div className="header-eyebrow-dot" />
+            <span className="typo-eyebrow text-[#D4A437]">THE FOUNDING TEAM</span>
+          </div>
           <h2
             data-anim="headline"
-            className="typo-h2 text-white"
+            className="font-serif-display text-[clamp(2rem,4.5vw,3.4rem)] font-medium text-white leading-[1.08] tracking-[-0.04em]"
             style={{ margin: 0 }}
           >
-            The Founding <span style={{ color: '#D4A437' }}>Team</span>
+            Three founders. 60+ combined years at J.P. Morgan and HSBC.
           </h2>
         </div>
-
-        {/* gold dot divider */}
-        <div className="mb-5 flex items-center justify-center gap-3">
-          <div style={{ height: 1, width: 40, background: 'linear-gradient(to right, transparent, rgba(212,164,55,0.5))' }} />
-          <div style={{ height: 6, width: 6, borderRadius: '50%', background: '#D4A437' }} />
-          <div style={{ height: 1, width: 40, background: 'linear-gradient(to left, transparent, rgba(212,164,55,0.5))' }} />
-        </div>
-
-        {/* subtitle */}
-        <p
-          data-anim="subtitle"
-          className="typo-body text-white/60"
-          style={{ textAlign: 'center', marginBottom: '3rem', maxWidth: 620, marginInline: 'auto' }}
-        >
-          <span style={{ display: 'block' }}>Three founders. 60+ combined years at J.P. Morgan and HSBC.</span>
-          <span style={{ display: 'block' }}>Three exits. The experience to build this institution and the track record to be trusted with it.</span>
-        </p>
 
         {/* ─── founders grid ─── */}
         <div style={{ position: 'relative' }}>
 
           {/* CONNECTOR LINE — sits at the vertical midpoint of the profile circles */}
-          {/* We position it absolutely within the profiles row. The profiles row starts right here.
-              Circle height = 200px, so line is at top = 100px from start of this relative div */}
           <div
             className="hidden md:block"
             style={{ position: 'absolute', top: CIRCLE_H / 2, left: 0, right: 0, height: 1, pointerEvents: 'none', zIndex: 0 }}
@@ -344,97 +253,47 @@ export function Leadership() {
 
           {/* columns */}
           <div
-            className="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-8 md:grid-cols-3 md:gap-y-0"
+            className="grid grid-cols-1 gap-y-10 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-12 md:grid-cols-3 md:gap-y-0"
           >
             {leaders.map((leader, i) => (
               <div
                 key={leader.id}
                 data-anim="card"
-                className={`border-b border-white/8 pb-6 md:border-b-0 md:pb-0 md:border-r ${i === 2 ? 'md:border-r-0' : ''}`}
+                className={`border-b border-white/8 pb-8 md:border-b-0 md:pb-0 md:border-r ${i === 2 ? 'md:border-r-0' : ''}`}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'flex-start',
                   width: '100%',
                   padding: '0 clamp(0.75rem, 3vw, 1.5rem)',
-                  perspective: '1000px',
                   position: 'relative',
                   zIndex: 1,
                 }}
               >
-                {/* profile circle — centered on desktop, left-aligned on smaller screens */}
+                {/* profile circle */}
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start', marginBottom: '1rem' }} className="md:justify-start">
                   <ProfileCircle leader={leader} index={i} />
                 </div>
 
-                {/* number + name */}
-                <div data-anim="inner" style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6, width: '100%' }}>
-                  <div style={{
-                    width: 34, height: 34, borderRadius: '50%',
-                    border: '1px solid rgba(212,164,55,0.5)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0,
-                  }}>
-                    <span className="typo-label" style={{ color: '#D4A437' }}>{leader.id}</span>
-                  </div>
-                  <h3 className="typo-button text-white" style={{ fontSize: 'clamp(1.15rem, 1.5vw, 1.35rem)' }}>
-                    {leader.name}
-                  </h3>
-                </div>
+                {/* name */}
+                <h3 data-anim="inner" className="font-serif-editorial text-[clamp(1.5rem,2vw,1.9rem)] font-medium text-white" style={{ marginBottom: 6, width: '100%' }}>
+                  {leader.name}
+                </h3>
 
                 {/* role */}
-                <p data-anim="inner" className="typo-eyebrow" style={{ color: '#D4A437', marginBottom: 8, width: '100%' }}>
+                <p data-anim="inner" className="text-[clamp(0.85rem,1.1vw,0.95rem)] font-medium text-[#D4A437]" style={{ marginBottom: 18, width: '100%' }}>
                   {leader.role}
                 </p>
 
-                {/* focus — italic, muted */}
-                <p data-anim="inner" className="typo-small" style={{ fontStyle: 'italic', color: 'rgba(255,255,255,0.45)', marginBottom: 18, width: '100%' }}>
-                  {leader.focus}
+                {/* bio */}
+                <p data-anim="inner" className="typo-body-sm text-white/70 leading-relaxed" style={{ marginBottom: 20, width: '100%' }}>
+                  {leader.bio}
                 </p>
 
-                {/* bio with icon */}
-                <div data-anim="inner" style={{ display: 'flex', gap: 12, marginBottom: 16, alignItems: 'flex-start', width: '100%' }}>
-                  <div style={{
-                    width: 36, height: 36, borderRadius: '50%',
-                    border: '1px solid rgba(212,164,55,0.3)',
-                    background: 'rgba(212,164,55,0.08)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    flexShrink: 0, color: '#D4A437',
-                    marginTop: 2,
-                  }}>
-                    <BioIcon type={leader.bioIcon} />
-                  </div>
-                  <p className="typo-small text-white/60">
-                    {leader.bio}
-                  </p>
-                </div>
-
-                {/* LinkedIn */}
-                <a
-                  href={leader.linkedin}
-                  data-anim="inner"
-                  className="typo-button"
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 10,
-                    textDecoration: 'none', color: 'rgba(255,255,255,0.75)',
-                    transition: 'color 0.2s',
-                    marginTop: '0.6rem'
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#D4A437')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.75)')}
-                >
-                  {/* "in" square badge */}
-                  <span style={{
-                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    width: 24, height: 24, borderRadius: 5,
-                    background: '#0077B5', color: '#fff',
-                    flexShrink: 0,
-                  }}>
-                    <LinkedInSquare />
-                  </span>
-                  LinkedIn →
-                </a>
-
+                {/* focus */}
+                <p data-anim="inner" className="text-[clamp(0.75rem,0.9vw,0.85rem)] text-white/40 tracking-wide mt-auto" style={{ width: '100%' }}>
+                  {leader.focus}
+                </p>
               </div>
             ))}
           </div>

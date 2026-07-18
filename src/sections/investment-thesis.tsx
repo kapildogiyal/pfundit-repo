@@ -65,10 +65,9 @@ export function InvestmentThesis() {
 
       gsap.to('[data-diagram="line"]', {
         strokeDashoffset: -36,
-        duration: 2.6,
+        duration: 1.5,
         ease: 'none',
         repeat: -1,
-        stagger: 0.18,
       });
     }, sectionRef);
 
@@ -91,11 +90,13 @@ export function InvestmentThesis() {
             {/* Left: Header and paragraphs */}
             <div id="thesis-intro" className="header-group max-w-[42rem] !mb-0">
               <div data-reveal="intro" className="flex items-center gap-4 flex-wrap mb-8">
-                <h2 className="typo-h2 text-white" style={{ margin: 0 }}>What We Are Building</h2>
+                <h2 className="typo-h2 text-white" style={{ margin: 0 }}>What We Are <span className="text-[#D4A437]">Building</span></h2>
                 <span className="typo-label rounded-full border border-[rgba(212,164,55,0.28)] bg-[rgba(212,164,55,0.08)] px-3 py-1.5 text-[#D4A437]">Phase 1 · India NBFC · Greenfield</span>
               </div>
-              <div className="space-y-4 max-w-[42rem]">
-                <p data-reveal="intro" className="typo-body text-white/60">AI-native credit infrastructure for the real economy — built <em>India-first</em>, and designed to scale across Asia.</p>
+              <div className="space-y-5 max-w-[42rem]">
+                <p data-reveal="intro" className="text-[1.35rem] md:text-[1.5rem] leading-[1.4] text-white/95 font-medium pb-2">
+                  AI-native credit infrastructure for the real economy — built <span className="text-[#D4A437]">India-first</span>, and designed to scale across Asia.
+                </p>
                 <p data-reveal="intro" className="typo-body text-white/60">In India, Pfundit is establishing a regulated NBFC focused on shorter-tenor, asset-aware credit tied to real transaction flows — with every exposure underwritten and monitored at the asset level from day one.</p>
                 <p data-reveal="intro" className="typo-body text-white/60">The platform targets segments where structured, data-driven financing improves risk-adjusted returns — including consumer and MSME financing, discounting, and ESG-aligned circular-economy supply chains.</p>
                 <p data-reveal="intro" className="typo-body text-white/60">Embedding financing into curated transaction networks, Pfundit delivers bank-grade governance, explainable AI-driven underwriting and transparent portfolios that meet institutional expectations on risk sharing, reporting and regulatory alignment.</p>
@@ -122,16 +123,16 @@ export function InvestmentThesis() {
                       </g>
                     ))}
                     <g data-diagram="hub" style={{ transformOrigin: '280px 250px' }}>
-                      <circle cx="280" cy="250" r="68" fill="#F9F8F4" />
+                      <circle cx="280" cy="250" r="58" fill="#D4A437" />
                       <circle cx="280" cy="250" r="55" fill="#0f1b3d" stroke="#D4A437" strokeWidth="1.2" />
                     </g>
                   </svg>
-                  <div className="absolute left-[2%] top-[13%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white/70 shadow-lg sm:px-4">Asset intelligence</div>
-                  <div className="absolute right-[1%] top-[12%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white/70 shadow-lg sm:px-4">Partner APIs</div>
-                  <div className="absolute bottom-[11%] left-[2%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white/70 shadow-lg sm:px-4">Human oversight</div>
-                  <div className="absolute bottom-[11%] right-[1%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white/70 shadow-lg sm:px-4">Credit operations</div>
+                  <div className="absolute left-[2%] top-[13%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white shadow-lg sm:px-4">Asset intelligence</div>
+                  <div className="absolute right-[1%] top-[12%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white shadow-lg sm:px-4">Partner APIs</div>
+                  <div className="absolute bottom-[11%] left-[2%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white shadow-lg sm:px-4">Human oversight</div>
+                  <div className="absolute bottom-[11%] right-[1%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white shadow-lg sm:px-4">Credit operations</div>
                   <div className="absolute left-1/2 top-1/2 flex h-[94px] w-[94px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full text-center">
-                    <span className="font-serif-editorial text-xl leading-none text-white">Pfundit</span>
+                    <span className="font-serif-editorial text-xl leading-none text-[#D4A437]">Pfundit</span>
                   </div>
                 </div>
               </div>
@@ -196,7 +197,7 @@ export function InvestmentThesis() {
               <span className="typo-eyebrow text-navy/55">ESG &amp; Impact</span>
             </div>
             <h2 data-reveal="heading" className="reveal-hidden typo-h2 text-navy header-heading">
-              Financing India's Circular Economy
+              Financing <span className="text-[#D4A437]">India's Circular Economy</span>
             </h2>
             <p data-reveal="paragraph" className="reveal-hidden typo-body text-navy/60 mt-3">
               India's waste and materials-recovery sector is scaling into a multi-billion-dollar market Ã¢â‚¬â€ and the working capital to build it out remains scarce. Pfundit is designing asset-backed credit for the operators closing the loop.

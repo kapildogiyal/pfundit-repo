@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState, useRef, useLayoutEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent, useVelocity } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { TalkToUsButton } from '@/components/button';
@@ -67,12 +67,10 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [companyMenuOpen, setCompanyMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState<string>('');
-  const [scrollDirection, setScrollDirection] = useState<'up' | 'down'>('down');
   const [isUserClick, setIsUserClick] = useState(false);
   const userClickRef = useRef(false);
   const headerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
-  const scrollVelocity = useVelocity(scrollY);
 
   const [isScrolled, setIsScrolled] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -88,28 +86,6 @@ export function Navbar() {
   const navContainerRef = useRef<HTMLDivElement | null>(null);
   const [underline, setUnderline] = useState({ left: 0, width: 0, opacity: 0 });
   const hiringStripRef = useRef<HTMLDivElement>(null);
-  const [hiringStripHeight, setHiringStripHeight] = useState(38);
-
-  useEffect(() => {
-    if (isHiringPage) return;
-    const updateHeight = () => {
-      if (hiringStripRef.current) {
-        setHiringStripHeight(hiringStripRef.current.offsetHeight);
-      }
-    };
-    updateHeight();
-    const timer = setTimeout(updateHeight, 50);
-    window.addEventListener('resize', updateHeight);
-    return () => {
-      window.removeEventListener('resize', updateHeight);
-      clearTimeout(timer);
-    };
-  }, [isHiringPage]);
-
-  const hiringStripY = useTransform(scrollY, [0, 30], [0, -60]);
-  const hiringStripOpacity = useTransform(scrollY, [0, 30], [1, 0]);
-  // On /hiring page there's no strip so nav starts at top (0), not hiringStripHeight
-  const navTop = useTransform(scrollY, [0, 30], [isHiringPage ? 0 : hiringStripHeight, 0]);
   const navHeight = useTransform(scrollY, [0, 50], ['88px', '64px']);
   const navBackground = useTransform(
     scrollY,
@@ -124,14 +100,6 @@ export function Navbar() {
 
   // Always dark nav since hero is light paper bg
   const showDarkNav = true;
-
-  useMotionValueEvent(scrollVelocity, 'change', (latest) => {
-    if (latest > 0) {
-      setScrollDirection('down');
-    } else if (latest < 0) {
-      setScrollDirection('up');
-    }
-  });
 
   useEffect(() => {
     let raf = 0;
@@ -238,24 +206,31 @@ export function Navbar() {
   };
 
   return (
-    <div ref={headerRef} className="fixed left-0 top-0 z-[100] w-full">
+    <div ref={headerRef} className="fixed left-0 top-0 z-[100] w-full flex flex-col">
       {/* Hiring strip — hidden on the /hiring page itself */}
       {!isHiringPage && (
-        <motion.div
+        <div
           ref={hiringStripRef}
-          style={{
-            y: hiringStripY,
-            opacity: scrollDirection === 'up' ? 1 : hiringStripOpacity
-          }}
-          className="absolute left-0 top-0 flex min-h-[42px] w-full items-center border-b border-[#d4a437]/25 bg-[#d4a437] text-navy shadow-[0_4px_16px_rgba(212,164,55,0.15)]"
+          className="relative flex min-h-[42px] w-full items-center border-b border-[#d4a437]/25 bg-[#d4a437] text-navy shadow-[0_4px_16px_rgba(212,164,55,0.15)]"
         >
           <div className="layout-shell editorial-container">
             <Link
               href="/hiring"
               className="group relative flex w-full items-center justify-center gap-2 py-2"
             >
-              <span className="text-center text-[clamp(0.75rem,2vw,0.9rem)] font-medium tracking-[-0.015em] text-navy/95">
-                <strong className="font-bold">Hiring</strong> — We are building the founding team in India — roles across credit, risk, compliance, technology and business development
+              <span className="inline-flex items-center justify-center flex-wrap gap-2 text-center text-[clamp(0.75rem,2vw,0.9rem)] font-medium tracking-[-0.015em] text-navy/95">
+                <span className="relative flex items-center justify-center overflow-hidden rounded-full p-[1px] bg-navy/15">
+                  {/* Glowing revolving border beam */}
+                  <span className="absolute inset-[-200%] animate-border-beam bg-border-beam" />
+                  
+                  {/* Foreground inner content */}
+                  <span className="relative z-10 rounded-full bg-navy px-2.5 py-0.5 text-[0.7rem] font-bold uppercase tracking-wider text-gold">
+                    Hiring
+                  </span>
+                </span>
+                <span>
+                  — We are building the founding team in India — roles across credit, risk, compliance, technology and business development
+                </span>
               </span>
               <span className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5">
                 <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,7 +239,7 @@ export function Navbar() {
               </span>
             </Link>
           </div>
-        </motion.div>
+        </div>
       )}
 
       <motion.nav
@@ -272,9 +247,8 @@ export function Navbar() {
           height: navHeight,
           backgroundColor: navBackground,
           borderBottom: `1px solid ${navBorder}`,
-          top: navTop,
         }}
-        className="absolute left-0 w-full transition-all duration-300 flex items-center"
+        className="relative w-full transition-all duration-300 flex items-center"
       >
         <div className="flex w-full items-center justify-between px-8 lg:px-16" style={{ paddingInline: 'clamp(32px, 5vw, 96px)' }}>
           <motion.button

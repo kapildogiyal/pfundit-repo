@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
+import { TalkToUsButton } from '@/components/button';
 
 const stats = [
   { value: 'US$300B+', label: 'MSME credit gap in India' },
@@ -169,12 +170,9 @@ export function HeroSection() {
             >
               Explore the Platform
             </button>
-            <button
-              className="typo-button rounded-full border border-navy/15 bg-white/50 px-8 py-3.5 font-semibold text-navy/70 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:border-navy/30 hover:text-navy"
-              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Write to Us
-            </button>
+            <TalkToUsButton 
+              onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })} 
+            />
           </div>
 
           {/* Credential check items */}

@@ -48,7 +48,7 @@ export default function Home() {
               </p>
               <div className="mt-4 flex items-center gap-2.5">
                 <div className="h-1.5 w-1.5 rounded-full bg-[#D4A437] shadow-[0_0_6px_rgba(212,164,55,0.7)]" />
-                <span className="text-[0.65rem] text-white/40">Singapore · ACRA Registered · UEN: 202544131H</span>
+                <span className="text-[0.65rem] text-white/40">Singapore · ACRA Registered</span>
               </div>
             </div>
 
@@ -65,17 +65,20 @@ export default function Home() {
                 <h4 className="mb-3.5 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-white/32">Registered Entity</h4>
                 <div className="space-y-1.5 text-[0.78rem] text-white/55">
                   <p>Pfundit Pte. Ltd.</p>
-                  <p>Singapore (ACRA) · 2025</p>
+                  <p>Singapore (ACRA) · Incorporated 2025</p>
                   <p>UEN: 202544131H</p>
+                  <p>Registered office: Singapore</p>
                   <p>info@pfundit.com</p>
                 </div>
               </div>
               <div>
-                <h4 className="mb-3.5 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-white/32">Legal</h4>
+                <h4 className="mb-3.5 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-white/32">Legal & Policies</h4>
                 <div className="space-y-2 text-[0.78rem] text-white/55">
                   <p>Privacy Policy</p>
                   <p>Terms of Use</p>
                   <p>Cookie Notice</p>
+                  <p>Responsible Disclosure</p>
+                  <p>Code of Conduct</p>
                 </div>
               </div>
             </div>
