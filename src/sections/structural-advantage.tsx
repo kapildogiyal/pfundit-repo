@@ -9,7 +9,7 @@ import { useScrollReveal } from "@/animations/useScrollReveal";
 const ctiRows = [
   { label: "Traditional NBFC", value: "55–65%", width: "62%", tone: "muted" as const },
   { label: "Existing Digital Lenders", value: "38–48%", width: "46%", tone: "digital" as const },
-  { label: "Pfundit — Greenfield AI-Native", value: "25–30%*", width: "78%", tone: "highlight" as const },
+  { label: "Pfundit — Greenfield AI-Native", value: "25–30%*", width: "28%", tone: "highlight" as const },
 ];
 
 const pillars = [

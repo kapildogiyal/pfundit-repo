@@ -125,15 +125,13 @@ export function InvestmentThesis() {
                     <g data-diagram="hub" style={{ transformOrigin: '280px 250px' }}>
                       <circle cx="280" cy="250" r="58" fill="#D4A437" />
                       <circle cx="280" cy="250" r="55" fill="#0f1b3d" stroke="#D4A437" strokeWidth="1.2" />
+                      <text x="280" y="258" textAnchor="middle" fill="#D4A437" fontSize="28" fontFamily="var(--font-serif-editorial)" fontWeight="500">Pfundit</text>
                     </g>
                   </svg>
-                  <div className="absolute left-[2%] top-[13%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white shadow-lg sm:px-4">Asset intelligence</div>
-                  <div className="absolute right-[1%] top-[12%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white shadow-lg sm:px-4">Partner APIs</div>
-                  <div className="absolute bottom-[11%] left-[2%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white shadow-lg sm:px-4">Human oversight</div>
-                  <div className="absolute bottom-[11%] right-[1%] rounded-full border border-white/10 bg-[#14234b]/90 px-3 py-1.5 text-center typo-label !text-[10px] !tracking-[0.12em] text-white shadow-lg sm:px-4">Credit operations</div>
-                  <div className="absolute left-1/2 top-1/2 flex h-[94px] w-[94px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full text-center">
-                    <span className="font-serif-editorial text-xl leading-none text-[#D4A437]">Pfundit</span>
-                  </div>
+                  <div className="absolute left-[-2%] sm:left-[2%] top-[5%] sm:top-[13%] whitespace-nowrap rounded-full border border-white/10 bg-[#14234b]/90 px-2 py-1 sm:px-4 sm:py-1.5 text-center typo-label !text-[7.5px] sm:!text-[10px] !tracking-[0.12em] text-white shadow-lg">Asset intelligence</div>
+                  <div className="absolute right-[-2%] sm:right-[1%] top-[4%] sm:top-[12%] whitespace-nowrap rounded-full border border-white/10 bg-[#14234b]/90 px-2 py-1 sm:px-4 sm:py-1.5 text-center typo-label !text-[7.5px] sm:!text-[10px] !tracking-[0.12em] text-white shadow-lg">Partner APIs</div>
+                  <div className="absolute bottom-[3%] sm:bottom-[11%] left-[-2%] sm:left-[2%] whitespace-nowrap rounded-full border border-white/10 bg-[#14234b]/90 px-2 py-1 sm:px-4 sm:py-1.5 text-center typo-label !text-[7.5px] sm:!text-[10px] !tracking-[0.12em] text-white shadow-lg">Human oversight</div>
+                  <div className="absolute bottom-[3%] sm:bottom-[11%] right-[-2%] sm:right-[1%] whitespace-nowrap rounded-full border border-white/10 bg-[#14234b]/90 px-2 py-1 sm:px-4 sm:py-1.5 text-center typo-label !text-[7.5px] sm:!text-[10px] !tracking-[0.12em] text-white shadow-lg">Credit operations</div>
                 </div>
               </div>
             </div>

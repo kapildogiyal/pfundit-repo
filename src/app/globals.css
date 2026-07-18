@@ -37,8 +37,8 @@
   --type-3xl: clamp(2.8rem, 2.3rem + 1.5vw, 3.8rem);
   --type-hero: clamp(3.2rem, 2.4rem + 2vw, 5.2rem);
 
-  --text-h1: clamp(3rem, 4.2vw, 3.75rem);
-  --text-h2: clamp(3rem, 4.2vw, 3.75rem); /* Same as H1 */
+  --text-h1: clamp(2.5rem, 8vw, 3.75rem);
+  --text-h2: clamp(2.5rem, 8vw, 3.75rem); /* Same as H1 */
   --text-stat: clamp(1.5rem, 2.5vw, 1.875rem);
 
   --animate-border-beam: border-beam 4s linear infinite;
@@ -236,7 +236,7 @@
     width: 100%;
     max-width: 1280px;
     margin-inline: auto;
-    padding-inline: clamp(48px, 5vw, 64px);
+    padding-inline: clamp(12px, 4vw, 64px);
   }
 
   /* Global Section Padding */

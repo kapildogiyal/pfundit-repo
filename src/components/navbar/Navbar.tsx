@@ -216,10 +216,10 @@ export function Navbar() {
           <div className="layout-shell editorial-container">
             <Link
               href="/hiring"
-              className="group relative flex w-full items-center justify-center gap-2 py-2"
+              className="group relative flex w-full max-w-full items-center justify-center gap-2 py-2 px-4 overflow-hidden"
             >
-              <span className="inline-flex items-center justify-center flex-wrap gap-2 text-center text-[clamp(0.75rem,2vw,0.9rem)] font-medium tracking-[-0.015em] text-navy/95">
-                <span className="relative flex items-center justify-center overflow-hidden rounded-full p-[1px] bg-navy/15">
+              <div className="flex items-center justify-center gap-2 overflow-hidden w-full max-w-4xl">
+                <span className="relative flex shrink-0 items-center justify-center overflow-hidden rounded-full p-[1px] bg-navy/15">
                   {/* Glowing revolving border beam */}
                   <span className="absolute inset-[-200%] animate-border-beam bg-border-beam" />
                   
@@ -228,15 +228,15 @@ export function Navbar() {
                     Hiring
                   </span>
                 </span>
-                <span>
+                <span className="truncate text-[clamp(0.75rem,2vw,0.9rem)] font-medium tracking-[-0.015em] text-navy/95">
                   — We are building the founding team in India — roles across credit, risk, compliance, technology and business development
                 </span>
-              </span>
-              <span className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5">
-                <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </span>
+                <span className="shrink-0 text-navy/95 transition-transform duration-300 group-hover:translate-x-0.5">
+                  <svg className="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </span>
+              </div>
             </Link>
           </div>
         </div>
@@ -250,7 +250,7 @@ export function Navbar() {
         }}
         className="relative w-full transition-all duration-300 flex items-center"
       >
-        <div className="flex w-full items-center justify-between px-8 lg:px-16" style={{ paddingInline: 'clamp(32px, 5vw, 96px)' }}>
+        <div className="flex w-full items-center justify-between px-4 lg:px-16" style={{ paddingInline: 'clamp(12px, 5vw, 96px)' }}>
           <motion.button
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -389,11 +389,6 @@ export function Navbar() {
             <Magnetic>
               {/* Desktop / tablet CTA */}
               <div className="hidden sm:block">
-                <TalkToUsButton onClick={() => scrollToSection('contact')} />
-              </div>
-
-              {/* Compact mobile CTA */}
-              <div className="sm:hidden">
                 <TalkToUsButton onClick={() => scrollToSection('contact')} />
               </div>
             </Magnetic>
