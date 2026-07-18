@@ -120,7 +120,7 @@ export function Governance() {
             <span className="typo-eyebrow text-[#D4A437]">Governance &amp; Trust</span>
           </div>
           <h2 className="typo-h2 text-navy mb-6">
-            Built on Regulated Rails
+            Built on <span className="text-[#D4A437]">Regulated Rails</span>
           </h2>
           <p className="typo-body text-navy/60">
             A Singapore-incorporated holding company operating to institutional standards from day one — designed for the scrutiny of regulators, investors and partners.

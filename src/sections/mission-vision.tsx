@@ -40,7 +40,7 @@ export function MissionVision() {
             data-reveal="heading"
             className="typo-h2 text-navy reveal-hidden header-heading"
           >
-            Mission &amp; Vision
+            Mission &amp; <span className="text-[#D4A437]">Vision</span>
           </h2>
         </div>
 

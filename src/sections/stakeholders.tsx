@@ -44,7 +44,7 @@ export function Stakeholders() {
           </div>
 
           <h2 data-reveal="heading" className="reveal-hidden typo-h2 text-navy header-heading">
-            One institution, built for the people who back it.
+            One institution, built for the <span className="text-[#D4A437]">people who back it.</span>
           </h2>
         </header>
 

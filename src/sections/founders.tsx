@@ -228,7 +228,7 @@ export function Leadership() {
             className="font-serif-display text-[clamp(2rem,4.5vw,3.4rem)] font-medium text-white leading-[1.08] tracking-[-0.04em]"
             style={{ margin: 0 }}
           >
-            Three founders. 60+ combined years at J.P. Morgan and HSBC.
+            Three founders. <span className="text-[#D4A437]">60+ combined years</span><br className="hidden sm:block" /> at J.P. Morgan and HSBC.
           </h2>
         </div>
 
